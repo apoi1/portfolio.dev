@@ -1,0 +1,73 @@
+---
+// Import Icons
+import React from '../icons/React.astro'
+import Html from '../icons/Html.astro'
+import Tailwind from '../icons/Tailwind.astro'
+import Firebase from '../icons/Firebase.astro'
+
+// Import Components
+import Carousel from "./Carousel.astro"
+
+// Consts 
+const TAGS = {
+    REACT: {
+        name: "React",
+        class: "bg-black text-white",
+        icon: React
+    },
+    HTML: {
+        name: "HTML",
+        class: "bg-gray text-black",
+        icon: Html
+    },
+    TAILWIND: {
+        name: "Tailwind",
+        class: "bg-gray/20 text-[#73bcf6]",
+        icon: Tailwind
+    },
+    FIREBASE: {
+        name: "Firebase",
+        class: "bg-gray text-black",
+        icon: Firebase
+    },
+}
+
+const PROJECTS = [
+    {
+        title: 'GTI Katana',
+        description: 'This project was made as a solution for my last worked as a internal way to organize simple activies and increase productivity',
+        link: 'https://tilinapp.vercel.app',
+        github: '#',
+        images: [
+            '../src/assets/GTIKscreenshot1.webp',
+            '../src/assets/GTIKscreenshot2.webp',
+            '../src/assets/GTIKscreenshot3.webp',
+        ],
+        tags: [TAGS.REACT, TAGS.HTML, TAGS.TAILWIND, TAGS.FIREBASE]
+    }
+]
+---
+
+{
+    PROJECTS.map(({ link, images, title, description, tags }) => (
+        <article>
+            <a href={link} target="_blank"><h3 class="text-2xl font-semibold text-blue-300/90 mb-2 hover ">{title}</h3></a>
+            <p class="text-lg mb-4 text-pretty">{description}</p>
+            <ul class="flex gap-x-2 flex-row m-4">
+                {tags.map (tag => (
+                    <li>
+                        <span class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2`}>
+                            <tag.icon class="size-4"/>
+                            {tag.name}
+                        </span>
+                    </li>)
+                )}   
+            </ul>
+                <Carousel 
+                    class="rounded shadow-2xl shadow-white/10 m" 
+                    image={images}
+                    alt={`Screenshot from the project ${title}`}
+                />
+        </article>
+    ))
+}
