@@ -1,0 +1,144 @@
+---
+/**
+ * Contact — giant CTA finale: oversized outlined word, mailto CTA,
+ * copy-email button with toast, socials row.
+ */
+import Icon from '../ui/Icon.astro';
+import { IDENTITY, type Locale } from '../../lib/site';
+import { getUI } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getUI(locale);
+const bigWord = locale === 'es' ? 'HABLEMOS' : "LET'S TALK";
+const mailSubject = encodeURIComponent(
+  locale === 'es' ? 'Hola desde tu portafolio' : 'Hello from your portfolio',
+);
+
+const socials = [
+  { href: IDENTITY.github, icon: 'github' as const, label: 'GitHub' },
+  { href: IDENTITY.linkedin, icon: 'linkedin' as const, label: 'LinkedIn' },
+  { href: IDENTITY.bluesky, icon: 'bluesky' as const, label: 'Bluesky' },
+];
+---
+
+<section id="contact" class="relative scroll-mt-20 overflow-hidden">
+  <!-- oversized outlined word -->
+  <div
+    class="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 select-none text-center"
+    aria-hidden="true"
+  >
+    <span
+      class="text-[clamp(4.5rem,15vw,13rem)] leading-none font-extrabold tracking-tight text-transparent"
+      style="-webkit-text-stroke: 1.5px var(--color-line-strong); opacity: 0.5"
+    >
+      {bigWord}
+    </span>
+  </div>
+
+  <div class="relative mx-auto max-w-6xl px-4 py-32 text-center md:px-6 md:py-44">
+    <p class="mono-label flex items-center justify-center gap-2.5" data-reveal>
+      <span class="inline-block size-1.5 rotate-45 bg-violet"></span>
+      {t.contact.kicker}
+      <span class="text-violet/70">/ 05</span>
+    </p>
+
+    <h2
+      class="mx-auto mt-5 max-w-3xl text-4xl font-extrabold leading-[0.98] tracking-tight md:text-6xl"
+      data-reveal
+      data-reveal-delay="0.08"
+    >
+      {t.contact.titleLead}
+      <span class="text-grad">{t.contact.titleGrad}</span>
+    </h2>
+
+    <p
+      class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-soft md:text-lg"
+      data-reveal
+      data-reveal-delay="0.16"
+    >
+      {t.contact.text}
+    </p>
+
+    <div
+      class="mt-10 flex flex-wrap items-center justify-center gap-4"
+      data-reveal
+      data-reveal-delay="0.24"
+    >
+      <a
+        href={`mailto:${IDENTITY.email}?subject=${mailSubject}`}
+        class="glow-violet group inline-flex items-center gap-2.5 rounded-full bg-violet px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-lilac"
+        data-magnetic
+        data-cursor="hover">
+        <Icon name="mail" class="size-4" />
+        {t.contact.openMail}
+        <Icon
+          name="arrow-up-right"
+          class="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        />
+      </a>
+      <button
+        type="button"
+        class="inline-flex items-center gap-2.5 rounded-full border border-line-strong px-7 py-3.5 text-sm font-semibold text-ink transition-colors duration-300 hover:border-lilac hover:text-lilac"
+        data-copy-email={IDENTITY.email}
+        data-toast={t.contact.emailCopied}
+        data-magnetic
+        data-cursor="hover">
+        <Icon name="copy" class="size-4" />
+        {t.contact.copyEmail}
+      </button>
+    </div>
+
+    <div
+      class="mt-12 flex flex-col items-center gap-4"
+      data-reveal
+      data-reveal-delay="0.32"
+    >
+      <p class="mono-label">{t.contact.prefer}</p>
+      <div class="flex gap-3">
+        {
+          socials.map((s) => (
+            <a
+              href={s.href}
+              target="_blank"
+              rel="noopener"
+              class="group flex items-center gap-2 rounded-full border border-line bg-raised/60 px-4 py-2 text-xs font-medium text-soft transition-colors duration-300 hover:border-lilac hover:text-lilac"
+              aria-label={s.label}
+              data-cursor="hover"
+            >
+              <Icon name={s.icon} class="size-3.5" />
+              {s.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const init = () => {
+      document
+        .querySelectorAll<HTMLButtonElement>('[data-copy-email]')
+        .forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const email = btn.dataset.copyEmail ?? '';
+            const msg = btn.dataset.toast ?? '';
+            try {
+              await navigator.clipboard.writeText(email);
+            } catch {
+              const ta = document.createElement('textarea');
+              ta.value = email;
+              document.body.appendChild(ta);
+              ta.select();
+              (document as any).execCommand('copy');
+              ta.remove();
+            }
+            (window as any).__toast?.(msg);
+          });
+        });
+    };
+    document.addEventListener('astro:page-load', init);
+  </script>
+</section>

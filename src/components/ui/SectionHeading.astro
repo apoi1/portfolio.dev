@@ -3,13 +3,15 @@
 interface Props {
   kicker: string;
   index?: string;
+  align?: 'left' | 'center';
   class?: string;
 }
-const { kicker, index, class: className = '' } = Astro.props;
+const { kicker, index, align = 'left', class: className = '' } = Astro.props;
+const centered = align === 'center';
 ---
 
-<div class={className}>
-  <p class="mono-label flex items-center gap-2.5" data-reveal>
+<div class:list={[className, centered && 'flex flex-col items-center text-center']}>
+  <p class:list={['mono-label flex items-center gap-2.5', centered && 'justify-center']} data-reveal>
     <span class="inline-block size-1.5 rotate-45 bg-violet"></span>
     {kicker}
     {index && <span class="text-violet/70">/ {index}</span>}

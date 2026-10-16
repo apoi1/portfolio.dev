@@ -1,0 +1,86 @@
+---
+/**
+ * Experience — glowing timeline of the two verified roles, plus
+ * education and languages cards. Content comes from ui.ts only
+ * (verified profile — no invented entries).
+ */
+import SectionHeading from '../ui/SectionHeading.astro';
+import Chip from '../ui/Chip.astro';
+import Icon from '../ui/Icon.astro';
+import type { Locale } from '../../lib/site';
+import { getUI } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getUI(locale);
+---
+
+<section id="experience" class="relative scroll-mt-20">
+  <div class="mx-auto max-w-6xl px-4 py-24 md:px-6 md:py-36">
+    <SectionHeading kicker={t.experience.kicker} index="02">
+      {t.experience.titleLead}
+      <span class="text-grad">{t.experience.titleGrad}</span>
+    </SectionHeading>
+
+    <ol class="relative mt-16 space-y-16 border-l border-line pl-8 md:pl-12">
+      {
+        t.experience.items.map((e) => (
+          <li class="relative" data-reveal>
+            <span class="absolute top-2 -left-[37px] size-3 rounded-full bg-violet shadow-[0_0_14px_3px] shadow-violet/50 md:-left-[53px]" />
+            <p class="font-mono text-xs tracking-wider text-faint">{e.period}</p>
+            <div class="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <h3 class="text-xl font-bold tracking-tight text-ink md:text-2xl">{e.role}</h3>
+              <span class="text-faint">·</span>
+              <a
+                href={e.link}
+                target="_blank"
+                rel="noopener"
+                class="font-semibold text-lilac transition-colors hover:text-ink"
+              >
+                {e.org}
+              </a>
+              <Chip label={e.badge} tone="violet" />
+            </div>
+            <ul class="mt-4 max-w-2xl space-y-2 leading-relaxed text-soft">
+              {e.bullets.map((b) => (
+                <li class="flex gap-3">
+                  <span class="mt-[0.65rem] size-1 shrink-0 rounded-full bg-lilac/70" />
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <div class="mt-5 flex flex-wrap gap-2">
+              {e.chips.map((c) => (
+                <Chip label={c} />
+              ))}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="mt-16 grid gap-5 md:grid-cols-2" data-stagger>
+      <div class="frame rounded-2xl p-6 md:p-7">
+        <p class="mono-label">{t.experience.educationKicker}</p>
+        <h4 class="mt-3 text-lg font-bold text-ink">{t.experience.degree}</h4>
+        <p class="mt-1.5 text-sm text-soft">{t.experience.school}</p>
+        <p class="mt-3 font-mono text-xs text-lilac">{t.experience.eduPeriod}</p>
+      </div>
+      <div class="frame rounded-2xl p-6 md:p-7">
+        <p class="mono-label">{t.experience.languagesKicker}</p>
+        <ul class="mt-4 space-y-2.5">
+          {
+            t.experience.languages.map((l) => (
+              <li class="flex items-center gap-3 text-sm text-soft">
+                <Icon name="globe" class="size-4 text-lilac" />
+                {l}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,82 @@
+---
+/**
+ * About — portrait with floating badges + verified bio + animated stat counters.
+ */
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../ui/Icon.astro';
+import type { Locale } from '../../lib/site';
+import { getUI } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getUI(locale);
+const testsLabel = locale === 'es' ? '527 pruebas' : '527 tests';
+---
+
+<section id="about" class="relative scroll-mt-20">
+  <div class="mx-auto max-w-6xl px-4 py-24 md:px-6 md:py-36">
+    <SectionHeading kicker={t.about.kicker} index="01">
+      {t.about.titleLead}
+      <span class="text-grad">{t.about.titleGrad}</span>
+    </SectionHeading>
+
+    <div
+      class="mt-14 grid items-start gap-14 lg:grid-cols-[5fr_7fr] lg:gap-20"
+    >
+      <!-- portrait -->
+      <div class="relative mx-auto w-full max-w-xs sm:max-w-sm lg:mx-0" data-reveal>
+        <div
+          class="frame glow-violet overflow-hidden rounded-3xl p-2 transition-transform duration-500 ease-out hover:-rotate-1 hover:scale-[1.02]"
+        >
+          <img
+            src="/photo.jpg"
+            alt={t.about.photoAlt}
+            width="512"
+            height="512"
+            loading="lazy"
+            decoding="async"
+            class="aspect-square w-full rounded-2xl object-cover" />
+        </div>
+        <div
+          class="glass absolute -right-3 top-8 animate-float rounded-full border border-line px-3.5 py-1.5 font-mono text-[11px] whitespace-nowrap text-ink"
+        >
+          <span class="text-mint">✦</span> {testsLabel}
+        </div>
+        <div
+          class="glass absolute -left-3 bottom-10 animate-float rounded-full border border-line px-3.5 py-1.5 font-mono text-[11px] whitespace-nowrap text-ink [animation-delay:1.4s]"
+        >
+          <Icon name="map-pin" class="mr-1 inline size-3 text-lilac" />
+          Bogotá · CO
+        </div>
+      </div>
+
+      <!-- bio + stats -->
+      <div>
+        <div class="space-y-5 text-base leading-relaxed text-soft md:text-lg" data-stagger>
+          {t.about.bio.map((p) => <p class="text-pretty">{p}</p>)}
+        </div>
+
+        <div class="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4" data-stagger>
+          {
+            t.about.stats.map((s) => (
+              <div class="frame rounded-2xl px-4 py-5 text-center md:text-left">
+                <p class="font-mono text-3xl font-bold text-ink md:text-4xl">
+                  {typeof s.value === 'number' ? (
+                    <span data-counter={s.value} data-suffix={s.suffix}>
+                      {s.value}
+                    </span>
+                  ) : (
+                    <span>{s.value}</span>
+                  )}
+                </p>
+                <p class="mono-label mt-2.5">{s.label}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

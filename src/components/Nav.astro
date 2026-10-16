@@ -107,7 +107,7 @@ const socials = [
   <!-- mobile menu -->
   <div
     id="mobile-menu"
-    class="invisible fixed inset-0 z-[-1] flex h-dvh flex-col justify-center px-8 opacity-0 transition-all duration-300 md:hidden"
+    class="glass invisible fixed inset-0 z-[-1] flex h-dvh flex-col justify-center px-8 opacity-0 transition-all duration-300 md:hidden"
     aria-hidden="true"
   >
     <nav aria-label={t.nav.menu}>
@@ -205,9 +205,6 @@ const socials = [
       menu.style.opacity = open ? '1' : '0';
       menu.style.visibility = open ? 'visible' : 'hidden';
       menu.style.zIndex = open ? '40' : '-1';
-      menu.style.background = 'var(--glass-bg)';
-      menu.style.backdropFilter = 'blur(24px) saturate(1.4)';
-      menu.style.webkitBackdropFilter = 'blur(24px) saturate(1.4)';
       document.documentElement.style.overflow = open ? 'hidden' : '';
     };
     burger?.addEventListener('click', () =>

@@ -2,13 +2,14 @@
 interface Props {
     image: string[];
     alt: string;
-    id: string;
+    id?: string;
+    class?: string;
 }
 
-const { image, alt, id } = Astro.props;
+const { image, alt, id, class: className } = Astro.props;
 ---
 
-<div class="custom-portfolio-carousel relative w-full rounded-xl overflow-hidden shadow-2xl shadow-white/5" data-id={id}>
+<div class={`custom-portfolio-carousel relative w-full rounded-xl overflow-hidden shadow-2xl shadow-white/5 ${className ?? ''}`} data-id={id}>
     <!-- Carousel wrapper -->
     <div class="relative h-56 overflow-hidden md:h-96">
         {
