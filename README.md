@@ -23,6 +23,7 @@
 | Projects as content | Astro Content Collections — **add a project by adding a folder** |
 | ⌘K command palette | Navigate, open cases, copy email, jump to the CV |
 | Print-ready CV | `/cv` and `/es/cv` reuse the same verified data as the site |
+| Easter eggs | Styled console greeting, Konami signal-boost confetti, click sparkles, hidden `sudo hire apoi2` in the palette, signal rain on the 404, tab-title wink |
 | SEO | JSON-LD (Person, WebSite, CreativeWork), sitemap with hreflang, OG/Twitter cards, semantic HTML |
 | Fast & resilient | Static HTML, `prefers-reduced-motion` fallbacks everywhere, no-JS still readable |
 
