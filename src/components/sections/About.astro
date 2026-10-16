@@ -4,6 +4,8 @@
  */
 import SectionHeading from '../ui/SectionHeading.astro';
 import Icon from '../ui/Icon.astro';
+import { Image } from 'astro:assets';
+import photo from '../../assets/photo.jpg';
 import type { Locale } from '../../lib/site';
 import { getUI } from '../../i18n/ui';
 
@@ -30,11 +32,11 @@ const testsLabel = locale === 'es' ? '527 pruebas' : '527 tests';
         <div
           class="frame glow-violet overflow-hidden rounded-3xl p-2 transition-transform duration-500 ease-out hover:-rotate-1 hover:scale-[1.02]"
         >
-          <img
-            src="/photo.jpg"
+          <Image
+            src={photo}
             alt={t.about.photoAlt}
-            width="512"
-            height="512"
+            width={512}
+            height={512}
             loading="lazy"
             decoding="async"
             class="aspect-square w-full rounded-2xl object-cover" />
