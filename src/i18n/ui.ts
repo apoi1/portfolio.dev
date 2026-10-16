@@ -195,6 +195,12 @@ const en = {
     text: 'The page you are looking for drifted out of range.',
     cta: 'Back home',
   },
+  delights: {
+    idleTitle: '👋 come back',
+    konamiToast: 'KONAMI — signal boosted ✦',
+    sudoHire: 'sudo hire apoi2',
+    sudoToast: 'Permission granted — opening your mail client…',
+  },
 };
 
 const es: typeof en = {
@@ -386,6 +392,12 @@ const es: typeof en = {
     title: 'Señal perdida',
     text: 'La página que buscas se salió de rango.',
     cta: 'Volver al inicio',
+  },
+  delights: {
+    idleTitle: '👋 volvé',
+    konamiToast: 'KONAMI — señal amplificada ✦',
+    sudoHire: 'sudo hire apoi2',
+    sudoToast: 'Permiso concedido — abriendo tu correo…',
   },
 };
 

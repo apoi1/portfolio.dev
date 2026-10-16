@@ -19,6 +19,8 @@ interface Field {
 
 let field: Field | null = null;
 let themeBound = false;
+let konamiBound = false;
+let boost = 0; // konami 'signal boost' — decays over 8s
 
 const cssVar = (name: string, fallback: string) =>
   getComputedStyle(document.documentElement).getPropertyValue(name).trim() ||
@@ -132,7 +134,7 @@ function createField(canvas: HTMLCanvasElement): Field {
       const d2 = dx * dx + dz * dz;
       const ripple =
         Math.exp(-d2 / 1.4) * Math.cos(d2 * 1.8 - time * 3.2) * 0.55;
-      const y = wave(x, z, time) + ripple;
+      const y = (wave(x, z, time) + ripple) * (1 + boost * 1.6);
       posAttr.setY(j, y);
       const hNorm = Math.min(1, Math.abs(y) / 0.9);
       const mix =
@@ -170,6 +172,7 @@ function createField(canvas: HTMLCanvasElement): Field {
     const frame = () => {
       if (visible && inView) {
         t += 0.016;
+        boost = Math.max(0, boost - 0.016 / 8);
         update(t);
         renderer.render(scene, camera);
       }
@@ -210,6 +213,12 @@ const init = () => {
   if (!themeBound) {
     themeBound = true;
     document.addEventListener('themechange', () => field?.applyTheme());
+  }
+  if (!konamiBound) {
+    konamiBound = true;
+    document.addEventListener('konami', () => {
+      boost = 1;
+    });
   }
 };
 

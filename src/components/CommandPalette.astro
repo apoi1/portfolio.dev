@@ -23,7 +23,7 @@ interface Item {
   hint?: string;
   href?: string;
   external?: boolean;
-  action?: 'copy-email' | 'print-cv';
+  action?: 'copy-email' | 'print-cv' | 'sudo-hire';
   icon: Parameters<typeof Icon>[0]['name'];
 }
 
@@ -45,6 +45,7 @@ const items: Item[] = [
   { group: t.palette.groups.links, label: 'Bluesky', href: IDENTITY.bluesky, external: true, icon: 'bluesky' },
   { group: t.palette.groups.links, label: IDENTITY.email, href: `mailto:${IDENTITY.email}`, icon: 'mail' },
   { group: t.palette.groups.actions, label: t.palette.actions.copyEmail, action: 'copy-email', icon: 'copy' },
+  { group: t.palette.groups.actions, label: t.delights.sudoHire, hint: 'sudo', action: 'sudo-hire', icon: 'terminal' },
   { group: t.palette.groups.actions, label: t.palette.actions.cv, href: `${base}/cv`, icon: 'download' },
   { group: t.palette.groups.actions, label: t.palette.actions.github, href: IDENTITY.github, external: true, icon: 'external' },
 ];
@@ -91,7 +92,8 @@ const items: Item[] = [
             data-href={item.href ?? ''}
             data-external={item.external ? 'true' : ''}
             data-action={item.action ?? ''}
-            data-toast={item.action === 'copy-email' ? t.contact.emailCopied : ''}
+            data-toast={item.action === 'copy-email' ? t.contact.emailCopied : item.action === 'sudo-hire' ? t.delights.sudoToast : ''}
+            data-secret={item.hint === 'sudo' ? 'sudo' : ''}
           >
             <Icon name={item.icon} class="size-4 shrink-0 text-lilac" />
             <span class="min-w-0 flex-1 truncate">{item.label}</span>
@@ -151,8 +153,11 @@ const items: Item[] = [
       const q = input.value.trim().toLowerCase();
       let shown = 0;
       items.forEach((el) => {
+        const secret = el.dataset.secret ?? '';
         const label = (el.dataset.label ?? '').toLowerCase();
-        const match = q === '' || label.includes(q);
+        const match = secret
+          ? q === secret
+          : q === '' || label.includes(q);
         el.style.display = match ? '' : 'none';
         if (match) shown++;
       });
@@ -190,6 +195,14 @@ const items: Item[] = [
           .then(() => (window as any).__toast?.(el.dataset.toast ?? ''))
           .catch(() => {});
         close();
+        return;
+      }
+      if (action === 'sudo-hire') {
+        close();
+        (window as any).__toast?.(el.dataset.toast ?? '');
+        window.setTimeout(() => {
+          window.location.href = `mailto:apoi2@proton.me?subject=${encodeURIComponent('sudo hire apoi2')}`;
+        }, 650);
         return;
       }
       if (action === 'print-cv') {

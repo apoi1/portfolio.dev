@@ -12,7 +12,20 @@ import Icon from '../components/ui/Icon.astro';
   noindex
 >
   <Nav locale="en" />
-  <main id="main" class="grid min-h-dvh place-items-center px-4">
+  <main id="main" class="relative grid min-h-dvh place-items-center overflow-hidden px-4">
+    <!-- signal rain -->
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {
+        Array.from({ length: 26 }).map((_, i) => (
+          <span
+            class="rain-glyph"
+            style={`left:${(Math.random() * 100).toFixed(1)}%;animation-delay:${(Math.random() * 4).toFixed(2)}s;animation-duration:${(2.4 + Math.random() * 2.6).toFixed(2)}s;color:${['var(--color-violet)', 'var(--color-cyan)', 'var(--color-lilac)'][i % 3]};opacity:${(0.25 + Math.random() * 0.45).toFixed(2)}`}
+          >
+            {['✦', '0', '1', '·', '▁', '▂', '▃'][i % 7]}
+          </span>
+        ))
+      }
+    </div>
     <div class="text-center">
       <p class="font-mono text-[clamp(5rem,18vw,11rem)] leading-none font-bold text-grad">
         404
@@ -45,3 +58,24 @@ import Icon from '../components/ui/Icon.astro';
   </main>
   <Footer locale="en" />
 </Layout>
+
+<style>
+  .rain-glyph {
+    position: absolute;
+    top: -6%;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    to {
+      transform: translateY(110vh);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rain-glyph {
+      display: none;
+    }
+  }
+</style>
