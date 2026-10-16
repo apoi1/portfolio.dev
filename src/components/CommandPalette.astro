@@ -249,16 +249,14 @@ const items: Item[] = [
 
     if (!(window as any).__cmdkKeys) {
       (window as any).__cmdkKeys = true;
+      // Re-dispatch through the per-page button so handlers always bind to
+      // the CURRENT page's DOM (init closures die with swapped elements).
       document.addEventListener('keydown', (e) => {
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
           e.preventDefault();
-          const r = document.getElementById('cmdk');
-          if (!r) return;
-          if (r.classList.contains('hidden')) {
-            show();
-          } else {
-            close();
-          }
+          document
+            .getElementById('cmdk-btn')
+            ?.dispatchEvent(new MouseEvent('click', { bubbles: false }));
         }
       });
     }

@@ -26,6 +26,8 @@ const finePointer = window.matchMedia('(pointer: fine)').matches;
 
 let lenis: Lenis | null = null;
 let ctx: gsap.Context | null = null;
+let tickerRaf: ((time: number) => void) | null = null;
+let anchorsBound = false;
 
 function initLenis(): Lenis | null {
   if (reduced) return null;
@@ -34,8 +36,11 @@ function initLenis(): Lenis | null {
     smoothWheel: true,
     wheelMultiplier: 1,
   });
-  const raf = (time: number) => l.raf(time * 1000);
-  gsap.ticker.add(raf);
+  // replace the previous ticker callback — orphaned rafs keep dead
+  // Lenis instances animating (D3)
+  if (tickerRaf) gsap.ticker.remove(tickerRaf);
+  tickerRaf = (time: number) => l.raf(time * 1000);
+  gsap.ticker.add(tickerRaf);
   gsap.ticker.lagSmoothing(0);
   l.on('scroll', ScrollTrigger.update);
   return l;
@@ -50,8 +55,10 @@ function scrollToTarget(target: string) {
   return true;
 }
 
-/** Smooth same-page anchors (respects the fixed nav). */
+/** Smooth same-page anchors (respects the fixed nav) — bound once (D2). */
 function bindAnchors() {
+  if (anchorsBound) return;
+  anchorsBound = true;
   document.addEventListener(
     'click',
     (e) => {

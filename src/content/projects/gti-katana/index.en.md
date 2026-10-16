@@ -1,6 +1,6 @@
 ---
 title: 'GTI Katana — internal productivity tool'
-tagline: 'The internal productivity app I built for Sutherland''s GTI team — designed on my own initiative and adopted into daily operations.'
+tagline: 'The internal productivity app I built for Sutherland''s GTI team — designed on my own initiative as the team''s activity organizer.'
 description: 'An internal productivity tool for Sutherland Global Services'' Global Technology Infrastructure team: React, Tailwind CSS and Firebase, live in production on Vercel.'
 tech: ['React', 'Tailwind CSS', 'Firebase', 'JavaScript']
 year: 2026
@@ -16,7 +16,7 @@ gallery:
   - ./GTIKscreenshot3.webp
 ---
 
-The internal productivity tool I built for **Sutherland's Global Technology Infrastructure team** while supporting international campaigns on-site. The team needed a lightweight way to organize day-to-day activities — so I designed and shipped **GTI Katana** on my own initiative, and it was adopted into the team's daily operations.
+The internal productivity tool I built for **Sutherland's Global Technology Infrastructure team** while supporting international campaigns on-site. The team needed a lightweight way to organize day-to-day activities — so I designed and shipped **GTI Katana** on my own initiative as the internal way to organize simple activities and increase productivity.
 
 ## What it did
 

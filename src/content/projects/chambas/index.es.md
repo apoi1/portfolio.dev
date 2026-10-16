@@ -16,7 +16,7 @@ Un **sistema local-first y de costo cero para automatizar la búsqueda de empleo
 
 ## Aspectos destacados
 
-- **9 fuentes de ingesta** más alta manual, con topes anti-burnout incorporados.
+- **7 fuentes de ingesta** más alta manual, con topes anti-burnout incorporados.
 - **SQLite** con migraciones; el scoring está 100% impulsado por la configuración de roles objetivo — nada hardcodeado.
 - **477 casos de prueba pytest** — la verdadera compuerta de calidad del repo.
 - **CLI + interfaz web embebida** (FastAPI), digests por cron, bilingüe ES/EN de punta a punta.

@@ -109,6 +109,22 @@ for (const file of allHtml) {
 }
 notes.push(`internal links checked: ${internalLinks}`);
 
+// 5b — bundled script sources resolve (catches unbundled absolute srcs)
+let scriptSrcs = 0;
+for (const file of allHtml) {
+  const html = readFileSync(file, 'utf8');
+  const srcs = [...html.matchAll(/<script[^>]*src="([^"]+)"/g)].map((m) => m[1]);
+  for (const src of srcs) {
+    if (!src.startsWith('/')) continue; // relative/remote handled by the bundler
+    scriptSrcs++;
+    const resolved = join(DIST, src.replace(/\?.*$/, '').replace(/^\//, ''));
+    if (!existsSync(resolved)) {
+      errors.push(`${file.replace(DIST, '')}: broken script src ${src}`);
+    }
+  }
+}
+notes.push(`script srcs checked: ${scriptSrcs}`);
+
 // 6 — infra files
 for (const f of ['robots.txt', 'sitemap-index.xml', 'og.png', 'og-es.png', 'favicon.svg', 'apple-touch-icon.png']) {
   if (!existsSync(page(f))) errors.push(`missing public asset: ${f}`);

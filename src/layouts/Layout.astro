@@ -116,16 +116,22 @@ const personJsonLd = {
         if (m) m.setAttribute('content', t === 'light' ? '#f4f4f9' : '#06060b');
         if (!window.__bootGuard) {
           window.__bootGuard = 1;
+          var rearm = function () {
+            setTimeout(function () {
+              if (!window.__motionReady)
+                document.documentElement.classList.remove('js');
+            }, 4000);
+          };
+          rearm();
           document.addEventListener('astro:after-swap', function () {
+            // ClientRouter re-applies class="js" on every soft swap —
+            // re-arm the reveal-gate safety timer for the new page (D7).
             try {
               document.documentElement.dataset.theme =
                 localStorage.getItem('apoi2-theme') || 'dark';
             } catch (e) {}
+            rearm();
           });
-          setTimeout(function () {
-            if (!window.__motionReady)
-              document.documentElement.classList.remove('js');
-          }, 4000);
         }
       })();
     </script>
@@ -152,6 +158,6 @@ const personJsonLd = {
     <Toast />
     <CommandPalette locale={locale} />
 
-    <script type="module" src="/src/scripts/motion.ts"></script>
+    <script src="../scripts/motion.ts"></script>
   </body>
 </html>

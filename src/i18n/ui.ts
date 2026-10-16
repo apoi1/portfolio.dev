@@ -47,7 +47,7 @@ const en = {
     photoAlt: 'Portrait of Julián Ruiz — apoi2',
     bio: [
       "I'm Julián — a systems engineer from Soacha, Colombia (class of 2026, UNIMINUTO) who works both ends of a system: the React dashboard a team opens every morning, and the ESP32 firmware talking MQTT underneath it.",
-      "At Sutherland's Global Technology Infrastructure team I kept international campaigns running — on-site support, about seven tickets a day — and when the workflow needed order I built GTI Katana, a React + Firebase tool my team adopted. Before that, at the Personería Municipal de Soacha, I ran Active Directory, LAN and firewalls for a public institution and built its internal web tools with React, Node and PHP.",
+      "At Sutherland's Global Technology Infrastructure team I kept international campaigns running — on-site support, about seven tickets a day — and when the workflow needed order I built GTI Katana, a React + Firebase tool for my team's workflow. Before that, at the Personería Municipal de Soacha, I ran Active Directory, LAN and firewalls for a public institution and built its internal web tools with React, Node and PHP.",
       "I like software that can prove itself: 527 automated tests across my systems, changelogs, validation protocols. I also build tools for videogames as a hobby — and when I go full-stack, it's Java with Spring Boot and React.",
     ],
     stats: [
@@ -69,7 +69,7 @@ const en = {
         period: 'Jan — Jul 2026',
         bullets: [
           'On-site technical support for international campaigns — networks, connectivity and workstations, ~7 tickets/day.',
-          'Built and shipped GTI Katana, an internal productivity app (React, Tailwind, Firebase) adopted by the team.',
+          'Built and shipped GTI Katana, an internal productivity app (React, Tailwind, Firebase) for the team\u2019s daily workflow.',
           'Kept campaign-critical technology resources highly available within the Global Technology Infrastructure team.',
         ],
         chips: ['React', 'Tailwind', 'Firebase', 'IT Support'],
@@ -244,7 +244,7 @@ const es: typeof en = {
     photoAlt: 'Retrato de Julián Ruiz — apoi2',
     bio: [
       'Soy Julián — ingeniero de sistemas de Soacha, Colombia (promoción 2026, UNIMINUTO) que trabaja los dos extremos de un sistema: el tablero en React que un equipo abre cada mañana y el firmware de ESP32 hablando MQTT por debajo.',
-      'En el equipo Global Technology Infrastructure de Sutherland mantuve campañas internacionales en marcha — soporte presencial, unos siete tickets al día — y cuando el flujo de trabajo necesitaba orden, construí GTI Katana, una herramienta en React + Firebase que mi equipo adoptó. Antes, en la Personería Municipal de Soacha, administré Active Directory, LAN y firewalls de una entidad pública y construí sus herramientas web internas con React, Node y PHP.',
+      'En el equipo Global Technology Infrastructure de Sutherland mantuve campañas internacionales en marcha — soporte presencial, unos siete tickets al día — y cuando el flujo de trabajo necesitaba orden, construí GTI Katana, una herramienta en React + Firebase para el flujo de mi equipo. Antes, en la Personería Municipal de Soacha, administré Active Directory, LAN y firewalls de una entidad pública y construí sus herramientas web internas con React, Node y PHP.',
       'Me gusta el software que puede demostrar lo que es: 527 pruebas automatizadas entre mis sistemas, changelogs, protocolos de validación. También construyo herramientas para videojuegos como hobby — y cuando voy full-stack, es Java con Spring Boot y React.',
     ],
     stats: [
@@ -266,7 +266,7 @@ const es: typeof en = {
         period: 'Ene — Jul 2026',
         bullets: [
           'Soporte técnico presencial para campañas internacionales — redes, conectividad y estaciones de trabajo, ~7 tickets/día.',
-          'Construí y lancé GTI Katana, una app interna de productividad (React, Tailwind, Firebase) adoptada por el equipo.',
+          'Construí y lancé GTI Katana, una app interna de productividad (React, Tailwind, Firebase) para el flujo diario del equipo.',
           'Mantuve alta disponibilidad de los recursos tecnológicos críticos dentro del equipo Global Technology Infrastructure.',
         ],
         chips: ['React', 'Tailwind', 'Firebase', 'Soporte TI'],

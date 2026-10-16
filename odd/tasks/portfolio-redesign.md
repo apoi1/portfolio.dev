@@ -34,18 +34,18 @@ D11 — Theming + bilingual i18n (S8, 2026-10-16 00:50): dark stays default (per
 
 | ID | Spec | Task | Commit |
 |----|------|------|--------|
-| T1 | S6 | ODD scaffold: feature doc, Engram mirror, todo, branch | — |
-| T2 | S1 | Toolchain: deps (gsap, lenis, three, sitemap; drop flowbite), astro.config site/sitemap, netlify.toml, LICENSE | (pending) |
-| T3 | S3 | Design system: tokens, fonts, base primitives (noise, cursor, preloader, magnetic, chips) | (pending) |
-| T4 | S2,S8 | SEO layout + i18n config + theme boot + control cluster (theme/lang toggles) + Nav/Footer | (pending) |
-| T5 | S3 | Hero: theme-reactive signal-field canvas + reveals + availability + marquee | (pending) |
-| T6 | S2,S8 | About, Experience, Skills, Contact sections (bilingual verified content + scroll motion) | (pending) |
-| T7 | S3,S8 | Content collections: bilingual schema + 5 projects (EN+ES) + co-located images/covers | (pending) |
-| T8 | S2,S3,S8 | Projects bento + /projects/[slug] + /es mirror routes + 404 + /cv (both locales) | (pending) |
-| T9 | S3 | Motion/interaction system: Lenis+GSAP, ⌘K palette (bilingual), scroll progress, toasts, reduced-motion | (pending) |
-| T10 | S2 | Social images (og per locale via sharp), favicon suite, Netlify headers | (pending) |
-| T11 | S7 | Docs: README + Mermaid, ARCHITECTURE, CONTENT-GUIDE, DEPLOYMENT, AGENTS.md | (pending) |
-| T12 | S1,S2 | Verification: verify-site script (content/SEO/links), astro check, build, preview smoke, CI | (pending) |
+| T1 | S6 | ODD scaffold: feature doc, Engram mirror, todo, branch | c969878 |
+| T2 | S1 | Toolchain: deps (gsap, lenis, three, sitemap; drop flowbite), astro.config site/sitemap, netlify.toml, LICENSE | e70790d |
+| T3 | S3 | Design system: tokens, fonts, base primitives (noise, cursor, preloader, magnetic, chips) | 3c45dcb |
+| T4 | S2,S8 | SEO layout + i18n config + theme boot + control cluster (theme/lang toggles) + Nav/Footer | d7c227d |
+| T5 | S3 | Hero: theme-reactive signal-field canvas + reveals + availability + marquee | f86cb63 |
+| T6 | S2,S8 | About, Experience, Skills, Contact sections (bilingual verified content + scroll motion) | cccf884 |
+| T7 | S3,S8 | Content collections: bilingual schema + 5 projects (EN+ES) + co-located images/covers | 4f185d7 |
+| T8 | S2,S3,S8 | Projects bento + /projects/[slug] + /es mirror routes + 404 + /cv (both locales) | a43e7d7 |
+| T9 | S3 | Motion/interaction system: Lenis+GSAP, ⌘K palette (bilingual), scroll progress, toasts, reduced-motion | a401266 |
+| T10 | S2 | Social images (og per locale via sharp), favicon suite, Netlify headers | 0fb1fa5 |
+| T11 | S7 | Docs: README + Mermaid, ARCHITECTURE, CONTENT-GUIDE, DEPLOYMENT, AGENTS.md | 8f9a5a2 |
+| T12 | S1,S2 | Verification: verify-site script (content/SEO/links), astro check, build, preview smoke, CI | 5862cf3 |
 | T13 | S6 | Close: log update, Engram mirror, morning report | (pending) |
 
 ## Log

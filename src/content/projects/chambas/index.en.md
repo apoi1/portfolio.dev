@@ -16,7 +16,7 @@ A **local-first, zero-cost job-search automation system** I run daily: it ingest
 
 ## Highlights
 
-- **9 ingest sources** plus manual add, with anti-burnout daily caps baked in.
+- **7 ingest sources** plus manual add, with anti-burnout daily caps baked in.
 - **SQLite** storage with migrations; scoring fully driven by the target-role config — nothing hardcoded.
 - **477 automated pytest cases** — the repo's real quality gate.
 - **CLI + embedded web UI** (FastAPI), cron-driven digests, bilingual ES/EN throughout.
