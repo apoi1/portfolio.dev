@@ -42,7 +42,8 @@ const en = {
   },
   about: {
     kicker: 'About',
-    title: 'Engineer by training, builder by default.',
+    titleLead: 'Engineer by training,',
+    titleGrad: 'builder by default.',
     photoAlt: 'Portrait of Julián Ruiz — apoi2',
     bio: [
       "I'm Julián — a systems engineer from Soacha, Colombia (class of 2026, UNIMINUTO) who works both ends of a system: the React dashboard a team opens every morning, and the ESP32 firmware talking MQTT underneath it.",
@@ -58,7 +59,8 @@ const en = {
   },
   experience: {
     kicker: 'Experience',
-    title: 'Real teams, real uptime.',
+    titleLead: 'Real teams,',
+    titleGrad: 'real uptime.',
     items: [
       {
         org: 'Sutherland Global Services',
@@ -96,7 +98,8 @@ const en = {
   },
   skills: {
     kicker: 'Skills',
-    title: 'From signals to screens.',
+    titleLead: 'From signals',
+    titleGrad: 'to screens.',
     groups: [
       {
         title: 'Languages',
@@ -138,11 +141,26 @@ const en = {
         'ls tests/',
         'csisensor/  chambas/  → 527 passing',
       ],
+      hint: 'type help + Enter — this terminal is real',
+      out: {
+        help: 'whoami · projects · contact · email · theme · lang · konami · sudo · clear',
+        whoami: 'julián ruiz — systems engineer · bogotá, CO · EN/ES',
+        projects: 'csisensor · chambas · gti-katana · cineclick · this site — press Ctrl+K to open them',
+        contact: 'apoi2@proton.me · linkedin.com/in/ruijuliadev · github.com/apoi1',
+        email: 'apoi2@proton.me — copied to your clipboard ✓',
+        theme: 'toggled — check the sun/moon up there ✦',
+        lang: 'switching language…',
+        konami: '↑ ↑ ↓ ↓ ← → ← → B A — try it anywhere on the page',
+        sudo: 'Permission granted — opening your mail client…',
+        clear: '',
+        unknown: 'command not found — type help',
+      },
     },
   },
   projects: {
     kicker: 'Projects',
-    title: 'Built, tested, shipped.',
+    titleLead: 'Built, tested,',
+    titleGrad: 'shipped.',
     subtitle: 'Every card is a case study — the stack, the numbers, the receipts.',
     caseStudy: 'Case study',
     live: 'Live',
@@ -151,7 +169,8 @@ const en = {
   },
   contact: {
     kicker: 'Contact',
-    title: "Let's build something solid.",
+    titleLead: "Let's build",
+    titleGrad: 'something solid.',
     text: "I'm one message away — an on-site role in Bogotá, a remote position anywhere, or just talking shop about ESP32s and Spring Boot.",
     copyEmail: 'Copy email',
     openMail: 'Write me',
@@ -240,7 +259,8 @@ const es: typeof en = {
   },
   about: {
     kicker: 'Sobre mí',
-    title: 'Ingeniero de formación, constructor por defecto.',
+    titleLead: 'Ingeniero de formación,',
+    titleGrad: 'constructor por defecto.',
     photoAlt: 'Retrato de Julián Ruiz — apoi2',
     bio: [
       'Soy Julián — ingeniero de sistemas de Soacha, Colombia (promoción 2026, UNIMINUTO) que trabaja los dos extremos de un sistema: el tablero en React que un equipo abre cada mañana y el firmware de ESP32 hablando MQTT por debajo.',
@@ -256,7 +276,8 @@ const es: typeof en = {
   },
   experience: {
     kicker: 'Experiencia',
-    title: 'Equipos reales, disponibilidad real.',
+    titleLead: 'Equipos reales,',
+    titleGrad: 'disponibilidad real.',
     items: [
       {
         org: 'Sutherland Global Services',
@@ -294,7 +315,8 @@ const es: typeof en = {
   },
   skills: {
     kicker: 'Habilidades',
-    title: 'De señales a pantallas.',
+    titleLead: 'De señales',
+    titleGrad: 'a pantallas.',
     groups: [
       {
         title: 'Lenguajes',
@@ -336,11 +358,26 @@ const es: typeof en = {
         'ls pruebas/',
         'csisensor/  chambas/  → 527 en verde',
       ],
+      hint: 'escribí help + Enter — esta terminal es real',
+      out: {
+        help: 'whoami · projects · contact · email · theme · lang · konami · sudo · clear',
+        whoami: 'julián ruiz — ingeniero de sistemas · bogotá, CO · EN/ES',
+        projects: 'csisensor · chambas · gti-katana · cineclick · este sitio — Ctrl+K los abre',
+        contact: 'apoi2@proton.me · linkedin.com/in/ruijuliadev · github.com/apoi1',
+        email: 'apoi2@proton.me — copiado a tu portapapeles ✓',
+        theme: 'cambiado — mirá el sol/luna allá arriba ✦',
+        lang: 'cambiando de idioma…',
+        konami: '↑ ↑ ↓ ↓ ← → ← → B A — probalo en cualquier lado de la página',
+        sudo: 'Permiso concedido — abriendo tu cliente de correo…',
+        clear: '',
+        unknown: 'comando no encontrado — escribí help',
+      },
     },
   },
   projects: {
     kicker: 'Proyectos',
-    title: 'Construido, probado, lanzado.',
+    titleLead: 'Construido, probado,',
+    titleGrad: 'lanzado.',
     subtitle: 'Cada tarjeta es un caso de estudio: el stack, los números, las evidencias.',
     caseStudy: 'Ver caso',
     live: 'Online',
@@ -349,7 +386,8 @@ const es: typeof en = {
   },
   contact: {
     kicker: 'Contacto',
-    title: 'Construyamos algo sólido.',
+    titleLead: 'Construyamos',
+    titleGrad: 'algo sólido.',
     text: 'Estoy a un mensaje — un rol presencial en Bogotá, una posición remota en cualquier parte, o simplemente charlar de ESP32s y Spring Boot.',
     copyEmail: 'Copiar correo',
     openMail: 'Escríbeme',

@@ -19,9 +19,7 @@ const testsLabel = locale === 'es' ? '527 pruebas' : '527 tests';
 
 <section id="about" class="relative scroll-mt-20">
   <div class="mx-auto max-w-6xl px-4 py-24 md:px-6 md:py-36">
-    <SectionHeading>
-      {t.about.title}
-    </SectionHeading>
+    <SectionHeading lead={t.about.titleLead} grad={t.about.titleGrad} />
 
     <div
       class="mt-14 grid items-start gap-14 lg:grid-cols-[5fr_7fr] lg:gap-20"

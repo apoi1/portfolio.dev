@@ -171,7 +171,15 @@ function createField(canvas: HTMLCanvasElement): Field {
     document.addEventListener('visibilitychange', onVis);
     const frame = () => {
       if (visible && inView) {
-        t += 0.016;
+        // scroll velocity feeds the wave speed — the page feels alive
+        // while you scroll it (motion.ts writes __scrollVel from Lenis)
+        const vel = Math.min(
+          Math.abs((window as any).__scrollVel || 0),
+          60,
+        );
+        (window as any).__scrollVel =
+          ((window as any).__scrollVel || 0) * 0.92;
+        t += 0.016 * (1 + (vel / 60) * 1.2);
         boost = Math.max(0, boost - 0.016 / 8);
         update(t);
         renderer.render(scene, camera);

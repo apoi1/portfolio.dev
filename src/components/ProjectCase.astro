@@ -134,7 +134,9 @@ const statusCls =
         height={1100}
         loading="eager"
         decoding="async"
-        class="w-full rounded-[1.25rem] object-cover" />
+        class="w-full cursor-zoom-in rounded-[1.25rem] object-cover"
+        data-lightbox
+        data-lightbox-alt={d.title} />
     </div>
   </div>
 
@@ -164,7 +166,9 @@ const statusCls =
                 height={750}
                 loading="lazy"
                 decoding="async"
-                class="w-full rounded-xl object-cover"
+                class="w-full cursor-zoom-in rounded-xl object-cover"
+                data-lightbox
+                data-lightbox-alt={`${d.title} — ${i + 1}`}
               />
             </div>
           ))}
@@ -210,6 +214,58 @@ const statusCls =
     }
   </nav>
 </article>
+
+<!-- lightbox -->
+<div
+  id="lightbox"
+  class="fixed inset-0 z-80 hidden items-center justify-center bg-base/95 p-4 md:p-10"
+  role="dialog"
+  aria-modal="true"
+  aria-label="image viewer"
+>
+  <img
+    id="lightbox-img"
+    alt=""
+    class="max-h-[86vh] max-w-full rounded-2xl border border-line object-contain"
+  />
+</div>
+
+<script>
+  const init = () => {
+    const box = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    if (!box || !img) return;
+
+    const open = (target: HTMLImageElement) => {
+      img.src = target.currentSrc || target.src;
+      img.alt = target.dataset.lightboxAlt || target.alt || '';
+      box.style.display = 'flex';
+      box.classList.remove('hidden');
+      (window as any).__lenisStop?.(true);
+      document.documentElement.style.overflow = 'hidden';
+    };
+    const close = () => {
+      box.classList.add('hidden');
+      box.style.display = 'none';
+      (window as any).__lenisStop?.(false);
+      document.documentElement.style.overflow = '';
+    };
+
+    document
+      .querySelectorAll<HTMLImageElement>('[data-lightbox]')
+      .forEach((t) =>
+        t.addEventListener('click', () => {
+          if (t.closest('a')) return; // don't hijack links
+          open(t);
+        }),
+      );
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !box.classList.contains('hidden')) close();
+    });
+  };
+  document.addEventListener('astro:page-load', init);
+</script>
 
 <style>
   .case-body {

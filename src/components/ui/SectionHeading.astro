@@ -1,14 +1,17 @@
 ---
 /**
- * Section opener: a small signal-waveform mark + one complete display
- * headline. No eyebrow chrome, no index numbers, no gradient words —
- * the typography carries the section.
+ * Section opener: signal-waveform mark + display headline in two
+ * typographic pieces — plain lead + gradient tail. The space between
+ * them is a layout gap (flex), so it can never be eaten by HTML
+ * minification.
  */
 interface Props {
+  lead: string;
+  grad: string;
   kicker?: string;
   class?: string;
 }
-const { kicker, class: className = '' } = Astro.props;
+const { lead, grad, kicker, class: className = '' } = Astro.props;
 ---
 
 <div class={className}>
@@ -31,10 +34,10 @@ const { kicker, class: className = '' } = Astro.props;
     }
   </div>
   <h2
-    class="mt-4 max-w-3xl text-[clamp(2.1rem,5vw,3.7rem)] font-extrabold leading-[1.03] tracking-[-0.02em] text-ink"
+    class="mt-4 flex max-w-3xl flex-wrap items-baseline gap-x-3 text-[clamp(2.1rem,5vw,3.7rem)] font-extrabold leading-[1.03] tracking-[-0.02em] text-ink"
     data-reveal
     data-reveal-delay="0.06"
   >
-    <slot />
+    <span>{lead}</span><span class="text-grad">{grad}</span>
   </h2>
 </div>

@@ -1,13 +1,14 @@
 ---
 /**
- * Skills — a live-looking terminal beside one instrument panel of
- * "channels" (evidence-backed stacks). No card-per-category kit.
+ * Skills — a REAL interactive terminal beside one instrument panel of
+ * "channels". Visitors can type commands: help, whoami, projects,
+ * contact, email (copies!), theme (toggles!), lang (navigates!), konami,
+ * sudo, clear.
  */
 import SectionHeading from '../ui/SectionHeading.astro';
 import Chip from '../ui/Chip.astro';
-import Icon from '../ui/Icon.astro';
-import type { Locale } from '../../lib/site';
 import { getUI } from '../../i18n/ui';
+import type { Locale } from '../../lib/site';
 
 interface Props {
   locale: Locale;
@@ -15,7 +16,7 @@ interface Props {
 const { locale } = Astro.props;
 const t = getUI(locale);
 
-// terminal lines come as [command, output, command, output, ...]
+// terminal intro lines come as [command, output, command, output, ...]
 const term = t.skills.terminal.lines;
 const pairs: Array<{ cmd: string; out?: string }> = [];
 for (let i = 0; i < term.length; i += 2) {
@@ -25,9 +26,7 @@ for (let i = 0; i < term.length; i += 2) {
 
 <section id="skills" class="relative scroll-mt-20">
   <div class="mx-auto max-w-6xl px-4 py-24 md:px-6 md:py-36">
-    <SectionHeading>
-      {t.skills.title}
-    </SectionHeading>
+    <SectionHeading lead={t.skills.titleLead} grad={t.skills.titleGrad} />
 
     <div class="mt-14 grid gap-6 lg:grid-cols-[5fr_7fr] lg:gap-8">
       <!-- terminal -->
@@ -38,7 +37,11 @@ for (let i = 0; i < term.length; i += 2) {
           <span class="size-2.5 rounded-full bg-mint"></span>
           <span class="mono-label ml-2 !text-faint">apoi2@bogota:~</span>
         </div>
-        <div class="space-y-2 p-5 font-mono text-xs md:text-[13px]" data-stagger>
+        <div
+          id="term-body"
+          class="max-h-56 space-y-2 overflow-y-auto p-5 font-mono text-xs md:text-[13px]"
+          data-stagger
+        >
           {
             pairs.map((p) => (
               <>
@@ -50,10 +53,19 @@ for (let i = 0; i < term.length; i += 2) {
               </>
             ))
           }
-          <p class="text-ink">
-            <span class="mr-2 text-violet">$</span>
-            <span class="animate-blink text-lilac">▌</span>
-          </p>
+        </div>
+        <div
+          class="flex items-center gap-2 border-t border-line px-5 py-3 font-mono text-xs md:text-[13px]"
+        >
+          <span class="shrink-0 text-violet">$</span>
+          <input
+            id="term-input"
+            class="min-w-0 flex-1 bg-transparent text-ink outline-none placeholder:text-faint"
+            placeholder={t.skills.terminal.hint}
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="terminal"
+          />
         </div>
       </div>
 
@@ -78,3 +90,76 @@ for (let i = 0; i < term.length; i += 2) {
     </div>
   </div>
 </section>
+
+<script>
+  import { getUI } from '../../i18n/ui';
+
+  const init = () => {
+    const input = document.getElementById('term-input') as HTMLInputElement | null;
+    const body = document.getElementById('term-body');
+    if (!input || !body) return;
+
+    const locale = document.documentElement.lang === 'es' ? ('es' as const) : ('en' as const);
+    const out = getUI(locale).skills.terminal.out;
+
+    const print = (cmd: string, text: string) => {
+      const c = document.createElement('p');
+      c.className = 'text-ink';
+      const d = document.createElement('span');
+      d.className = 'mr-2 text-violet';
+      d.textContent = '$';
+      c.append(d, document.createTextNode(cmd));
+      const o = document.createElement('p');
+      o.className = 'pl-4 text-soft';
+      o.textContent = text;
+      body.append(c, o);
+      body.scrollTop = body.scrollHeight;
+    };
+
+    input.addEventListener('keydown', async (e) => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      const raw = input.value.trim();
+      input.value = '';
+      if (!raw) return;
+      const cmd = raw.toLowerCase().split(/\s+/)[0];
+
+      if (cmd === 'clear') {
+        body.replaceChildren();
+        return;
+      }
+      const text = (out as Record<string, string>)[cmd] ?? out.unknown;
+      print(raw, text);
+
+      if (cmd === 'email') {
+        try {
+          await navigator.clipboard.writeText('apoi2@proton.me');
+        } catch {}
+        (window as any).__toast?.(text);
+      }
+      if (cmd === 'sudo') {
+        (window as any).__toast?.(text);
+        window.setTimeout(() => {
+          window.location.href = 'mailto:apoi2@proton.me?subject=sudo%20hire%20apoi2';
+        }, 700);
+      }
+      if (cmd === 'theme') {
+        const next =
+          document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem('apoi2-theme', next);
+        } catch {}
+        document.dispatchEvent(
+          new CustomEvent('themechange', { detail: { theme: next } }),
+        );
+      }
+      if (cmd === 'lang') {
+        window.setTimeout(() => {
+          window.location.href = locale === 'es' ? '/' : '/es/';
+        }, 500);
+      }
+    });
+  };
+  document.addEventListener('astro:page-load', init);
+</script>

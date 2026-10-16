@@ -1,9 +1,9 @@
 ---
 /**
- * Custom cursor: ink dot + lerped violet ring. Fine pointers only;
- * grows over interactive elements. Never shown on touch devices
- * or when the user prefers reduced motion. Re-initializes on
- * every astro:page-load so it survives ViewTransitions.
+ * Custom cursor: ink dot + lerped violet ring. Fine pointers only.
+ * Over [data-cursor-label] targets (project cards) the ring grows,
+ * fills violet and speaks — "Ver caso" / "Case study" travels with it.
+ * Never shown on touch devices or under prefers-reduced-motion.
  */
 ---
 
@@ -19,8 +19,12 @@
   </div>
   <div
     id="cursor-ring"
-    class="absolute left-0 top-0 size-9 rounded-full border border-lilac/50 transition-[width,height,background-color,border-color] duration-300 ease-out"
+    class="absolute left-0 top-0 grid size-9 place-items-center rounded-full border border-lilac/50 transition-[width,height,background-color,border-color] duration-300 ease-out"
   >
+    <span
+      id="cursor-label"
+      class="max-w-full truncate px-2 text-center font-mono text-[10px] tracking-wide text-white opacity-0 transition-opacity duration-200"
+    ></span>
   </div>
 </div>
 
@@ -28,69 +32,88 @@
   const fine = window.matchMedia('(pointer: fine)').matches;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  let raf = 0;
+  let el: HTMLElement | null = null;
+  let dot: HTMLElement | null = null;
+  let ring: HTMLElement | null = null;
+  let labelEl: HTMLElement | null = null;
+
   let x = -100;
   let y = -100;
   let rx = -100;
   let ry = -100;
   let shown = false;
   let active = false;
+  let label = '';
+  let raf = 0;
 
   const onMove = (e: MouseEvent) => {
     x = e.clientX;
     y = e.clientY;
     if (!shown) {
       shown = true;
-      const el = document.getElementById('cursor');
       if (el) el.style.opacity = '1';
     }
     const t = e.target as HTMLElement | null;
     active = !!t?.closest(
       'a, button, input, [role="button"], [data-cursor="hover"]',
     );
+    const lblHost = t?.closest<HTMLElement>('[data-cursor-label]');
+    label = lblHost?.dataset.cursorLabel ?? '';
   };
 
   const render = () => {
-    const dot = document.getElementById('cursor-dot');
-    const ring = document.getElementById('cursor-ring');
-    if (!dot || !ring) return; // page swapped; loop stops, init restarts it
+    if (!dot || !ring || !el) return; // swapped page: init restarts the loop
     dot.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
     rx += (x - rx) * 0.16;
     ry += (y - ry) * 0.16;
     ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-    const s = active ? '3.25rem' : '2.25rem';
+    const speaking = label !== '';
+    const s = speaking ? '5.5rem' : active ? '3.25rem' : '2.25rem';
     ring.style.width = s;
     ring.style.height = s;
-    ring.style.backgroundColor = active
-      ? 'rgb(124 92 255 / 0.12)'
-      : 'transparent';
+    ring.style.backgroundColor = speaking
+      ? 'rgb(124 92 255 / 0.92)'
+      : active
+        ? 'rgb(124 92 255 / 0.12)'
+        : 'transparent';
+    ring.style.borderColor = speaking
+      ? 'transparent'
+      : 'var(--color-lilac)';
+    if (labelEl) {
+      labelEl.textContent = label;
+      labelEl.style.opacity = speaking ? '1' : '0';
+    }
     raf = requestAnimationFrame(render);
   };
 
-  let listenersBound = false;
   const init = () => {
-    const el = document.getElementById('cursor');
-    if (!el || fine === false || reduced) {
+    el = document.getElementById('cursor');
+    dot = document.getElementById('cursor-dot');
+    ring = document.getElementById('cursor-ring');
+    labelEl = document.getElementById('cursor-label');
+    if (!el || !fine || reduced) {
       el?.remove();
       return;
     }
     el.style.opacity = '0';
     el.style.transition = 'opacity .3s';
-    if (!listenersBound) {
-      listenersBound = true;
-      window.addEventListener('mousemove', onMove, { passive: true });
-      document.documentElement.addEventListener('mouseleave', () => {
-        const c = document.getElementById('cursor');
-        if (c) c.style.opacity = '0';
-      });
-      document.documentElement.addEventListener('mouseenter', () => {
-        const c = document.getElementById('cursor');
-        if (c && shown) c.style.opacity = '1';
-      });
-    }
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(render);
   };
+
+  if (fine && !reduced) {
+    window.addEventListener('mousemove', onMove, { passive: true });
+    document.documentElement.addEventListener('mouseleave', () => {
+      if (el) el.style.opacity = '0';
+      shown = false;
+    });
+    document.documentElement.addEventListener('mouseenter', () => {
+      if (el && (x > -90 || y > -90)) {
+        el.style.opacity = '1';
+        shown = true;
+      }
+    });
+  }
 
   document.addEventListener('astro:page-load', init);
 </script>

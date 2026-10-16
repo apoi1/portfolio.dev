@@ -21,9 +21,7 @@ const projects = await getProjects(locale);
 
 <section id="projects" class="relative scroll-mt-20">
   <div class="mx-auto max-w-6xl px-4 py-24 md:px-6 md:py-36">
-    <SectionHeading>
-      {t.projects.title}
-    </SectionHeading>
+    <SectionHeading lead={t.projects.titleLead} grad={t.projects.titleGrad} />
     <p
       class="mt-6 max-w-xl text-sm leading-relaxed text-soft md:text-base"
       data-reveal

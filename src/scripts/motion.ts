@@ -209,6 +209,29 @@ function magnetic() {
   });
 }
 
+/** 3D tilt on [data-tilt] cards — subtle, pointer-driven. */
+function tilt() {
+  if (!finePointer || reduced) return;
+  document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
+    const strength = 4.5;
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(el, {
+        rotateY: px * strength,
+        rotateX: -py * strength,
+        transformPerspective: 900,
+        duration: 0.5,
+        ease: 'power2.out',
+      });
+    });
+    el.addEventListener('mouseleave', () =>
+      gsap.to(el, { rotateX: 0, rotateY: 0, duration: 0.8, ease: 'power3.out' }),
+    );
+  });
+}
+
 const init = () => {
   (window as any).__motionReady = true;
 
@@ -236,12 +259,16 @@ const init = () => {
   lenis = initLenis();
   (window as any).__lenisStop = (stop: boolean) =>
     stop ? lenis?.stop() : lenis?.start();
+  lenis?.on('scroll', (e: any) => {
+    (window as any).__scrollVel = e?.velocity ?? 0;
+  });
   ctx = gsap.context(() => {
     heroEntrance();
     scrollReveals();
     counters();
   });
   magnetic();
+  tilt();
   bindAnchors();
 };
 

@@ -40,11 +40,11 @@ const socials = [
 
   <div class="relative mx-auto max-w-6xl px-4 py-32 text-center md:px-6 md:py-44">
     <h2
-      class="mx-auto mt-5 max-w-3xl text-4xl font-extrabold leading-[0.98] tracking-tight md:text-6xl"
+      class="mx-auto mt-5 flex max-w-3xl flex-wrap items-baseline justify-center gap-x-3 text-4xl font-extrabold leading-[0.98] tracking-tight md:text-6xl"
       data-reveal
       data-reveal-delay="0.08"
     >
-      {t.contact.title}
+      <span>{t.contact.titleLead}</span><span class="text-grad">{t.contact.titleGrad}</span>
     </h2>
 
     <p
