@@ -1,0 +1,268 @@
+---
+/**
+ * Command palette (⌘K / Ctrl+K) — server-rendered groups, client-side
+ * fuzzy filter + keyboard navigation. Bilingual via ui.ts; the project
+ * group comes straight from the content collection.
+ */
+import Icon from './ui/Icon.astro';
+import { getProjects, projectSlug, caseHref } from '../lib/projects';
+import { IDENTITY, type Locale } from '../lib/site';
+import { getUI } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getUI(locale);
+const base = locale === 'es' ? '/es' : '';
+const projects = await getProjects(locale);
+
+interface Item {
+  group: string;
+  label: string;
+  hint?: string;
+  href?: string;
+  external?: boolean;
+  action?: 'copy-email' | 'print-cv';
+  icon: Parameters<typeof Icon>[0]['name'];
+}
+
+const items: Item[] = [
+  { group: t.palette.groups.navigate, label: t.nav.about, href: `${base}/#about`, icon: 'arrow-right' },
+  { group: t.palette.groups.navigate, label: t.nav.experience, href: `${base}/#experience`, icon: 'arrow-right' },
+  { group: t.palette.groups.navigate, label: t.nav.projects, href: `${base}/#projects`, icon: 'arrow-right' },
+  { group: t.palette.groups.navigate, label: t.nav.skills, href: `${base}/#skills`, icon: 'arrow-right' },
+  { group: t.palette.groups.navigate, label: t.nav.contact, href: `${base}/#contact`, icon: 'arrow-right' },
+  ...projects.map((p) => ({
+    group: t.palette.groups.projects,
+    label: p.data.title,
+    hint: p.data.links.repo ? 'GitHub' : p.data.links.live ? t.projects.live : undefined,
+    href: caseHref(locale, projectSlug(p)),
+    icon: 'code' as const,
+  })),
+  { group: t.palette.groups.links, label: 'GitHub', href: IDENTITY.github, external: true, icon: 'github' },
+  { group: t.palette.groups.links, label: 'LinkedIn', href: IDENTITY.linkedin, external: true, icon: 'linkedin' },
+  { group: t.palette.groups.links, label: 'Bluesky', href: IDENTITY.bluesky, external: true, icon: 'bluesky' },
+  { group: t.palette.groups.links, label: IDENTITY.email, href: `mailto:${IDENTITY.email}`, icon: 'mail' },
+  { group: t.palette.groups.actions, label: t.palette.actions.copyEmail, action: 'copy-email', icon: 'copy' },
+  { group: t.palette.groups.actions, label: t.palette.actions.cv, href: `${base}/cv`, icon: 'download' },
+  { group: t.palette.groups.actions, label: t.palette.actions.github, href: IDENTITY.github, external: true, icon: 'external' },
+];
+---
+
+<div
+  id="cmdk"
+  class="fixed inset-0 z-70 hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label={t.nav.cmdk}
+>
+  <div
+    class="absolute inset-0 bg-base/70 backdrop-blur-sm"
+    data-cmdk-close
+  >
+  </div>
+  <div
+    class="frame glass mx-auto mt-[10vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-2xl border border-line-strong shadow-2xl"
+  >
+    <div class="flex items-center gap-3 border-b border-line px-4">
+      <Icon name="terminal" class="size-4 shrink-0 text-lilac" />
+      <input
+        id="cmdk-input"
+        type="text"
+        class="h-12 min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-faint"
+        placeholder={t.palette.placeholder}
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <kbd
+        class="mono-label shrink-0 rounded border border-line px-1.5 py-0.5"
+      >esc</kbd>
+    </div>
+
+    <div id="cmdk-list" class="max-h-[min(24rem,60vh)] overflow-y-auto p-2">
+      {
+        items.map((item) => (
+          <button
+            type="button"
+            class="cmdk-item flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-ink transition-colors hover:bg-violet/12 data-[active=true]:bg-violet/12"
+            data-cmdk-item
+            data-label={item.label}
+            data-href={item.href ?? ''}
+            data-external={item.external ? 'true' : ''}
+            data-action={item.action ?? ''}
+            data-toast={item.action === 'copy-email' ? t.contact.emailCopied : ''}
+          >
+            <Icon name={item.icon} class="size-4 shrink-0 text-lilac" />
+            <span class="min-w-0 flex-1 truncate">{item.label}</span>
+            {item.hint && (
+              <span class="mono-label shrink-0 !text-faint">{item.hint}</span>
+            )}
+            {item.external && (
+              <Icon name="arrow-up-right" class="size-3.5 shrink-0 text-faint" />
+            )}
+          </button>
+        ))
+      }
+      <p
+        id="cmdk-empty"
+        class="mono-label hidden px-4 py-6 text-center"
+      >
+        {t.palette.empty}
+      </p>
+    </div>
+
+    <div
+      class="mono-label flex items-center justify-between border-t border-line px-4 py-2.5"
+    >
+      <span>↑↓ ↵</span>
+      <span>{t.palette.hintClose}</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const init = () => {
+    const root = document.getElementById('cmdk');
+    const input = document.getElementById('cmdk-input') as HTMLInputElement | null;
+    const list = document.getElementById('cmdk-list');
+    const empty = document.getElementById('cmdk-empty');
+    if (!root || !input || !list) return;
+
+    const items = [...list.querySelectorAll<HTMLElement>('[data-cmdk-item]')];
+    let open = false;
+    let active = -1;
+
+    const visible = () =>
+      items.filter((el) => el.style.display !== 'none');
+
+    const setActive = (i: number) => {
+      const vis = visible();
+      if (vis.length === 0) return;
+      active = ((i % vis.length) + vis.length) % vis.length;
+      items.forEach((el) => (el.dataset.active = 'false'));
+      vis[active].dataset.active = 'true';
+      vis[active].scrollIntoView({ block: 'nearest' });
+    };
+
+    const filter = () => {
+      const q = input.value.trim().toLowerCase();
+      let shown = 0;
+      items.forEach((el) => {
+        const label = (el.dataset.label ?? '').toLowerCase();
+        const match = q === '' || label.includes(q);
+        el.style.display = match ? '' : 'none';
+        if (match) shown++;
+      });
+      if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
+      setActive(0);
+    };
+
+    const close = () => {
+      open = false;
+      root.style.display = 'none';
+      root.classList.add('hidden');
+      document.documentElement.style.overflow = '';
+      (window as any).__lenisStop?.(false);
+    };
+
+    const show = () => {
+      open = true;
+      root.classList.remove('hidden');
+      root.style.display = 'block';
+      document.documentElement.style.overflow = 'hidden';
+      (window as any).__lenisStop?.(true);
+      input.value = '';
+      filter();
+      input.focus();
+      setActive(0);
+    };
+
+    const run = (el: HTMLElement) => {
+      const href = el.dataset.href ?? '';
+      const action = el.dataset.action ?? '';
+      const external = el.dataset.external === 'true';
+      if (action === 'copy-email') {
+        navigator.clipboard
+          .writeText('apoi2@proton.me')
+          .then(() => (window as any).__toast?.(el.dataset.toast ?? ''))
+          .catch(() => {});
+        close();
+        return;
+      }
+      if (action === 'print-cv') {
+        close();
+        window.location.href = href;
+        return;
+      }
+      close();
+      if (!href) return;
+      if (external) {
+        window.open(href, '_blank', 'noopener');
+        return;
+      }
+      if (href.startsWith('mailto:')) {
+        window.location.href = href;
+        return;
+      }
+      // hash link on the same page → smooth scroll
+      if (href.includes('#') && !href.startsWith('http')) {
+        const path = href.split('#')[0];
+        if (path === location.pathname || path === '') {
+          const id = href.split('#')[1];
+          const target = id ? document.getElementById(id) : null;
+          if (target) {
+            target.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth' });
+            return;
+          }
+        }
+      }
+      window.location.href = href;
+    };
+
+    // bind once per page
+    document.getElementById('cmdk-btn')?.addEventListener('click', show);
+    root.querySelectorAll('[data-cmdk-close]').forEach((el) =>
+      el.addEventListener('click', close),
+    );
+    items.forEach((el) => el.addEventListener('click', () => run(el)));
+    input.addEventListener('input', filter);
+    root.addEventListener('keydown', (e) => {
+      if (!open) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActive(active + 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActive(active - 1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const vis = visible();
+        if (vis[active]) run(vis[active]);
+      }
+    });
+
+    if (!(window as any).__cmdkKeys) {
+      (window as any).__cmdkKeys = true;
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          const r = document.getElementById('cmdk');
+          if (!r) return;
+          if (r.classList.contains('hidden')) {
+            show();
+          } else {
+            close();
+          }
+        }
+      });
+    }
+  };
+
+  document.addEventListener('astro:page-load', init);
+</script>

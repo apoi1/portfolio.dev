@@ -10,6 +10,7 @@ import Preloader from '../components/ui/Preloader.astro';
 import Cursor from '../components/ui/Cursor.astro';
 import NoiseOverlay from '../components/ui/NoiseOverlay.astro';
 import Toast from '../components/ui/Toast.astro';
+import CommandPalette from '../components/CommandPalette.astro';
 
 import { SITE, IDENTITY, altPath, type Locale } from '../lib/site';
 
@@ -145,6 +146,7 @@ const personJsonLd = {
     <Cursor />
     <NoiseOverlay />
     <Toast />
+    <CommandPalette locale={locale} />
 
     <script type="module" src="/src/scripts/motion.ts"></script>
   </body>
