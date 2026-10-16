@@ -1,0 +1,192 @@
+---
+/**
+ * Hero — full-viewport opener. Interactive signal-field canvas behind
+ * giant display typography, typewriter role rotator, magnetic CTAs,
+ * availability pill and a bottom strip with coordinates + socials.
+ * Reveal choreography is driven by the motion system (data-hero-seq).
+ */
+import Icon from '../ui/Icon.astro';
+import { IDENTITY, type Locale } from '../../lib/site';
+import { getUI } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getUI(locale);
+const base = locale === 'es' ? '/es' : '';
+
+const socials = [
+  { href: IDENTITY.github, icon: 'github' as const, label: 'GitHub' },
+  { href: IDENTITY.linkedin, icon: 'linkedin' as const, label: 'LinkedIn' },
+  { href: IDENTITY.bluesky, icon: 'bluesky' as const, label: 'Bluesky' },
+];
+---
+
+<section id="top" class="relative flex min-h-dvh flex-col overflow-hidden">
+  <!-- signal canvas + veils -->
+  <div class="absolute inset-0 -z-10" aria-hidden="true">
+    <canvas id="signal-field" class="size-full"></canvas>
+    <div
+      class="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_0%,transparent_35%,var(--color-base)_100%)]"
+    >
+    </div>
+    <div
+      class="bg-grid absolute inset-0 [mask-image:radial-gradient(75%_65%_at_50%_45%,black,transparent)]"
+    >
+    </div>
+    <div
+      class="absolute -top-40 left-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-violet/12 blur-3xl"
+    >
+    </div>
+  </div>
+
+  <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-4 pb-20 pt-32 md:px-6">
+    <p class="mono-label !text-soft" data-hero-seq="0">
+      <span class="mr-2 inline-block size-1.5 rounded-full bg-mint align-middle"></span>
+      {t.hero.kicker}
+    </p>
+
+    <h1
+      class="mt-7 font-extrabold leading-[0.92] tracking-[-0.02em]"
+      data-hero-seq="1"
+    >
+      <span
+        class="block text-[clamp(3.4rem,11.5vw,8.75rem)] text-ink"
+        data-split>Julián Ruiz</span
+      >
+      <span
+        class="mt-3 block text-[clamp(1.15rem,3.4vw,2.1rem)] font-bold text-soft"
+      >
+        {t.hero.aka}
+        <span class="text-grad font-extrabold">apoi2</span>
+      </span>
+    </h1>
+
+    <p
+      class="mt-7 flex min-h-9 items-center gap-2 font-mono text-sm text-soft md:text-base"
+      data-hero-seq="2"
+    >
+      <span class="text-violet">›</span>
+      <span>{t.hero.rotatorPrefix}</span>
+      <span
+        id="rotator"
+        class="text-ink"
+        data-rotator={JSON.stringify(t.hero.rotator)}></span>
+      <span class="animate-blink text-lilac">▌</span>
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center gap-4" data-hero-seq="3">
+      <a
+        href={`${base}/#projects`}
+        class="glow-violet group inline-flex items-center gap-2 rounded-full bg-violet px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-lilac"
+        data-magnetic
+        data-cursor="hover">
+        {t.hero.ctaWork}
+        <Icon
+          name="arrow-down"
+          class="size-4 transition-transform duration-300 group-hover:translate-y-0.5"
+        />
+      </a>
+      <a
+        href={`${base}/#contact`}
+        class="inline-flex items-center gap-2 rounded-full border border-line-strong px-6 py-3 text-sm font-semibold text-ink transition-colors duration-300 hover:border-lilac hover:text-lilac"
+        data-magnetic
+        data-cursor="hover">
+        {t.hero.ctaContact}
+        <Icon name="arrow-up-right" class="size-4" />
+      </a>
+    </div>
+
+    <div
+      class="mt-9 inline-flex w-fit items-center gap-2.5 rounded-full border border-line bg-raised/70 px-4 py-2"
+      data-hero-seq="4"
+    >
+      <span class="size-2 animate-pulse-dot rounded-full bg-mint"></span>
+      <span class="text-sm font-medium text-ink">{t.hero.available}</span>
+      <span class="text-xs text-faint">{t.hero.availabilityNote}</span>
+    </div>
+  </div>
+
+  <!-- bottom strip -->
+  <div
+    class="absolute inset-x-0 bottom-0"
+    data-hero-seq="5"
+  >
+    <div
+      class="mx-auto flex max-w-6xl items-center justify-between px-4 pb-6 md:px-6"
+    >
+      <p class="mono-label flex items-center gap-1.5">
+        {t.hero.scroll}
+        <Icon name="arrow-down" class="size-3 animate-float" />
+      </p>
+      <p class="mono-label hidden md:block">{IDENTITY.location.coords}</p>
+      <div class="flex gap-2.5">
+        {
+          socials.map((s) => (
+            <a
+              href={s.href}
+              target="_blank"
+              rel="noopener"
+              class="grid size-8 place-items-center rounded-full border border-line text-faint transition-all duration-300 hover:border-lilac hover:text-lilac"
+              aria-label={s.label}
+              data-cursor="hover"
+            >
+              <Icon name={s.icon} class="size-3.5" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/scripts/signal-field.ts"></script>
+
+  <script>
+    // typewriter role rotator
+    const init = () => {
+      const el = document.getElementById('rotator');
+      if (!el) return;
+      let items: string[] = [];
+      try {
+        items = JSON.parse(el.dataset.rotator ?? '[]');
+      } catch {
+        items = [];
+      }
+      if (items.length === 0) return;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) {
+        el.textContent = items[0];
+        return;
+      }
+      let idx = 0;
+      let pos = 0;
+      let deleting = false;
+      const step = () => {
+        const word = items[idx];
+        if (!deleting) {
+          pos++;
+          el.textContent = word.slice(0, pos);
+          if (pos === word.length) {
+            deleting = true;
+            window.setTimeout(step, 1700);
+            return;
+          }
+          window.setTimeout(step, 46);
+        } else {
+          pos--;
+          el.textContent = word.slice(0, pos);
+          if (pos === 0) {
+            deleting = false;
+            idx = (idx + 1) % items.length;
+            window.setTimeout(step, 350);
+            return;
+          }
+          window.setTimeout(step, 24);
+        }
+      };
+      window.setTimeout(step, 500);
+    };
+    document.addEventListener('astro:page-load', init);
+  </script>
+</section>
