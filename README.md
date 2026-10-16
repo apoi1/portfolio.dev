@@ -16,8 +16,9 @@
 
 | Feature | How |
 | --- | --- |
-| Interactive hero | three.js point-wave "signal field" — reacts to your pointer and to the theme |
-| Scroll choreography | GSAP + ScrollTrigger + Lenis, all declarative (`data-reveal`, `data-stagger`, `data-counter`, `data-magnetic`) |
+| Interactive hero | three.js point-wave "signal field" — reacts to your pointer, to the theme, and speeds up as you scroll |
+| Living pages | Tilt-3D project cards, a cursor that grows and speaks over cards, a REAL terminal (type `help`), image lightboxes on case pages |
+| Scroll choreography | GSAP + ScrollTrigger + Lenis, all declarative (`data-reveal`, `data-stagger`, `data-counter`, `data-magnetic`, `data-tilt`) |
 | Bilingual EN/ES | Full i18n routing (`/` + `/es/`), hreflang alternates, per-locale metadata & OG cards |
 | Dark / light theme | CSS-variable token overrides — zero build fork, zero flash, persisted |
 | Projects as content | Astro Content Collections — **add a project by adding a folder** |
