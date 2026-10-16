@@ -46,7 +46,7 @@ const markers = [
   [es, 'Julián Ruiz', 'ES home: name'],
   [es, 'Ver caso', 'ES home: case-study label'],
   [es, 'Disponible para trabajar', 'ES home: availability'],
-  [es, 'construido, probado', 'ES home: projects heading (ES)'],
+  [es, 'Construido, probado', 'ES home: projects heading (ES)'],
 ];
 for (const [html, needle, label] of markers) {
   if (html && !html.includes(needle)) errors.push(`marker not found — ${label}: "${needle}"`);
@@ -57,7 +57,7 @@ for (const p of PAGES) {
   const f = page(p);
   if (!existsSync(f)) continue;
   const html = readFileSync(f, 'utf8');
-  const isEs = p.startsWith('dist/es/') || p === join(DIST, 'es/index.html');
+  const isEs = p.startsWith('/es/');
   const checks = [
     ['canonical', /rel="canonical" href="https:\/\/apoi2\.is-a\.dev/],
     ['hreflang en', /hreflang="en"/],

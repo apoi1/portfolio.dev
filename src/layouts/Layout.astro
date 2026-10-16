@@ -20,6 +20,7 @@ interface Props {
   locale: Locale;
   ogImage?: string;
   ogType?: 'website' | 'article';
+  noindex?: boolean;
 }
 
 const {
@@ -28,6 +29,7 @@ const {
   locale,
   ogImage = locale === 'es' ? '/og-es.png' : '/og.png',
   ogType = 'website',
+  noindex = false,
 } = Astro.props;
 
 const rawPath = Astro.url.pathname;
@@ -70,6 +72,7 @@ const personJsonLd = {
     <meta name="author" content={IDENTITY.handle} />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#06060b" />
+    {noindex && <meta name="robots" content="noindex" />}
 
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="en" href={enHref} />

@@ -15,6 +15,10 @@ const path = Astro.url.pathname;
 const base = locale === 'es' ? '/es' : '';
 const homeHref = locale === 'es' ? '/es/' : '/';
 const onHome = path === '/' || path === '/es' || path === '/es/';
+// 404 has no translated counterpart — the toggle falls back to the homes
+const is404 = path.startsWith('/404');
+const langEnHref = is404 ? '/' : altPath(path, 'en');
+const langEsHref = is404 ? '/es/' : altPath(path, 'es');
 const hash = (id: string) => (onHome ? `#${id}` : `${base}/#${id}`);
 
 const links = [
@@ -74,8 +78,8 @@ const socials = [
     <div class="flex items-center gap-2">
       <LangToggle
         locale={locale}
-        enHref={altPath(path, 'en')}
-        esHref={altPath(path, 'es')}
+        enHref={langEnHref}
+        esHref={langEsHref}
       />
       <ThemeToggle label={t.nav.theme} />
       <button
