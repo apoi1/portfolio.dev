@@ -116,6 +116,27 @@ const personJsonLd = {
         if (m) m.setAttribute('content', t === 'light' ? '#f4f4f9' : '#06060b');
         if (!window.__bootGuard) {
           window.__bootGuard = 1;
+          // Stale SPA session guard: after a deploy, old in-memory pages
+          // reference chunk URLs that no longer exist. If a script fails
+          // to load, reload once to pick up the fresh build.
+          window.addEventListener(
+            'error',
+            function (e) {
+              var t = e.target;
+              if (
+                t &&
+                t.tagName === 'SCRIPT' &&
+                t.src &&
+                !sessionStorage.getItem('__chunk_reload')
+              ) {
+                try {
+                  sessionStorage.setItem('__chunk_reload', '1');
+                } catch (err) {}
+                location.reload();
+              }
+            },
+            true,
+          );
           var rearm = function () {
             setTimeout(function () {
               if (!window.__motionReady)

@@ -234,6 +234,9 @@ function tilt() {
 
 const init = () => {
   (window as any).__motionReady = true;
+  try {
+    sessionStorage.removeItem('__chunk_reload');
+  } catch {}
 
   // teardown previous page's timelines
   ctx?.revert();
