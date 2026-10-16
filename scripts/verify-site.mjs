@@ -7,12 +7,28 @@
  * Exit code 1 on any failure, with a compact report.
  */
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 
 const DIST = 'dist';
 const SITE = 'https://apoi2.is-a.dev';
 const errors = [];
 const notes = [];
+
+// 0 — netlify.toml must parse before Netlify ever sees it
+// (TOML redefinition traps — e.g. [headers] mixed with [[headers]] —
+// only surface on Netlify's build machines otherwise).
+if (existsSync('netlify.toml')) {
+  const res = spawnSync('python3', [
+    '-c',
+    'import tomllib,sys; tomllib.load(open("netlify.toml","rb"))',
+  ]);
+  if (res.status !== 0) {
+    errors.push('netlify.toml does not parse — invalid TOML');
+  } else {
+    notes.push('netlify.toml: valid');
+  }
+}
 
 const page = (p) => join(DIST, p);
 const read = (p) => readFileSync(page(p), 'utf8');
