@@ -14,12 +14,21 @@ cover: ./cover.svg
 gallery: []
 ---
 
-La mitad backend de una **aplicación full-stack de películas** — pública en GitHub: una API REST en Spring Boot para películas y reseñas con la arquitectura clásica en capas (controller → service → repository), build con Maven, soporte Docker y un deploy vivo en Render.
+La mitad backend de una **aplicación full-stack de películas** — pública en GitHub y deployada en Render. Cuando voy full-stack, esta es la forma que alcanzo: Java con Spring Boot, capas claras, tipado fuerte y convenciones aburridas de la mejor manera.
 
-## Qué hay adentro
+## La arquitectura
 
-- Endpoints REST para películas y reseñas (`MovieController`, `ReviewController`) — flujos de creación, lectura y borrado.
-- Repositorios Spring Data JPA con una capa de servicios que hace la validación.
-- Build Dockerizado; lo primero que alcanzo cuando voy full-stack es **Java + Spring Boot**.
+El repo sigue el layering clásico de Spring, una preocupación por capa, con el package nombrado por la marca (`dev.apoi2.cineclick`):
 
-Este es el stack que más disfruto para backend: tipado fuerte, capas claras y convenciones aburridas de la buena manera.
+- **Controller** — `MovieController` y `ReviewController` exponen la superficie REST: listado de películas, detalles y el flujo de reseñas (crear / leer / borrar).
+- **Service** — las reglas de negocio y la validación viven acá, lejos de la capa HTTP.
+- **Repository** — Spring Data JPA habla con el almacén; los modelos se quedan delgados y honestos.
+- Un bootstrap `MoviesApplication`, un build Maven con wrapper (`./mvnw`), un `Dockerfile` para correr containerizado y una prueba de humo que arranca el contexto completo.
+
+## Deployment
+
+La API está viva en [cineclickbackend.onrender.com](https://cineclickbackend.onrender.com) — lo que la vuelve fácil de chequear con un `curl` cualquiera durante una entrevista, y obliga al código a sobrevivir un cold start real en vez de vivir solo en mi máquina.
+
+## Por qué está en el portafolio
+
+Es el centro honesto de mi stack: no es un sistema de investigación como csisensor ni una automatización personal como chambas — un backend convencional y bien estructurado exactamente del tipo que los equipos de producción publican todos los días.

@@ -12,14 +12,24 @@ cover: ./cover.svg
 gallery: []
 ---
 
-Un **sistema local-first y de costo cero para automatizar la búsqueda de empleo** que corro a diario: ingresa vacantes de fuentes abiertas y seguras para sus términos (RSS, Greenhouse, Lever, HN Who's Hiring, GetOnBoard…), califica cada vacante contra un perfil bilingüe de palabras clave, hace seguimiento de las postulaciones por un pipeline con recordatorios automáticos de follow-up, calcula estadísticas de embudo y genera paquetes de personalización de CV y carta de presentación por vacante — bajo una regla vinculante: solo puede seleccionar, reordenar y reformular **hechos verificados del perfil**; nunca inventa experiencia.
+Un **sistema local-first y de costo cero para automatizar la búsqueda de empleo** que corro todos los días. Convirtió la parte más agotadora de una cacería de trabajo — leer docenas de vacantes que no encajan — en un escaneo de cinco minutos de las que sí encajan.
 
-## Aspectos destacados
+## El loop diario
 
-- **7 fuentes de ingesta** más alta manual, con topes anti-burnout incorporados.
-- **SQLite** con migraciones; el scoring está 100% impulsado por la configuración de roles objetivo — nada hardcodeado.
-- **477 casos de prueba pytest** — la verdadera compuerta de calidad del repo.
-- **CLI + interfaz web embebida** (FastAPI), digests por cron, bilingüe ES/EN de punta a punta.
-- Privado por diseño: los datos personales viven fuera de git.
+1. **Ingesta** — `chambas ingest` trae vacantes nuevas de 7 fuentes abiertas y seguras para sus términos (feeds RSS/Atom, Remotive, RemoteOK, HN Who's Hiring, Greenhouse, Lever, GetOnBoard) a un almacén SQLite local. Las plataformas que prohíben scraping nunca se tocan; esas entran a mano con `chambas add`.
+2. **Scoring** — cada vacante se califica contra mis perfiles bilingües (ES/EN) de palabras clave por rol objetivo — nada hardcodeado, todo impulsado por `profile.yaml`. Las palabras de exclusión se matchean por límite de palabra, porque un filtro naïve por substring una vez me escondió todas las vacantes que contenían la palabra "international".
+3. **Seguimiento** — las postulaciones avanzan por un pipeline con recordatorios automáticos de follow-up (día 7 por defecto) y estadísticas de embudo que muestran exactamente dónde se fuga el proceso.
+4. **Tailoring** — por cada vacante se renderiza un borrador de CV y carta desde mi perfil verificado — con topes anti-burnout diarios para que el sistema sugiera una cantidad sana de trabajo, no una lista infinita.
+
+## La regla de integridad
+
+El sistema solo puede **seleccionar, reordenar y reformular hechos de mi perfil verificado** — nunca inventa experiencia. Esa regla es el punto: la automatización le debe quitar el papeleo a la honestidad, no la honestidad al trabajo.
+
+## La ingeniería
+
+- **477 casos pytest automatizados** — la verdadera compuerta de calidad del repo: conectores de ingesta (fixture-driven, sin red), scoring, el motor de follow-ups y el renderer de tailoring.
+- **SQLite con migraciones**, `chambas init` idempotente y una CLI de 14 comandos (`ingest`, `score`, `track`, `status`, `note`, `followups`, `digest`, `stats`, `tailor`, `brief`, …).
+- **Automatización por cron** — ingesta cada 6 horas, un digest cada mañana; la interfaz web (FastAPI) es embebida, no deployada.
+- **Bilingüe de punta a punta** — palabras clave en español para el mercado local, en inglés para lo remoto; el digest respeta los topes del día.
 
 *El código es privado por ahora — con gusto recorro la arquitectura en una entrevista.*
