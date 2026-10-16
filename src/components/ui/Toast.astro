@@ -1,0 +1,35 @@
+---
+/** Bottom toast — window.__toast(msg) from anywhere (copy email, palette actions). */
+---
+
+<div
+  id="toast"
+  class="glass pointer-events-none fixed bottom-6 left-1/2 z-95 -translate-x-1/2 translate-y-3 rounded-full border border-line px-5 py-2.5 opacity-0 transition-all duration-300"
+  role="status"
+  aria-live="polite"
+>
+  <span class="flex items-center gap-2 font-mono text-xs text-ink">
+    <span class="text-mint">✓</span>
+    <span id="toast-msg"></span>
+  </span>
+</div>
+
+<script>
+  let t: number | undefined;
+  const init = () => {
+    (window as any).__toast = (msg: string) => {
+      const el = document.getElementById('toast');
+      const m = document.getElementById('toast-msg');
+      if (!el || !m) return;
+      m.textContent = msg;
+      el.style.opacity = '1';
+      el.style.transform = 'translate(-50%, 0)';
+      clearTimeout(t);
+      t = window.setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translate(-50%, 12px)';
+      }, 2200);
+    };
+  };
+  document.addEventListener('astro:page-load', init);
+</script>

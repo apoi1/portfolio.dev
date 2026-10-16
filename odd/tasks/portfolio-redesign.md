@@ -14,11 +14,12 @@ S4 (verbatim): "puedes incluir imagenes nuevas, borrar los archivos de agentes q
 S5 (verbatim): "el repositorio es este https://github.com/apoi1/portfolio.dev , y me gustaria que busques en otras sesiones mis accesos de github para hacerle commits y ver que otros proyectos nuevos he hecho"
 S6 (verbatim): "si puedes dejar todo el trabajo durante toda la noche, el tiempo que necesites, con tal de hacer un trabajo espectacular y que en la mañana solo tenga que hacer una confirmación para un comit o un push"
 S7 (verbatim): "además de eso preparale una documentación genial en el repositorio de github para cuando lo quierna revisar, no se si puedas conseguir skills para hacer esquemas y así, si no, tampoco hay mucho problema"
+S8 (verbatim, added 2026-10-16 ~00:50): "quiero que tambien le pongas esos botones super bonitos que hacen que puedas alternar entre modo oscuro y modo claro, y que puedas cambiarle el idioma a la pagina, lo que cambiaría los textos y asi a unos entre español e inglés"
 
 ## Decisions (2026-10-16, night)
 
 D1 — Keep Astro 7 + Tailwind 4 (both current-gen; the "dated" feel is design, not framework). The redesign is total: every visible surface changes. Netlify constraint honored via static output, netlify.toml, Node 22.
-D2 — Content language: English primary (matches existing public site; broadest recruiter reach). Spanish offered as a future iteration.
+D2 — SUPERSEDED by D11/S8 (2026-10-16 00:50): now bilingual EN (default, /) + ES (/es/) with full i18n routing, hreflang alternates and a premium language toggle. Dark remains default; light theme added via token overrides.
 D3 — Identity: real name Julián David Ruiz Flórez presented prominently + "apoi2" as handle/monogram brand (current site is handle-only; recruiters search names). Socials: LinkedIn ruijuliadev, GitHub apoi1, Bluesky apoi2.bsky.social, email apoi2@proton.me. X omitted (current pill has empty href — bug, not info).
 D4 — NovaLabs experience entry REMOVED. User's own honesty decision (chambas project, 2026-10-14): fabricated, "permanently out". Not "important information". All other current-site info preserved and improved.
 D5 — Experience framing reconciled to verified facts (chambas profile.yaml): Sutherland = SENA apprenticeship, on-site tech support for international campaigns (network/connectivity/workstations, ~7 tickets/day) within GTI + built GTI Katana internal tool; Personería de Soacha = IT support + internal web dev (React, basic Node, PHP, HTML/CSS; AD/LAN/firewalls/inventory). No year-count inflation ("+2 years" claim dropped; shipped proof instead).
@@ -27,6 +28,7 @@ D7 — Modular scalability (S3): Astro Content Collections — each project = fo
 D8 — Schematics (S7): Mermaid diagrams (GitHub-native rendering) in README + docs/ARCHITECTURE.md. No external skill needed.
 D9 — Commits on feature branch (S6): work-unit commits during the night; morning = user confirms → merge to main + push (Netlify auto-deploys). No push without user confirmation.
 D10 — Removals (S4): flowbite dep (unused), Google Fonts Inter import (unused; Onest is the font), stock Astro README (replaced), generic AGENTS.md (replaced with short pointer), .vscode/launch.json (boilerplate), stock Astro favicon (replaced). Old components replaced wholesale by the new design system.
+D11 — Theming + bilingual i18n (S8, 2026-10-16 00:50): dark stays default (persisted in localStorage, respects prefers-color-scheme on first visit, inline head boot script, zero FOUC). Light theme = [data-theme="light"] CSS variable overrides over the same Tailwind v4 runtime tokens (no build fork). Premium toggles: sonner-style sun/moon morph + segmented EN|ES pill with sliding thumb. i18n: EN default at / (keeps existing audience), ES at /es/ — both fully translated; hreflang alternates + per-locale metadata + sitemap i18n; language toggle navigates to the counterpart page and persists preference.
 
 ## Tasks
 
@@ -35,13 +37,13 @@ D10 — Removals (S4): flowbite dep (unused), Google Fonts Inter import (unused;
 | T1 | S6 | ODD scaffold: feature doc, Engram mirror, todo, branch | — |
 | T2 | S1 | Toolchain: deps (gsap, lenis, three, sitemap; drop flowbite), astro.config site/sitemap, netlify.toml, LICENSE | (pending) |
 | T3 | S3 | Design system: tokens, fonts, base primitives (noise, cursor, preloader, magnetic, chips) | (pending) |
-| T4 | S2 | SEO layout: meta/OG/JSON-LD head, favicon suite, robots.txt, Nav, Footer | (pending) |
-| T5 | S3 | Hero: interactive signal-field canvas + reveals + availability + marquee | (pending) |
-| T6 | S2 | About, Experience, Skills, Contact sections (verified content + scroll motion) | (pending) |
-| T7 | S3 | Content collections: schema + 5 project entries + co-located images/covers | (pending) |
-| T8 | S2,S3 | Projects bento grid + /projects/[slug] case pages + 404 + /cv print page | (pending) |
-| T9 | S3 | Motion/interaction system: Lenis+GSAP, ⌘K palette, scroll progress, toasts, reduced-motion | (pending) |
-| T10 | S2 | Social image (og.png via sharp script), final favicon set, Netlify headers | (pending) |
+| T4 | S2,S8 | SEO layout + i18n config + theme boot + control cluster (theme/lang toggles) + Nav/Footer | (pending) |
+| T5 | S3 | Hero: theme-reactive signal-field canvas + reveals + availability + marquee | (pending) |
+| T6 | S2,S8 | About, Experience, Skills, Contact sections (bilingual verified content + scroll motion) | (pending) |
+| T7 | S3,S8 | Content collections: bilingual schema + 5 projects (EN+ES) + co-located images/covers | (pending) |
+| T8 | S2,S3,S8 | Projects bento + /projects/[slug] + /es mirror routes + 404 + /cv (both locales) | (pending) |
+| T9 | S3 | Motion/interaction system: Lenis+GSAP, ⌘K palette (bilingual), scroll progress, toasts, reduced-motion | (pending) |
+| T10 | S2 | Social images (og per locale via sharp), favicon suite, Netlify headers | (pending) |
 | T11 | S7 | Docs: README + Mermaid, ARCHITECTURE, CONTENT-GUIDE, DEPLOYMENT, AGENTS.md | (pending) |
 | T12 | S1,S2 | Verification: verify-site script (content/SEO/links), astro check, build, preview smoke, CI | (pending) |
 | T13 | S6 | Close: log update, Engram mirror, morning report | (pending) |
@@ -50,4 +52,5 @@ D10 — Removals (S4): flowbite dep (unused), Google Fonts Inter import (unused;
 
 L1 — User original request (verbatim, 2026-10-16 ~00:0x): full quote = S1–S6 above.
 L2 — User follow-up (verbatim): S7 above (docs + diagrams request).
-L3 — Exploration findings (2026-10-16 00:0x–00:37): repo cloned (main @ 7ada4d3, 4 commits); current stack Astro 7.0.8 + Tailwind 4.3.2 + flowbite (unused) + Onest font; current content extracted (hero copy, socials, 2 experiences + NovaLabs (fabricated→removed D4), GTI Katana project + 3 webp screenshots + photo.jpg); domain confirmed apoi2.is-a.dev → CNAME apoi2.netlify.app, live HTTP 200; tilinapp.vercel.app live; GitHub repos enumerated (csisensor Python/MIT/active today, CineClickBackend Java/Spring Boot/Render, register fork = domain registration); chambas project read locally (README: 477-test job-search automation, private); email apoi2@proton.me confirmed (footer mailto + is-a.dev registration); machine git identity apoi2 <yangchileno666@gmail.com>; no gh CLI; WSL GCM credential helper path stale on this Linux machine → push auth = morning user action. csisensor README content captured for the case page.
+L3 — Exploration findings (2026-10-16 00:0x–00:37): repo cloned (main @ 7ada4d3, 4 commits); current stack Astro 7.0.8 + Tailwind 4.3.2 + flowbite (unused) + Onest font; current content extracted (hero copy, socials, 2 experiences + NovaLabs (fabricated→removed D4), GTI Katana project + 3 webp screenshots + photo.jpg); domain confirmed apoi2.is-a.dev → CNAME apoi2.netlify.app, live HTTP 200; tilinapp.vercel.app live; GitHub repos enumerated (csisensor Python/MIT/active today, CineClickBackend Java/Spring Boot/Render, register fork = domain registration); chambas project read locally (README: 477-test job-search automation, private); email apoi2@proton.me confirmed (footer mailto + is-a.dev registration); machine git identity apoi2 <yangchileno666@gmail.com>; no gh CLI; WSL GCM credential helper RESOLVES GitHub credentials on this machine (WSL2 confirmed, GCM binary exists) → morning push will authenticate non-interactively. csisensor README content captured for the case page.
+L4 — User requirement change (2026-10-16 ~00:50): S8 added — premium dark/light toggle + ES/EN language switcher changing all texts. D2 superseded by D11: bilingual i18n (EN default at /, ES at /es), hreflang, token-based theming with dark default. Tasks T4–T8, T10, T12 adjusted; no completed task reopened (T3 still in progress absorbed theme tokens).

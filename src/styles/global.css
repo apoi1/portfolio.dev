@@ -1,7 +1,298 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-@import "flowbite/src/themes/default";
+
+/* ─────────────────────────────────────────────────────────────
+   apoi2 · portfolio v2 — design system
+   dark-first (default) · light theme via token overrides
+   electric violet lineage (#6366ee) · signal aesthetic
+   ───────────────────────────────────────────────────────────── */
 
 @theme {
-    --color-primary: #3b82f6;
+  /* surfaces */
+  --color-base: #06060b;
+  --color-raised: #0a0a13;
+  --color-overlay: #0e0e1b;
+
+  /* text */
+  --color-ink: #f2f2fa;
+  --color-soft: #a7a7bb;
+  --color-faint: #64647e;
+
+  /* hairlines */
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+
+  /* brand — violet keeps the v1 identity (#63e), electrified */
+  --color-violet: #7c5cff;
+  --color-vio: #6366ee;
+  --color-lilac: #a78bfa;
+  --color-cyan: #22d3ee;
+  --color-mint: #3ddc97;
+  --color-amber: #fbbf24;
+  --color-rose: #fb7185;
+
+  /* type */
+  --font-sans: "Onest Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas,
+    monospace;
+
+  /* motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* keyframed utilities */
+  --animate-marquee: marquee 46s linear infinite;
+  --animate-marquee-slow: marquee 90s linear infinite;
+  --animate-pulse-dot: pulse-dot 2.2s var(--ease-inout-smooth) infinite;
+  --animate-blink: blink 1.1s steps(1) infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-spin-slow: spin 16s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgb(61 220 151 / 0.5); opacity: 1; }
+    50% { box-shadow: 0 0 0 7px rgb(61 220 151 / 0); opacity: 0.7; }
+  }
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
+
+/* ── runtime theme plumbing ───────────────────────────────────
+   Tailwind v4 utilities resolve to var(--color-*) at runtime,
+   so re-declaring the tokens under [data-theme="light"] flips
+   the whole system with zero build forking. */
+
+:root {
+  color-scheme: dark;
+
+  /* gradient + glass + canvas parameters (dark) */
+  --grad-a: #a78bfa;
+  --grad-b: #7c5cff;
+  --grad-c: #22d3ee;
+  --glass-bg: rgb(14 14 27 / 0.55);
+  --frame-a: rgb(255 255 255 / 0.13);
+  --frame-b: rgb(255 255 255 / 0.03);
+  --frame-c: rgb(124 92 255 / 0.26);
+  --grid-line: rgb(255 255 255 / 0.035);
+  --noise-opacity: 0.04;
+  --scroll-thumb: var(--color-vio);
+
+  /* hero signal-field canvas palette (read by three.js) */
+  --sig-a: #7c5cff;
+  --sig-b: #22d3ee;
+  --sig-glow: 0.62;
+  --sig-bg-top: #0a0a16;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --color-base: #f4f4f9;
+  --color-raised: #ffffff;
+  --color-overlay: #ffffff;
+  --color-ink: #12121e;
+  --color-soft: #52526e;
+  --color-faint: #8b8ba6;
+  --color-line: rgb(18 18 30 / 0.1);
+  --color-line-strong: rgb(18 18 30 / 0.2);
+
+  --color-violet: #6d4dff;
+  --color-vio: #6366ee;
+  --color-lilac: #6a48e8;
+  --color-cyan: #0891b2;
+  --color-mint: #059669;
+  --color-amber: #b45309;
+  --color-rose: #e11d48;
+
+  --grad-a: #7c3aed;
+  --grad-b: #6d28d9;
+  --grad-c: #0e7490;
+  --glass-bg: rgb(255 255 255 / 0.62);
+  --frame-a: rgb(18 18 30 / 0.12);
+  --frame-b: rgb(18 18 30 / 0.02);
+  --frame-c: rgb(109 77 255 / 0.32);
+  --grid-line: rgb(18 18 30 / 0.05);
+  --noise-opacity: 0.03;
+  --scroll-thumb: #6366ee;
+
+  --sig-a: #6d4dff;
+  --sig-b: #0891b2;
+  --sig-glow: 0.42;
+  --sig-bg-top: #eceafd;
+}
+
+@layer base {
+  html {
+    scrollbar-color: var(--scroll-thumb) transparent;
+    background-color: var(--color-base);
+  }
+
+  body {
+    background-color: var(--color-base);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+    transition: background-color 0.45s var(--ease-inout-smooth),
+      color 0.45s var(--ease-inout-smooth);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-violet) 60%, transparent);
+    color: #fff;
+  }
+
+  [data-theme="light"] ::selection {
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lilac);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+@layer utilities {
+  /* frosted panel */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  }
+
+  /* brand gradient text */
+  .text-grad {
+    background-image: linear-gradient(
+      100deg,
+      var(--grad-a) 0%,
+      var(--grad-b) 42%,
+      var(--grad-c) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* gradient hairline card frame */
+  .frame {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(var(--color-raised), var(--color-raised)) padding-box,
+      linear-gradient(155deg, var(--frame-a), var(--frame-b) 32%, var(--frame-c))
+        border-box;
+  }
+
+  /* violet halo */
+  .glow-violet {
+    box-shadow: 0 0 44px -8px rgb(124 92 255 / 0.45);
+  }
+
+  /* small uppercase mono kicker */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+  }
+
+  /* film-grain overlay */
+  .noise-bg {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: var(--noise-opacity);
+  }
+
+  /* faint blueprint grid */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* soft horizontal edge mask (marquees) */
+  .mask-x {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+  }
+
+  /* animated underline for nav links */
+  .link-line {
+    position: relative;
+  }
+  .link-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1px;
+    width: 100%;
+    background: var(--color-lilac);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s var(--ease-out-expo);
+  }
+  .link-line:hover::after,
+  .link-line[aria-current="true"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* ── scroll-reveal gate ─────────────────────────────────────
+   Elements tagged [data-reveal] hide only while the motion
+   bundle is expected (html.js). A 4s safety timer in the head
+   script drops the class if it never reports ready, so content
+   can never stay invisible on a broken load. */
+html.js [data-reveal] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+html.js [data-stagger] > * {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal],
+  html.js [data-stagger] > * {
+    opacity: 1;
+  }
+  .animate-marquee,
+  .animate-marquee-slow,
+  .animate-float,
+  .animate-spin-slow {
+    animation: none !important;
+  }
 }

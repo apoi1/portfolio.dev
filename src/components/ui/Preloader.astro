@@ -1,0 +1,81 @@
+---
+/**
+ * Boot preloader: mono counter 0→100 + violet progress hairline,
+ * then the whole curtain slides up. Skips instantly when already
+ * seen this session or under prefers-reduced-motion (click skips
+ * too). Announces completion through window.__preloaderDone + a
+ * DOM event so the hero reveal starts in sync. Re-initializes on
+ * every astro:page-load so it never outlives a ViewTransition.
+ */
+---
+
+<div
+  id="preloader"
+  class="fixed inset-0 z-80 flex flex-col items-center justify-center gap-7 bg-base"
+  aria-hidden="true"
+>
+  <p class="mono-label !text-soft">apoi2 — portfolio <span class="text-violet">v2</span></p>
+  <p class="font-mono text-7xl font-bold text-grad md:text-8xl" id="preloader-count">0</p>
+  <div class="h-px w-44 overflow-hidden bg-line">
+    <div id="preloader-bar" class="h-full origin-left scale-x-0 bg-violet"></div>
+  </div>
+</div>
+
+<script>
+  const D = 1050;
+
+  const finish = () => {
+    (window as any).__preloaderDone = true;
+    document.dispatchEvent(new CustomEvent('preloader:done'));
+  };
+
+  const init = () => {
+    const el = document.getElementById('preloader');
+    if (!el) return finish();
+
+    let raf = 0;
+    const done = () => {
+      sessionStorage.setItem('apoi2-v2-seen', '1');
+      (window as any).__preloaderDone = true;
+      document.dispatchEvent(new CustomEvent('preloader:done'));
+    };
+
+    const seen = sessionStorage.getItem('apoi2-v2-seen') === '1';
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (seen || reduced) {
+      el.remove();
+      return done();
+    }
+
+    const count = document.getElementById('preloader-count');
+    const bar = document.getElementById('preloader-bar');
+    const t0 = performance.now();
+
+    const out = () => {
+      cancelAnimationFrame(raf);
+      el.style.transition =
+        'transform .75s cubic-bezier(.16, 1, .3, 1), opacity .5s ease .35s';
+      el.style.transform = 'translateY(-101%)';
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.remove();
+        done();
+      }, 800);
+    };
+
+    el.addEventListener('click', out, { once: true });
+
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - t0) / D);
+      const eased = 1 - Math.pow(1 - p, 3);
+      if (count) count.textContent = String(Math.round(eased * 100));
+      if (bar) bar.style.transform = `scaleX(${eased})`;
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else out();
+    };
+    raf = requestAnimationFrame(tick);
+  };
+
+  document.addEventListener('astro:page-load', init);
+</script>

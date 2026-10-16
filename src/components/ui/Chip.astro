@@ -1,0 +1,21 @@
+---
+/** Tech-tag pill — the atomic unit of every tech stack list. */
+interface Props {
+  label: string;
+  tone?: 'default' | 'violet' | 'cyan' | 'mint' | 'amber' | 'rose';
+}
+const { label, tone = 'default' } = Astro.props;
+
+const tones: Record<string, string> = {
+  default: 'text-soft border-line',
+  violet: 'text-lilac border-violet/35',
+  cyan: 'text-cyan border-cyan/35',
+  mint: 'text-mint border-mint/35',
+  amber: 'text-amber border-amber/35',
+  rose: 'text-rose border-rose/35',
+};
+---
+
+<span
+  class={`inline-flex items-center gap-1.5 rounded-full border bg-raised/70 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] uppercase ${tones[tone]}`}
+>{label}</span>

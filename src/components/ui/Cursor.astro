@@ -1,0 +1,96 @@
+---
+/**
+ * Custom cursor: ink dot + lerped violet ring. Fine pointers only;
+ * grows over interactive elements. Never shown on touch devices
+ * or when the user prefers reduced motion. Re-initializes on
+ * every astro:page-load so it survives ViewTransitions.
+ */
+---
+
+<div
+  id="cursor"
+  class="pointer-events-none fixed left-0 top-0 z-100 hidden"
+  aria-hidden="true"
+>
+  <div
+    id="cursor-dot"
+    class="absolute left-0 top-0 size-1.5 rounded-full bg-ink mix-blend-difference"
+  >
+  </div>
+  <div
+    id="cursor-ring"
+    class="absolute left-0 top-0 size-9 rounded-full border border-lilac/50 transition-[width,height,background-color,border-color] duration-300 ease-out"
+  >
+  </div>
+</div>
+
+<script>
+  const fine = window.matchMedia('(pointer: fine)').matches;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let raf = 0;
+  let x = -100;
+  let y = -100;
+  let rx = -100;
+  let ry = -100;
+  let shown = false;
+  let active = false;
+
+  const onMove = (e: MouseEvent) => {
+    x = e.clientX;
+    y = e.clientY;
+    if (!shown) {
+      shown = true;
+      const el = document.getElementById('cursor');
+      if (el) el.style.opacity = '1';
+    }
+    const t = e.target as HTMLElement | null;
+    active = !!t?.closest(
+      'a, button, input, [role="button"], [data-cursor="hover"]',
+    );
+  };
+
+  const render = () => {
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return; // page swapped; loop stops, init restarts it
+    dot.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+    rx += (x - rx) * 0.16;
+    ry += (y - ry) * 0.16;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    const s = active ? '3.25rem' : '2.25rem';
+    ring.style.width = s;
+    ring.style.height = s;
+    ring.style.backgroundColor = active
+      ? 'rgb(124 92 255 / 0.12)'
+      : 'transparent';
+    raf = requestAnimationFrame(render);
+  };
+
+  let listenersBound = false;
+  const init = () => {
+    const el = document.getElementById('cursor');
+    if (!el || fine === false || reduced) {
+      el?.remove();
+      return;
+    }
+    el.style.opacity = '0';
+    el.style.transition = 'opacity .3s';
+    if (!listenersBound) {
+      listenersBound = true;
+      window.addEventListener('mousemove', onMove, { passive: true });
+      document.documentElement.addEventListener('mouseleave', () => {
+        const c = document.getElementById('cursor');
+        if (c) c.style.opacity = '0';
+      });
+      document.documentElement.addEventListener('mouseenter', () => {
+        const c = document.getElementById('cursor');
+        if (c && shown) c.style.opacity = '1';
+      });
+    }
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(render);
+  };
+
+  document.addEventListener('astro:page-load', init);
+</script>

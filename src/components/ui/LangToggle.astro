@@ -1,0 +1,40 @@
+---
+/**
+ * EN|ES segmented pill with a sliding violet thumb.
+ * Pure links — the URL is the language state (SEO-clean).
+ * Pages pass the counterpart href for the current path.
+ */
+interface Props {
+  locale: 'en' | 'es';
+  enHref: string;
+  esHref: string;
+}
+const { locale, enHref, esHref } = Astro.props;
+const on = 'text-white';
+const off = 'text-soft transition-colors duration-200 hover:text-ink';
+---
+
+<div
+  class="relative flex items-center rounded-full border border-line bg-raised p-0.5 font-mono text-[11px] font-semibold"
+  role="group"
+  aria-label="Language / Idioma"
+>
+  <span
+    class={`absolute inset-y-0.5 left-0.5 w-[calc(50%-2px)] rounded-full bg-violet transition-transform duration-300 ${
+      locale === 'es' ? 'translate-x-full' : ''
+    }`}
+    aria-hidden="true"
+  ></span>
+  <a
+    href={enHref}
+    class={`relative z-10 rounded-full px-2.5 py-1 ${locale === 'en' ? on : off}`}
+    aria-current={locale === 'en' ? 'true' : undefined}
+    hreflang="en">EN</a
+  >
+  <a
+    href={esHref}
+    class={`relative z-10 rounded-full px-2.5 py-1 ${locale === 'es' ? on : off}`}
+    aria-current={locale === 'es' ? 'true' : undefined}
+    hreflang="es">ES</a
+  >
+</div>
