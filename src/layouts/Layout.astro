@@ -1,62 +1,151 @@
 ---
-// Supports weights 100-900
 import '@fontsource-variable/onest/wght.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import '../styles/global.css'
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '../styles/global.css';
 
-interface Props{
-	title: string;
-	description: string;
+import { ClientRouter } from 'astro:transitions';
+
+import Preloader from '../components/ui/Preloader.astro';
+import Cursor from '../components/ui/Cursor.astro';
+import NoiseOverlay from '../components/ui/NoiseOverlay.astro';
+import Toast from '../components/ui/Toast.astro';
+
+import { SITE, IDENTITY, altPath, type Locale } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
 }
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  locale,
+  ogImage = '/og.png',
+  ogType = 'website',
+} = Astro.props;
+
+const rawPath = Astro.url.pathname;
+const normPath = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
+const canonical = new URL(normPath, SITE).href;
+const enHref = new URL(altPath(normPath, 'en'), SITE).href;
+const esHref = new URL(altPath(normPath, 'es'), SITE).href;
+const ogUrl = new URL(ogImage, SITE).href;
+const ogLocale = locale === 'es' ? 'es_CO' : 'en_US';
+const ogAlt = locale === 'es' ? 'en_US' : 'es_CO';
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: IDENTITY.fullName,
+  alternateName: [IDENTITY.handle, IDENTITY.shortName],
+  url: SITE,
+  email: `mailto:${IDENTITY.email}`,
+  jobTitle: 'Systems Engineer',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Soacha',
+    addressRegion: 'Cundinamarca',
+    addressCountry: 'CO',
+  },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'UNIMINUTO' },
+  sameAs: [IDENTITY.github, IDENTITY.linkedin, IDENTITY.bluesky],
+  knowsLanguage: ['es', 'en'],
+};
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={locale} class="js" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="author" content="apoi2" />
-	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="author" content={IDENTITY.handle} />
     <meta name="generator" content={Astro.generator} />
-	<title>{title}</title>
-</head>
+    <meta name="theme-color" content="#06060b" />
 
-<body>
-	<div
-		class="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
-	</div>
-	<span class="">
-		<Header />
-		<slot />
-		<Footer />	
-	</span>
-</body>
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="es" href={esHref} />
+    <link rel="alternate" hreflang="x-default" href={enHref} />
 
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={IDENTITY.handle} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogAlt} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <script is:inline>
+      (function () {
+        try {
+          var t =
+            localStorage.getItem('apoi2-theme') ||
+            (window.matchMedia &&
+              matchMedia('(prefers-color-scheme: light)').matches
+              ? 'light'
+              : 'dark');
+        } catch (e) {
+          t = 'dark';
+        }
+        document.documentElement.dataset.theme = t;
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute('content', t === 'light' ? '#f4f4f9' : '#06060b');
+        if (!window.__bootGuard) {
+          window.__bootGuard = 1;
+          document.addEventListener('astro:after-swap', function () {
+            try {
+              document.documentElement.dataset.theme =
+                localStorage.getItem('apoi2-theme') || 'dark';
+            } catch (e) {}
+          });
+          setTimeout(function () {
+            if (!window.__motionReady)
+              document.documentElement.classList.remove('js');
+          }, 4000);
+        }
+      })();
+    </script>
+
+    <ClientRouter />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-full focus:bg-violet focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+    >
+      {locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+    </a>
+
+    <slot />
+
+    <Preloader />
+    <Cursor />
+    <NoiseOverlay />
+    <Toast />
+
+    <script type="module" src="/src/scripts/motion.ts"></script>
+  </body>
 </html>
-  <style is:global>
-	:root {
-		color-scheme: light dark;
-	}
-
-	html {
-		font-family: "Onest Variable", system-ui,  sans-serif;
-	}
-
-	body {
-		background: #050505;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		min-height: 100vh;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		html {
-			scroll-behavior: auto;
-		}
-	}
-  </style>

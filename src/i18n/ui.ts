@@ -1,0 +1,406 @@
+/**
+ * Bilingual UI copy — the single source for every string on the site.
+ * `es` is type-checked against the `en` shape, so a missing translation
+ * is a build error. Project content lives in the content collections.
+ */
+import type { Locale } from '../lib/site';
+
+const en = {
+  meta: {
+    homeTitle: 'Julián Ruiz · apoi2 — Systems & Software Engineer',
+    homeDesc:
+      'Portfolio of Julián Ruiz Flórez (apoi2): systems engineer from Colombia building real-time signal systems (ESP32, WiFi CSI) and full-stack products (React, Spring Boot). Open to work.',
+    cvTitle: 'CV — Julián Ruiz · apoi2',
+    cvDesc: 'Print-ready résumé of Julián Ruiz Flórez (apoi2) — systems engineer.',
+  },
+  nav: {
+    about: 'About',
+    experience: 'Experience',
+    projects: 'Projects',
+    skills: 'Skills',
+    contact: 'Contact',
+    theme: 'Toggle dark / light theme',
+    menu: 'Menu',
+    close: 'Close',
+    cmdk: 'Search & commands (Ctrl K)',
+  },
+  hero: {
+    kicker: 'Systems engineer — Bogotá, Colombia',
+    aka: 'a.k.a.',
+    rotatorPrefix: 'I build',
+    rotator: [
+      'real-time signal systems',
+      'full-stack web products',
+      'internal tools teams adopt',
+      'software that proves itself',
+    ],
+    available: 'Open to work',
+    availabilityNote: 'on-site Bogotá · remote worldwide',
+    ctaWork: 'See my work',
+    ctaContact: 'Get in touch',
+    scroll: 'scroll',
+  },
+  about: {
+    kicker: 'About',
+    titleLead: 'Engineer by training,',
+    titleGrad: 'builder by default.',
+    photoAlt: 'Portrait of Julián Ruiz — apoi2',
+    bio: [
+      "I'm Julián — a systems engineer from Soacha, Colombia (class of 2026, UNIMINUTO) who works both ends of a system: the React dashboard a team opens every morning, and the ESP32 firmware talking MQTT underneath it.",
+      "At Sutherland's Global Technology Infrastructure team I kept international campaigns running — on-site support, about seven tickets a day — and when the workflow needed order I built GTI Katana, a React + Firebase tool my team adopted. Before that, at the Personería Municipal de Soacha, I ran Active Directory, LAN and firewalls for a public institution and built its internal web tools with React, Node and PHP.",
+      "I like software that can prove itself: 527 automated tests across my systems, changelogs, validation protocols. I also build tools for videogames as a hobby — and when I go full-stack, it's Java with Spring Boot and React.",
+    ],
+    stats: [
+      { value: 5, suffix: '+', label: 'projects shipped' },
+      { value: 527, suffix: '', label: 'automated tests' },
+      { value: 2, suffix: '', label: 'apps in production' },
+      { value: 'B2+', suffix: '', label: 'professional English' },
+    ],
+  },
+  experience: {
+    kicker: 'Experience',
+    titleLead: 'Real teams,',
+    titleGrad: 'real uptime.',
+    items: [
+      {
+        org: 'Sutherland Global Services',
+        role: 'IT Support Engineer',
+        badge: 'SENA Apprenticeship · GTI',
+        period: 'Jan — Jul 2026',
+        bullets: [
+          'On-site technical support for international campaigns — networks, connectivity and workstations, ~7 tickets/day.',
+          'Built and shipped GTI Katana, an internal productivity app (React, Tailwind, Firebase) adopted by the team.',
+          'Kept campaign-critical technology resources highly available within the Global Technology Infrastructure team.',
+        ],
+        chips: ['React', 'Tailwind', 'Firebase', 'IT Support'],
+        link: 'https://www.sutherlandglobal.com/',
+      },
+      {
+        org: 'Personería Municipal de Soacha',
+        role: 'IT Support & Software Developer',
+        badge: 'Internship · Public sector',
+        period: 'Jul — Nov 2025',
+        bullets: [
+          'Administered Active Directory, LAN, firewalls and asset inventory for a government institution.',
+          'Developed internal web tools with React, Node.js, PHP, HTML and CSS.',
+          'Handled government data with a confidentiality-first approach.',
+        ],
+        chips: ['Active Directory', 'Linux', 'React', 'Node.js', 'PHP'],
+        link: 'https://www.personeria-soacha.gov.co/',
+      },
+    ],
+    educationKicker: 'Education',
+    degree: 'B.Eng. Systems Engineering',
+    school: 'Corporación Universitaria Minuto de Dios — UNIMINUTO',
+    eduPeriod: 'Class of 2026',
+    languagesKicker: 'Languages',
+    languages: ['Spanish — native', 'English — B2+ professional'],
+  },
+  skills: {
+    kicker: 'Skills',
+    titleLead: 'From signals',
+    titleGrad: 'to screens.',
+    groups: [
+      {
+        title: 'Languages',
+        icon: 'code',
+        items: ['TypeScript', 'JavaScript', 'Java', 'Python', 'C++', 'SQL', 'PHP'],
+      },
+      {
+        title: 'Frontend',
+        icon: 'sparkle',
+        items: ['React', 'Astro', 'Tailwind CSS', 'HTML/CSS', 'Vite', 'GSAP'],
+      },
+      {
+        title: 'Backend & data',
+        icon: 'cpu',
+        items: ['Spring Boot', 'Node.js', 'FastAPI', 'REST', 'MQTT', 'SQLite', 'Firebase'],
+      },
+      {
+        title: 'Systems & hardware',
+        icon: 'signal',
+        items: ['ESP32 · ESP-IDF', 'Linux', 'Docker', 'Git', 'PyQt5', 'Windows tooling'],
+      },
+      {
+        title: 'Practices',
+        icon: 'check',
+        items: [
+          'Test-driven — 527 tests',
+          'Signal processing — FFT/DSP',
+          'Technical writing',
+          'AI-assisted engineering',
+        ],
+      },
+    ],
+    terminal: {
+      lines: [
+        'whoami',
+        'julián ruiz — systems engineer',
+        'cat status.txt',
+        'open to work · on-site Bogotá / remote',
+        'ls tests/',
+        'csisensor/  chambas/  → 527 passing',
+      ],
+    },
+  },
+  projects: {
+    kicker: 'Projects',
+    titleLead: 'Built, tested,',
+    titleGrad: 'shipped.',
+    subtitle: 'Every card is a case study — the stack, the numbers, the receipts.',
+    caseStudy: 'Case study',
+    live: 'Live',
+    privateLabel: 'Private',
+    viewAll: 'on GitHub',
+  },
+  contact: {
+    kicker: 'Contact',
+    titleLead: "Let's build",
+    titleGrad: 'something solid.',
+    text: "I'm one message away — an on-site role in Bogotá, a remote position anywhere, or just talking shop about ESP32s and Spring Boot.",
+    copyEmail: 'Copy email',
+    openMail: 'Write me',
+    emailCopied: 'Email copied — talk soon',
+    prefer: 'Prefer socials?',
+  },
+  footer: {
+    tagline: 'Systems engineer building real-time signal systems & full-stack products.',
+    navigate: 'Navigate',
+    elsewhere: 'Elsewhere',
+    localTime: 'Bogotá local time',
+    backTop: 'Back to top',
+    builtWith: 'Designed & built by apoi2 with Astro, Tailwind CSS and GSAP.',
+    rights: 'Almost all rights reserved.',
+  },
+  palette: {
+    placeholder: 'Type a command or search…',
+    hintClose: 'esc to close',
+    empty: 'Nothing matches.',
+    groups: {
+      navigate: 'Navigate',
+      projects: 'Projects',
+      links: 'Links',
+      actions: 'Actions',
+    },
+    actions: {
+      copyEmail: 'Copy email',
+      cv: 'CV — print / save as PDF',
+      github: 'Open GitHub profile',
+    },
+  },
+  cv: {
+    kicker: 'Résumé',
+    title: 'Julián David Ruiz Flórez',
+    print: 'Print / Save as PDF',
+    updated: 'Updated',
+  },
+  notfound: {
+    code: '404',
+    title: 'Signal lost',
+    text: 'The page you are looking for drifted out of range.',
+    cta: 'Back home',
+  },
+};
+
+const es: typeof en = {
+  meta: {
+    homeTitle: 'Julián Ruiz · apoi2 — Ingeniero de Sistemas y Software',
+    homeDesc:
+      'Portafolio de Julián Ruiz Flórez (apoi2): ingeniero de sistemas desde Colombia. Sistemas en tiempo real (ESP32, WiFi CSI) y productos full-stack (React, Spring Boot). Disponible para trabajar.',
+    cvTitle: 'CV — Julián Ruiz · apoi2',
+    cvDesc: 'Hoja de vida lista para imprimir de Julián Ruiz Flórez (apoi2) — ingeniero de sistemas.',
+  },
+  nav: {
+    about: 'Sobre mí',
+    experience: 'Experiencia',
+    projects: 'Proyectos',
+    skills: 'Habilidades',
+    contact: 'Contacto',
+    theme: 'Cambiar tema oscuro / claro',
+    menu: 'Menú',
+    close: 'Cerrar',
+    cmdk: 'Buscar y comandos (Ctrl K)',
+  },
+  hero: {
+    kicker: 'Ingeniero de sistemas — Bogotá, Colombia',
+    aka: 'también conocido como',
+    rotatorPrefix: 'Construyo',
+    rotator: [
+      'sistemas en tiempo real',
+      'productos web full-stack',
+      'herramientas internas que se adoptan',
+      'software que se demuestra a sí mismo',
+    ],
+    available: 'Disponible para trabajar',
+    availabilityNote: 'presencial Bogotá · remoto global',
+    ctaWork: 'Ver mi trabajo',
+    ctaContact: 'Escríbeme',
+    scroll: 'desliza',
+  },
+  about: {
+    kicker: 'Sobre mí',
+    titleLead: 'Ingeniero de formación,',
+    titleGrad: 'constructor por defecto.',
+    photoAlt: 'Retrato de Julián Ruiz — apoi2',
+    bio: [
+      'Soy Julián — ingeniero de sistemas de Soacha, Colombia (promoción 2026, UNIMINUTO) que trabaja los dos extremos de un sistema: el tablero en React que un equipo abre cada mañana y el firmware de ESP32 hablando MQTT por debajo.',
+      'En el equipo Global Technology Infrastructure de Sutherland mantuve campañas internacionales en marcha — soporte presencial, unos siete tickets al día — y cuando el flujo de trabajo necesitaba orden, construí GTI Katana, una herramienta en React + Firebase que mi equipo adoptó. Antes, en la Personería Municipal de Soacha, administré Active Directory, LAN y firewalls de una entidad pública y construí sus herramientas web internas con React, Node y PHP.',
+      'Me gusta el software que puede demostrar lo que es: 527 pruebas automatizadas entre mis sistemas, changelogs, protocolos de validación. También construyo herramientas para videojuegos como hobby — y cuando voy full-stack, es Java con Spring Boot y React.',
+    ],
+    stats: [
+      { value: 5, suffix: '+', label: 'proyectos lanzados' },
+      { value: 527, suffix: '', label: 'pruebas automatizadas' },
+      { value: 2, suffix: '', label: 'apps en producción' },
+      { value: 'B2+', suffix: '', label: 'inglés profesional' },
+    ],
+  },
+  experience: {
+    kicker: 'Experiencia',
+    titleLead: 'Equipos reales,',
+    titleGrad: 'disponibilidad real.',
+    items: [
+      {
+        org: 'Sutherland Global Services',
+        role: 'Ingeniero de soporte TI',
+        badge: 'Aprendiz SENA · GTI',
+        period: 'Ene — Jul 2026',
+        bullets: [
+          'Soporte técnico presencial para campañas internacionales — redes, conectividad y estaciones de trabajo, ~7 tickets/día.',
+          'Construí y lancé GTI Katana, una app interna de productividad (React, Tailwind, Firebase) adoptada por el equipo.',
+          'Mantuve alta disponibilidad de los recursos tecnológicos críticos dentro del equipo Global Technology Infrastructure.',
+        ],
+        chips: ['React', 'Tailwind', 'Firebase', 'Soporte TI'],
+        link: 'https://www.sutherlandglobal.com/',
+      },
+      {
+        org: 'Personería Municipal de Soacha',
+        role: 'Soporte TI y desarrollador de software',
+        badge: 'Pasantía · Sector público',
+        period: 'Jul — Nov 2025',
+        bullets: [
+          'Administré Active Directory, LAN, firewalls e inventario de activos de una entidad gubernamental.',
+          'Desarrollé herramientas web internas con React, Node.js, PHP, HTML y CSS.',
+          'Manejé datos gubernamentales con un enfoque de confidencialidad primero.',
+        ],
+        chips: ['Active Directory', 'Linux', 'React', 'Node.js', 'PHP'],
+        link: 'https://www.personeria-soacha.gov.co/',
+      },
+    ],
+    educationKicker: 'Educación',
+    degree: 'Ingeniería de Sistemas',
+    school: 'Corporación Universitaria Minuto de Dios — UNIMINUTO',
+    eduPeriod: 'Promoción 2026',
+    languagesKicker: 'Idiomas',
+    languages: ['Español — nativo', 'Inglés — B2+ profesional'],
+  },
+  skills: {
+    kicker: 'Habilidades',
+    titleLead: 'De señales',
+    titleGrad: 'a pantallas.',
+    groups: [
+      {
+        title: 'Lenguajes',
+        icon: 'code',
+        items: ['TypeScript', 'JavaScript', 'Java', 'Python', 'C++', 'SQL', 'PHP'],
+      },
+      {
+        title: 'Frontend',
+        icon: 'sparkle',
+        items: ['React', 'Astro', 'Tailwind CSS', 'HTML/CSS', 'Vite', 'GSAP'],
+      },
+      {
+        title: 'Backend y datos',
+        icon: 'cpu',
+        items: ['Spring Boot', 'Node.js', 'FastAPI', 'REST', 'MQTT', 'SQLite', 'Firebase'],
+      },
+      {
+        title: 'Sistemas y hardware',
+        icon: 'signal',
+        items: ['ESP32 · ESP-IDF', 'Linux', 'Docker', 'Git', 'PyQt5', 'Herramientas Windows'],
+      },
+      {
+        title: 'Prácticas',
+        icon: 'check',
+        items: [
+          'Test-driven — 527 pruebas',
+          'Procesamiento de señales — FFT/DSP',
+          'Documentación técnica',
+          'Ingeniería asistida por IA',
+        ],
+      },
+    ],
+    terminal: {
+      lines: [
+        'whoami',
+        'julián ruiz — ingeniero de sistemas',
+        'cat estado.txt',
+        'disponible · presencial Bogotá / remoto',
+        'ls pruebas/',
+        'csisensor/  chambas/  → 527 en verde',
+      ],
+    },
+  },
+  projects: {
+    kicker: 'Proyectos',
+    titleLead: 'Construido, probado,',
+    titleGrad: 'lanzado.',
+    subtitle: 'Cada tarjeta es un caso de estudio: el stack, los números, las evidencias.',
+    caseStudy: 'Ver caso',
+    live: 'Online',
+    privateLabel: 'Privado',
+    viewAll: 'en GitHub',
+  },
+  contact: {
+    kicker: 'Contacto',
+    titleLead: 'Construyamos',
+    titleGrad: 'algo sólido.',
+    text: 'Estoy a un mensaje — un rol presencial en Bogotá, una posición remota en cualquier parte, o simplemente charlar de ESP32s y Spring Boot.',
+    copyEmail: 'Copiar correo',
+    openMail: 'Escríbeme',
+    emailCopied: 'Correo copiado — hablamos',
+    prefer: '¿Prefieres redes?',
+  },
+  footer: {
+    tagline: 'Ingeniero de sistemas: sistemas en tiempo real y productos full-stack.',
+    navigate: 'Navegación',
+    elsewhere: 'Redes',
+    localTime: 'Hora local Bogotá',
+    backTop: 'Volver arriba',
+    builtWith: 'Diseñado y construido por apoi2 con Astro, Tailwind CSS y GSAP.',
+    rights: 'Casi todos los derechos reservados.',
+  },
+  palette: {
+    placeholder: 'Escribe un comando o busca…',
+    hintClose: 'esc para cerrar',
+    empty: 'Nada por aquí.',
+    groups: {
+      navigate: 'Ir a',
+      projects: 'Proyectos',
+      links: 'Enlaces',
+      actions: 'Acciones',
+    },
+    actions: {
+      copyEmail: 'Copiar correo',
+      cv: 'CV — imprimir / guardar como PDF',
+      github: 'Abrir perfil de GitHub',
+    },
+  },
+  cv: {
+    kicker: 'Hoja de vida',
+    title: 'Julián David Ruiz Flórez',
+    print: 'Imprimir / Guardar como PDF',
+    updated: 'Actualizado',
+  },
+  notfound: {
+    code: '404',
+    title: 'Señal perdida',
+    text: 'La página que buscas se salió de rango.',
+    cta: 'Volver al inicio',
+  },
+};
+
+export type UI = typeof en;
+
+export function getUI(locale: Locale): UI {
+  return locale === 'es' ? es : en;
+}

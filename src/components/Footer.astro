@@ -1,14 +1,154 @@
-<footer class="rounded-base shadow m-4 bg-black/20 backdrop-blur-lg w-full xl:w-180 mx-auto mb-10">
-    <div class="w-full mx-auto max-w-7xl p-4 md:flex md:items-center md:justify-between">
-      <span class="text-sm text-blue-300/90 sm:text-center">© 2026 <a href="#" class="hover:underline">apoi2</a>. Almost All Rights Reserved.
-    </span>
-    <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-white/90 sm:mt-0">
-        <li>
-            <a href="#top" class="hover:underline me-4 md:me-6">About</a>
-        </li>
-        <li>
-            <a href="mailto:apoi2@proton.me" class="hover:underline">Contact</a>
-        </li>
-    </ul>
+---
+import Icon from './ui/Icon.astro';
+import { IDENTITY, type Locale } from '../lib/site';
+import { getUI } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getUI(locale);
+const base = locale === 'es' ? '/es' : '';
+const homeHref = locale === 'es' ? '/es/' : '/';
+
+const links = [
+  { id: 'about', label: t.nav.about },
+  { id: 'experience', label: t.nav.experience },
+  { id: 'projects', label: t.nav.projects },
+  { id: 'skills', label: t.nav.skills },
+  { id: 'contact', label: t.nav.contact },
+];
+
+const socials = [
+  { href: IDENTITY.github, icon: 'github' as const, label: 'GitHub' },
+  { href: IDENTITY.linkedin, icon: 'linkedin' as const, label: 'LinkedIn' },
+  { href: IDENTITY.bluesky, icon: 'bluesky' as const, label: 'Bluesky' },
+];
+---
+
+<footer class="relative mt-24 border-t border-line">
+  <div class="mx-auto max-w-6xl px-4 md:px-6">
+    <div class="grid gap-12 py-14 md:grid-cols-[1.5fr_1fr_1fr]">
+      <div>
+        <a
+          href={homeHref}
+          class="flex items-center gap-2.5"
+          aria-label="apoi2 — home"
+          data-cursor="hover"
+        >
+          <span
+            class="grid size-9 place-items-center rounded-lg border border-line bg-raised"
+          >
+            <Icon name="signal" class="size-4.5 text-lilac" />
+          </span>
+          <span class="font-mono text-base font-bold tracking-tight text-ink"
+            >apoi<span class="text-grad">2</span></span
+          >
+        </a>
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-soft">
+          {t.footer.tagline}
+        </p>
+        <a
+          href={`mailto:${IDENTITY.email}`}
+          class="group mt-5 inline-flex items-center gap-2 font-mono text-sm text-lilac transition-colors hover:text-ink"
+          data-cursor="hover"
+        >
+          <Icon name="mail" class="size-4" />
+          {IDENTITY.email}
+          <Icon
+            name="arrow-up-right"
+            class="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          />
+        </a>
+      </div>
+
+      <nav aria-label={t.footer.navigate}>
+        <p class="mono-label">{t.footer.navigate}</p>
+        <ul class="mt-4 flex flex-col gap-2.5 text-sm text-soft">
+          {
+            links.map((l) => (
+              <li>
+                <a
+                  class="transition-colors hover:text-ink"
+                  href={`${base}/#${l.id}`}
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <p class="mono-label">{t.footer.elsewhere}</p>
+        <ul class="mt-4 flex flex-col gap-2.5 text-sm text-soft">
+          {
+            socials.map((s) => (
+              <li>
+                <a
+                  class="group inline-flex items-center gap-2 transition-colors hover:text-ink"
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <Icon name={s.icon} class="size-4 text-faint group-hover:text-lilac" />
+                  {s.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mono-label mt-7">{t.footer.localTime}</p>
+        <p class="mt-2 font-mono text-sm text-ink">
+          <time id="bogota-clock" datetime="">--:--:--</time>
+          <span class="text-faint"> UTC−5</span>
+        </p>
+      </div>
     </div>
+
+    <div
+      class="flex flex-col gap-3 border-t border-line py-6 text-xs text-faint md:flex-row md:items-center md:justify-between"
+    >
+      <p>© 2026 {IDENTITY.fullName} — {IDENTITY.handle}. {t.footer.rights}</p>
+      <p class="font-mono">{t.footer.builtWith}</p>
+      <a
+        href="#top"
+        class="group inline-flex items-center gap-2 font-mono transition-colors hover:text-ink"
+        data-cursor="hover"
+      >
+        <Icon
+          name="arrow-down"
+          class="size-3.5 rotate-180 transition-transform duration-300 group-hover:-translate-y-0.5"
+        />
+        {t.footer.backTop}
+      </a>
+    </div>
+  </div>
 </footer>
+
+<script>
+  let clockBound = false;
+  const fmt = new Intl.DateTimeFormat('es-CO', {
+    timeZone: 'America/Bogota',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+  const tick = () => {
+    const el = document.getElementById('bogota-clock');
+    if (!el) return;
+    const now = new Date();
+    el.textContent = fmt.format(now);
+    el.setAttribute('datetime', now.toISOString());
+  };
+  const init = () => {
+    if (!clockBound) {
+      clockBound = true;
+      setInterval(tick, 1000);
+    }
+    tick();
+  };
+  document.addEventListener('astro:page-load', init);
+</script>
