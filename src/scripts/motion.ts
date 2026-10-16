@@ -127,10 +127,10 @@ function scrollReveals() {
     const variant = el.dataset.reveal || 'up';
     const delay = parseFloat(el.dataset.revealDelay ?? '0');
     const from: gsap.TweenVars = { opacity: 0 };
-    if (variant === 'up') from.y = 40;
-    if (variant === 'left') from.x = -48;
-    if (variant === 'right') from.x = 48;
-    if (variant === 'scale') from.scale = 0.94;
+    if (variant === 'up') from.y = 18;
+    if (variant === 'left') from.x = -24;
+    if (variant === 'right') from.x = 24;
+    if (variant === 'scale') from.scale = 0.96;
     gsap.fromTo(
       el,
       from,
@@ -139,10 +139,10 @@ function scrollReveals() {
         y: 0,
         scale: 1,
         opacity: 1,
-        duration: reduced ? 0 : 0.95,
+        duration: reduced ? 0 : 0.7,
         delay,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 90%', once: true },
       },
     );
   });
@@ -151,14 +151,14 @@ function scrollReveals() {
     const kids = [...group.children] as HTMLElement[];
     gsap.fromTo(
       kids,
-      { y: 26, opacity: 0 },
+      { y: 14, opacity: 0 },
       {
         y: 0,
         opacity: 1,
-        duration: reduced ? 0 : 0.8,
-        stagger: 0.09,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: group, start: 'top 88%', once: true },
+        duration: reduced ? 0 : 0.6,
+        stagger: 0.07,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: group, start: 'top 90%', once: true },
       },
     );
   });

@@ -1,7 +1,7 @@
 ---
 /**
- * Skills — bento of five category cards + a live-looking terminal card.
- * Items are evidence-backed only (stacks that shipped in real projects).
+ * Skills — a live-looking terminal beside one instrument panel of
+ * "channels" (evidence-backed stacks). No card-per-category kit.
  */
 import SectionHeading from '../ui/SectionHeading.astro';
 import Chip from '../ui/Chip.astro';
@@ -25,14 +25,13 @@ for (let i = 0; i < term.length; i += 2) {
 
 <section id="skills" class="relative scroll-mt-20">
   <div class="mx-auto max-w-6xl px-4 py-24 md:px-6 md:py-36">
-    <SectionHeading kicker={t.skills.kicker} index="04">
-      {t.skills.titleLead}
-      <span class="text-grad">{t.skills.titleGrad}</span>
+    <SectionHeading>
+      {t.skills.title}
     </SectionHeading>
 
-    <div class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-      <!-- terminal card spans the last column on lg -->
-      <div class="frame overflow-hidden rounded-2xl lg:col-span-1" data-reveal>
+    <div class="mt-14 grid gap-6 lg:grid-cols-[5fr_7fr] lg:gap-8">
+      <!-- terminal -->
+      <div class="frame overflow-hidden rounded-2xl" data-reveal>
         <div class="flex items-center gap-2 border-b border-line px-4 py-3">
           <span class="size-2.5 rounded-full bg-rose"></span>
           <span class="size-2.5 rounded-full bg-amber"></span>
@@ -58,23 +57,24 @@ for (let i = 0; i < term.length; i += 2) {
         </div>
       </div>
 
-      {
-        t.skills.groups.map((g) => (
-          <div class="frame rounded-2xl p-6" data-reveal>
-            <div class="flex items-center gap-3">
-              <span class="grid size-9 place-items-center rounded-xl border border-line bg-base text-lilac">
-                <Icon name={g.icon as any} class="size-4.5" />
-              </span>
-              <h3 class="font-bold text-ink">{g.title}</h3>
+      <!-- channels panel -->
+      <div
+        class="frame flex flex-col divide-y divide-line rounded-2xl px-6 py-4 md:px-8"
+        data-stagger
+      >
+        {
+          t.skills.groups.map((g) => (
+            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-2.5 py-4 first:pt-3 last:pb-3">
+              <p class="w-30 shrink-0 font-mono text-xs text-faint">{g.title}</p>
+              <div class="flex flex-wrap gap-1.5">
+                {g.items.map((item) => (
+                  <Chip label={item} />
+                ))}
+              </div>
             </div>
-            <div class="mt-5 flex flex-wrap gap-2">
-              {g.items.map((item) => (
-                <Chip label={item} />
-              ))}
-            </div>
-          </div>
-        ))
-      }
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>

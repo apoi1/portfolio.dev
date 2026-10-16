@@ -26,14 +26,14 @@ const loop = [...items, ...items];
 ---
 
 <div
-  class="relative -rotate-1 overflow-hidden border-y border-line bg-raised/40 py-4 mask-x"
+  class="relative overflow-hidden border-y border-line bg-raised/40 py-4 mask-x"
   aria-hidden="true"
 >
   <div class="flex w-max animate-marquee items-center gap-10 hover:[animation-play-state:paused]">
     {
       loop.map((item) => (
         <span class="flex items-center gap-10">
-          <span class="font-mono text-sm tracking-[0.18em] whitespace-nowrap uppercase text-soft">
+          <span class="font-mono text-sm tracking-[0.08em] whitespace-nowrap text-soft">
             {item}
           </span>
           <span class="text-xs text-violet">✦</span>

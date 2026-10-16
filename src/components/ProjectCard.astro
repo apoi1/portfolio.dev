@@ -32,7 +32,7 @@ const extra = d.tech.length - chips.length;
 ---
 
 <article
-  class={`frame group relative flex flex-col overflow-hidden rounded-3xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_60px_-16px_rgb(124_92_255/0.35)] ${
+  class={`frame group relative flex flex-col overflow-hidden rounded-3xl transition-colors duration-300 hover:border-lilac/30 ${
     featured ? 'lg:col-span-2' : ''
   }`}
   data-reveal
@@ -46,19 +46,19 @@ const extra = d.tech.length - chips.length;
       height={550}
       loading={featured ? 'eager' : 'lazy'}
       decoding="async"
-      class="aspect-[16/10] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+      class="aspect-[16/10] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
     />
     <div
       class="absolute inset-0 bg-gradient-to-t from-base/85 via-base/10 to-transparent"
     >
     </div>
     <div class="absolute top-4 left-4 flex items-center gap-2">
-      <span class="glass flex items-center gap-1.5 rounded-full border border-line px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-ink">
+      <span class="glass flex items-center gap-1.5 rounded-full border border-line px-3 py-1 font-mono text-[11px] text-ink">
         <span class={`size-1.5 rounded-full ${status.cls}`}></span>
-        {d.status === 'active' ? 'ACTIVE' : status.label}
+        {d.status === 'active' ? 'active' : status.label}
       </span>
     </div>
-    <span class="glass absolute top-4 right-4 rounded-full border border-line px-3 py-1 font-mono text-[10px] text-ink">
+    <span class="glass absolute top-4 right-4 rounded-full border border-line px-3 py-1 font-mono text-[11px] text-ink">
       {d.year}
     </span>
   </a>

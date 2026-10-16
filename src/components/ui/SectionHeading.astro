@@ -1,25 +1,39 @@
 ---
-/** Section opener: mono kicker + huge display title (slot allows .text-grad spans). */
+/**
+ * Section opener: a small signal-waveform mark + one complete display
+ * headline. No eyebrow chrome, no index numbers, no gradient words —
+ * the typography carries the section.
+ */
 interface Props {
-  kicker: string;
-  index?: string;
-  align?: 'left' | 'center';
+  kicker?: string;
   class?: string;
 }
-const { kicker, index, align = 'left', class: className = '' } = Astro.props;
-const centered = align === 'center';
+const { kicker, class: className = '' } = Astro.props;
 ---
 
-<div class:list={[className, centered && 'flex flex-col items-center text-center']}>
-  <p class:list={['mono-label flex items-center gap-2.5', centered && 'justify-center']} data-reveal>
-    <span class="inline-block size-1.5 rotate-45 bg-violet"></span>
-    {kicker}
-    {index && <span class="text-violet/70">/ {index}</span>}
-  </p>
+<div class={className}>
+  <div class="flex items-center gap-3" data-reveal>
+    <svg
+      viewBox="0 0 28 12"
+      class="h-3 w-7 shrink-0 text-violet"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <path d="M1 6h4.5l2.5-4 3.5 8 2.5-4H17l2-2.5 2.5 5 2-2.5h3.5"></path>
+    </svg>
+    {
+      kicker && (
+        <p class="font-mono text-xs text-faint">{kicker}</p>
+      )
+    }
+  </div>
   <h2
-    class="mt-5 max-w-3xl text-4xl font-extrabold leading-[0.98] tracking-tight md:text-6xl"
+    class="mt-4 max-w-3xl text-[clamp(2.1rem,5vw,3.7rem)] font-extrabold leading-[1.03] tracking-[-0.02em] text-ink"
     data-reveal
-    data-reveal-delay="0.08"
+    data-reveal-delay="0.06"
   >
     <slot />
   </h2>

@@ -42,8 +42,7 @@ const en = {
   },
   about: {
     kicker: 'About',
-    titleLead: 'Engineer by training,',
-    titleGrad: 'builder by default.',
+    title: 'Engineer by training, builder by default.',
     photoAlt: 'Portrait of Julián Ruiz — apoi2',
     bio: [
       "I'm Julián — a systems engineer from Soacha, Colombia (class of 2026, UNIMINUTO) who works both ends of a system: the React dashboard a team opens every morning, and the ESP32 firmware talking MQTT underneath it.",
@@ -59,8 +58,7 @@ const en = {
   },
   experience: {
     kicker: 'Experience',
-    titleLead: 'Real teams,',
-    titleGrad: 'real uptime.',
+    title: 'Real teams, real uptime.',
     items: [
       {
         org: 'Sutherland Global Services',
@@ -98,8 +96,7 @@ const en = {
   },
   skills: {
     kicker: 'Skills',
-    titleLead: 'From signals',
-    titleGrad: 'to screens.',
+    title: 'From signals to screens.',
     groups: [
       {
         title: 'Languages',
@@ -145,8 +142,7 @@ const en = {
   },
   projects: {
     kicker: 'Projects',
-    titleLead: 'Built, tested,',
-    titleGrad: 'shipped.',
+    title: 'Built, tested, shipped.',
     subtitle: 'Every card is a case study — the stack, the numbers, the receipts.',
     caseStudy: 'Case study',
     live: 'Live',
@@ -155,8 +151,7 @@ const en = {
   },
   contact: {
     kicker: 'Contact',
-    titleLead: "Let's build",
-    titleGrad: 'something solid.',
+    title: "Let's build something solid.",
     text: "I'm one message away — an on-site role in Bogotá, a remote position anywhere, or just talking shop about ESP32s and Spring Boot.",
     copyEmail: 'Copy email',
     openMail: 'Write me',
@@ -239,8 +234,7 @@ const es: typeof en = {
   },
   about: {
     kicker: 'Sobre mí',
-    titleLead: 'Ingeniero de formación,',
-    titleGrad: 'constructor por defecto.',
+    title: 'Ingeniero de formación, constructor por defecto.',
     photoAlt: 'Retrato de Julián Ruiz — apoi2',
     bio: [
       'Soy Julián — ingeniero de sistemas de Soacha, Colombia (promoción 2026, UNIMINUTO) que trabaja los dos extremos de un sistema: el tablero en React que un equipo abre cada mañana y el firmware de ESP32 hablando MQTT por debajo.',
@@ -256,8 +250,7 @@ const es: typeof en = {
   },
   experience: {
     kicker: 'Experiencia',
-    titleLead: 'Equipos reales,',
-    titleGrad: 'disponibilidad real.',
+    title: 'Equipos reales, disponibilidad real.',
     items: [
       {
         org: 'Sutherland Global Services',
@@ -295,8 +288,7 @@ const es: typeof en = {
   },
   skills: {
     kicker: 'Habilidades',
-    titleLead: 'De señales',
-    titleGrad: 'a pantallas.',
+    title: 'De señales a pantallas.',
     groups: [
       {
         title: 'Lenguajes',
@@ -342,8 +334,7 @@ const es: typeof en = {
   },
   projects: {
     kicker: 'Proyectos',
-    titleLead: 'Construido, probado,',
-    titleGrad: 'lanzado.',
+    title: 'Construido, probado, lanzado.',
     subtitle: 'Cada tarjeta es un caso de estudio: el stack, los números, las evidencias.',
     caseStudy: 'Ver caso',
     live: 'Online',
@@ -352,8 +343,7 @@ const es: typeof en = {
   },
   contact: {
     kicker: 'Contacto',
-    titleLead: 'Construyamos',
-    titleGrad: 'algo sólido.',
+    title: 'Construyamos algo sólido.',
     text: 'Estoy a un mensaje — un rol presencial en Bogotá, una posición remota en cualquier parte, o simplemente charlar de ESP32s y Spring Boot.',
     copyEmail: 'Copiar correo',
     openMail: 'Escríbeme',

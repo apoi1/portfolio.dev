@@ -1,5 +1,5 @@
 ---
-/** Tech-tag pill — the atomic unit of every tech stack list. */
+/** Tech-tag — reads like an instrument value, not a shout. */
 interface Props {
   label: string;
   tone?: 'default' | 'violet' | 'cyan' | 'mint' | 'amber' | 'rose';
@@ -17,5 +17,5 @@ const tones: Record<string, string> = {
 ---
 
 <span
-  class={`inline-flex items-center gap-1.5 rounded-full border bg-raised/70 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] uppercase ${tones[tone]}`}
+  class={`inline-flex items-center rounded-md border bg-base/60 px-2 py-0.5 font-mono text-[11px] ${tones[tone]}`}
 >{label}</span>

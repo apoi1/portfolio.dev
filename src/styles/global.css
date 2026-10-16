@@ -207,12 +207,11 @@
     box-shadow: 0 0 44px -8px rgb(124 92 255 / 0.45);
   }
 
-  /* small uppercase mono kicker */
+  /* small mono annotation (kbd hints, readouts) — quiet, not shouting */
   .mono-label {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
     color: var(--color-faint);
   }
 

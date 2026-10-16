@@ -19,9 +19,8 @@ const testsLabel = locale === 'es' ? '527 pruebas' : '527 tests';
 
 <section id="about" class="relative scroll-mt-20">
   <div class="mx-auto max-w-6xl px-4 py-24 md:px-6 md:py-36">
-    <SectionHeading kicker={t.about.kicker} index="01">
-      {t.about.titleLead}
-      <span class="text-grad">{t.about.titleGrad}</span>
+    <SectionHeading>
+      {t.about.title}
     </SectionHeading>
 
     <div
@@ -60,10 +59,19 @@ const testsLabel = locale === 'es' ? '527 pruebas' : '527 tests';
           {t.about.bio.map((p) => <p class="text-pretty">{p}</p>)}
         </div>
 
-        <div class="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4" data-stagger>
+        <div
+          class="frame mt-12 grid grid-cols-2 md:grid-cols-4 md:divide-x md:divide-line"
+          data-stagger
+        >
           {
-            t.about.stats.map((s) => (
-              <div class="frame rounded-2xl px-4 py-5 text-center md:text-left">
+            t.about.stats.map((s, i) => (
+              <div
+                class:list={[
+                  'py-5 md:px-7',
+                  i % 2 === 0 ? 'pr-6' : 'pl-6 md:pl-7',
+                  i === 0 && 'md:pl-7',
+                ]}
+              >
                 <p class="font-mono text-3xl font-bold text-ink md:text-4xl">
                   {typeof s.value === 'number' ? (
                     <span data-counter={s.value} data-suffix={s.suffix}>
@@ -73,7 +81,7 @@ const testsLabel = locale === 'es' ? '527 pruebas' : '527 tests';
                     <span>{s.value}</span>
                   )}
                 </p>
-                <p class="mono-label mt-2.5">{s.label}</p>
+                <p class="mt-2 font-mono text-xs text-faint">{s.label}</p>
               </div>
             ))
           }
