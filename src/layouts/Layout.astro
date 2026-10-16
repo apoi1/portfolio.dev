@@ -26,7 +26,7 @@ const {
   title,
   description,
   locale,
-  ogImage = '/og.png',
+  ogImage = locale === 'es' ? '/og-es.png' : '/og.png',
   ogType = 'website',
 } = Astro.props;
 
@@ -93,6 +93,7 @@ const personJsonLd = {
     <meta name="twitter:image" content={ogUrl} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <script is:inline>

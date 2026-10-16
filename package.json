@@ -19,7 +19,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
-    "verify": "node scripts/verify-site.mjs"
+    "verify": "node scripts/verify-site.mjs",
+    "gen:og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
