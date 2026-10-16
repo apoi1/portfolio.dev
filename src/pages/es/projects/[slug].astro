@@ -1,0 +1,54 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import ProjectCase from '../../../components/ProjectCase.astro';
+import { getProjects, projectSlug, neighbors } from '../../../lib/projects';
+import { IDENTITY, SITE } from '../../../lib/site';
+
+export async function getStaticPaths() {
+  const projects = await getProjects('es');
+  return projects.map((project) => ({
+    params: { slug: projectSlug(project) },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const all = await getProjects('es');
+const { prev, next } = neighbors(all, projectSlug(project));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: project.data.title,
+  description: project.data.description,
+  inLanguage: 'es',
+  url: new URL(`/es/projects/${projectSlug(project)}/`, SITE).href,
+  author: {
+    '@type': 'Person',
+    name: IDENTITY.fullName,
+    alternateName: IDENTITY.handle,
+  },
+  dateCreated: String(project.data.year),
+  ...(project.data.links.repo ? { sameAs: [project.data.links.repo] } : {}),
+};
+---
+
+<Layout
+  title={`${project.data.title} — apoi2`}
+  description={project.data.description}
+  locale="es"
+  ogType="article"
+>
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(jsonLd)}
+  />
+  <Nav locale="es" />
+  <main id="main">
+    <ProjectCase locale="es" project={project} prev={prev} next={next} />
+  </main>
+  <Footer locale="es" />
+</Layout>

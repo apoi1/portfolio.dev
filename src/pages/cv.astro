@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import CVView from '../components/CVView.astro';
+import { getUI } from '../i18n/ui';
+
+const t = getUI('en');
+---
+
+<Layout title={t.meta.cvTitle} description={t.meta.cvDesc} locale="en">
+  <Nav locale="en" />
+  <main id="main">
+    <CVView locale="en" />
+  </main>
+  <Footer locale="en" />
+</Layout>

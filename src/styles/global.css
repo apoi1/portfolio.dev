@@ -296,3 +296,39 @@ html.js [data-stagger] > * {
     animation: none !important;
   }
 }
+
+/* ── print: the /cv page is the printable surface ──────────────
+   Chrome disappears, tokens flip to a paper palette via the same
+   CSS-variable mechanism the light theme uses. */
+@media print {
+  #site-nav,
+  footer,
+  #preloader,
+  #cursor,
+  #toast,
+  #scroll-progress,
+  .noise-bg,
+  .no-print {
+    display: none !important;
+  }
+  :root,
+  [data-theme] {
+    --color-base: #ffffff;
+    --color-raised: #ffffff;
+    --color-overlay: #ffffff;
+    --color-ink: #101014;
+    --color-soft: #33333c;
+    --color-faint: #66666e;
+    --color-line: rgb(16 16 20 / 0.14);
+    --color-line-strong: rgb(16 16 20 / 0.3);
+    --color-lilac: #5527c9;
+    --color-violet: #6d4dff;
+    --frame-a: rgb(16 16 20 / 0.12);
+    --frame-b: rgb(16 16 20 / 0.02);
+    --frame-c: rgb(85 39 201 / 0.3);
+    --glass-bg: #ffffff;
+  }
+  body {
+    background: #fff !important;
+  }
+}

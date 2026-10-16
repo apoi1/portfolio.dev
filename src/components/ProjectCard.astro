@@ -1,0 +1,124 @@
+---
+/**
+ * Project card — cover (zoom on hover), status LED + year, title,
+ * tagline, tech chips, case-study + external links.
+ */
+import { Image } from 'astro:assets';
+import Icon from './ui/Icon.astro';
+import Chip from './ui/Chip.astro';
+import { caseHref, projectSlug, type ProjectEntry } from '../lib/projects';
+import { getUI } from '../i18n/ui';
+import type { Locale } from '../lib/site';
+
+interface Props {
+  project: ProjectEntry;
+  locale: Locale;
+  featured?: boolean;
+}
+const { project, locale, featured = false } = Astro.props;
+const t = getUI(locale);
+const d = project.data;
+
+const statusMap: Record<string, { label: string; cls: string }> = {
+  live: { label: t.projects.live, cls: 'bg-mint' },
+  active: { label: '●', cls: 'bg-violet animate-pulse-dot' },
+  private: { label: t.projects.privateLabel, cls: 'bg-amber' },
+  wip: { label: 'WIP', cls: 'bg-cyan' },
+};
+const status = statusMap[d.status] ?? statusMap.wip;
+
+const chips = d.tech.slice(0, featured ? 6 : 4);
+const extra = d.tech.length - chips.length;
+---
+
+<article
+  class={`frame group relative flex flex-col overflow-hidden rounded-3xl transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_60px_-16px_rgb(124_92_255/0.35)] ${
+    featured ? 'lg:col-span-2' : ''
+  }`}
+  data-reveal
+  data-cursor="hover"
+>
+  <a href={caseHref(locale, projectSlug(project))} class="relative block overflow-hidden">
+    <Image
+      src={d.cover}
+      alt={d.title}
+      width={880}
+      height={550}
+      loading={featured ? 'eager' : 'lazy'}
+      decoding="async"
+      class="aspect-[16/10] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+    />
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-base/85 via-base/10 to-transparent"
+    >
+    </div>
+    <div class="absolute top-4 left-4 flex items-center gap-2">
+      <span class="glass flex items-center gap-1.5 rounded-full border border-line px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-ink">
+        <span class={`size-1.5 rounded-full ${status.cls}`}></span>
+        {d.status === 'active' ? 'ACTIVE' : status.label}
+      </span>
+    </div>
+    <span class="glass absolute top-4 right-4 rounded-full border border-line px-3 py-1 font-mono text-[10px] text-ink">
+      {d.year}
+    </span>
+  </a>
+
+  <div class="flex flex-1 flex-col p-6 md:p-7">
+    <h3 class="text-xl font-bold tracking-tight text-ink md:text-2xl">
+      <a href={caseHref(locale, projectSlug(project))} class="transition-colors hover:text-lilac">
+        {d.title}
+      </a>
+    </h3>
+    <p class="mt-2.5 flex-1 text-sm leading-relaxed text-soft">
+      {d.tagline}
+    </p>
+
+    <div class="mt-5 flex flex-wrap items-center gap-2">
+      {chips.map((c) => <Chip label={c} />)}
+      {extra > 0 && <Chip label={`+${extra}`} tone="violet" />}
+    </div>
+
+    <div class="mt-6 flex items-center justify-between border-t border-line pt-5">
+      <a
+        href={caseHref(locale, projectSlug(project))}
+        class="group/link inline-flex items-center gap-2 font-mono text-xs font-semibold tracking-wider uppercase text-lilac transition-colors hover:text-ink"
+      >
+        {t.projects.caseStudy}
+        <Icon
+          name="arrow-right"
+          class="size-3.5 transition-transform duration-300 group-hover/link:translate-x-1"
+        />
+      </a>
+      <div class="flex items-center gap-2">
+        {
+          d.links.repo && (
+            <a
+              href={d.links.repo}
+              target="_blank"
+              rel="noopener"
+              class="grid size-8 place-items-center rounded-full border border-line text-faint transition-all duration-300 hover:border-lilac hover:text-lilac"
+              aria-label="GitHub repository"
+              title="GitHub repository"
+            >
+              <Icon name="github" class="size-3.5" />
+            </a>
+          )
+        }
+        {
+          d.links.live && (
+            <a
+              href={d.links.live}
+              target="_blank"
+              rel="noopener"
+              class="grid size-8 place-items-center rounded-full border border-line text-faint transition-all duration-300 hover:border-lilac hover:text-lilac"
+              aria-label="Live site"
+              title="Live site"
+            >
+              <Icon name="external" class="size-3.5" />
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</article>

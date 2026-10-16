@@ -1,0 +1,293 @@
+---
+/**
+ * Case-study view: hero (title/tagline/meta/links), cover, prose body,
+ * gallery, prev/next navigation. Shared by /projects/[slug] and
+ * /es/projects/[slug].
+ */
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Icon from './ui/Icon.astro';
+import Chip from './ui/Chip.astro';
+import { caseHref, projectSlug, type ProjectEntry } from '../lib/projects';
+import { getUI } from '../i18n/ui';
+import type { Locale } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+  project: ProjectEntry;
+  prev?: ProjectEntry;
+  next?: ProjectEntry;
+}
+const { locale, project, prev, next } = Astro.props;
+const t = getUI(locale);
+const d = project.data;
+const { Content } = await render(project);
+const projectsHref = locale === 'es' ? '/es/#projects' : '/#projects';
+
+const statusLabel =
+  d.status === 'live'
+    ? t.projects.live
+    : d.status === 'private'
+      ? t.projects.privateLabel
+      : d.status === 'active'
+        ? 'ACTIVE'
+        : 'WIP';
+const statusCls =
+  d.status === 'live'
+    ? 'text-mint border-mint/40'
+    : d.status === 'private'
+      ? 'text-amber border-amber/40'
+      : 'text-lilac border-violet/40';
+---
+
+<article class="relative">
+  <!-- header -->
+  <header class="mx-auto max-w-4xl px-4 pt-36 md:px-6 md:pt-44">
+    <a
+      href={projectsHref}
+      class="mono-link group inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-faint transition-colors hover:text-ink"
+      data-reveal
+      data-cursor="hover">
+      <Icon
+        name="arrow-right"
+        class="size-3.5 rotate-180 transition-transform duration-300 group-hover:-translate-x-1"
+      />
+      {t.projects.kicker}
+    </a>
+
+    <h1
+      class="mt-7 text-4xl font-extrabold tracking-tight text-ink md:text-6xl"
+      data-reveal
+      data-reveal-delay="0.05"
+    >
+      {d.title}
+    </h1>
+
+    <p
+      class="mt-5 max-w-2xl text-lg leading-relaxed text-soft"
+      data-reveal
+      data-reveal-delay="0.1"
+    >
+      {d.tagline}
+    </p>
+
+    <div
+      class="mt-8 flex flex-wrap items-center gap-2.5"
+      data-reveal
+      data-reveal-delay="0.15"
+    >
+      <span
+        class={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[10px] tracking-widest uppercase ${statusCls}`}
+      >
+        <span class="size-1.5 rounded-full bg-current"></span>
+        {statusLabel}
+      </span>
+      <span class="rounded-full border border-line px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-faint">
+        {d.year}
+      </span>
+      {d.tech.map((tech) => <Chip label={tech} />)}
+    </div>
+
+    <div
+      class="mt-8 flex flex-wrap items-center gap-3"
+      data-reveal
+      data-reveal-delay="0.2"
+    >
+      {
+        d.links.repo && (
+          <a
+            href={d.links.repo}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-full border border-line-strong px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-lilac hover:text-lilac"
+            data-cursor="hover"
+          >
+            <Icon name="github" class="size-4" />
+            GitHub
+          </a>
+        )
+      }
+      {
+        d.links.live && (
+          <a
+            href={d.links.live}
+            target="_blank"
+            rel="noopener"
+            class="glow-violet inline-flex items-center gap-2 rounded-full bg-violet px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-lilac"
+            data-cursor="hover"
+          >
+            <Icon name="external" class="size-4" />
+            {t.projects.live}
+          </a>
+        )
+      }
+    </div>
+  </header>
+
+  <!-- cover -->
+  <div class="mx-auto mt-12 max-w-5xl px-4 md:px-6" data-reveal>
+    <div class="frame overflow-hidden rounded-3xl p-1.5">
+      <Image
+        src={d.cover}
+        alt={d.title}
+        width={1760}
+        height={1100}
+        loading="eager"
+        decoding="async"
+        class="w-full rounded-[1.25rem] object-cover" />
+    </div>
+  </div>
+
+  <!-- body -->
+  <div
+    class="case-body mx-auto mt-16 max-w-3xl px-4 pb-8 md:px-6"
+    data-reveal
+  >
+    <Content />
+  </div>
+
+  <!-- gallery -->
+  {
+    d.gallery.length > 0 && (
+      <div class="mx-auto mt-6 max-w-5xl px-4 md:px-6">
+        <div class="grid gap-5 md:grid-cols-2">
+          {d.gallery.map((img, i) => (
+            <div
+              class="frame overflow-hidden rounded-2xl p-1.5"
+              data-reveal
+              data-reveal-delay={String(i * 0.06)}
+            >
+              <Image
+                src={img}
+                alt={`${d.title} — ${i + 1}`}
+                width={1200}
+                height={750}
+                loading="lazy"
+                decoding="async"
+                class="w-full rounded-xl object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <!-- prev / next -->
+  <nav
+    class="mx-auto mt-20 grid max-w-5xl gap-4 border-t border-line px-4 pt-10 pb-4 md:grid-cols-2 md:px-6"
+    aria-label={t.projects.kicker}
+  >
+    {
+      prev ? (
+        <a
+          href={caseHref(locale, projectSlug(prev))}
+          class="group rounded-2xl border border-line p-5 transition-colors hover:border-lilac/50"
+          data-cursor="hover"
+        >
+          <p class="mono-label">←</p>
+          <p class="mt-2 font-semibold text-soft transition-colors group-hover:text-lilac">
+            {prev.data.title}
+          </p>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+    {
+      next && (
+        <a
+          href={caseHref(locale, projectSlug(next))}
+          class="group rounded-2xl border border-line p-5 text-right transition-colors hover:border-lilac/50"
+          data-cursor="hover"
+        >
+          <p class="mono-label flex justify-end">→</p>
+          <p class="mt-2 font-semibold text-soft transition-colors group-hover:text-lilac">
+            {next.data.title}
+          </p>
+        </a>
+      )
+    }
+  </nav>
+</article>
+
+<style>
+  .case-body {
+    font-size: 1.02rem;
+    line-height: 1.85;
+    color: var(--color-soft);
+  }
+  .case-body h2 {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+  .case-body p {
+    margin-bottom: 1.15rem;
+  }
+  .case-body ul,
+  .case-body ol {
+    margin: 0 0 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .case-body ul {
+    list-style: none;
+  }
+  .case-body ul > li {
+    position: relative;
+    padding-left: 1rem;
+  }
+  .case-body ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 0.32rem;
+    height: 0.32rem;
+    border-radius: 999px;
+    background: var(--color-lilac);
+    opacity: 0.75;
+  }
+  .case-body ol {
+    list-style: decimal;
+  }
+  .case-body ol > li::marker {
+    color: var(--color-lilac);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+  .case-body strong {
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+  .case-body a {
+    color: var(--color-lilac);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--color-lilac) 40%, transparent);
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+  .case-body a:hover {
+    color: var(--color-ink);
+  }
+  .case-body blockquote {
+    margin: 1.5rem 0;
+    border-left: 2px solid var(--color-violet);
+    padding: 0.35rem 0 0.35rem 1.25rem;
+    font-style: italic;
+    color: var(--color-faint);
+  }
+  .case-body code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: color-mix(in oklab, var(--color-violet) 12%, transparent);
+    color: var(--color-lilac);
+    padding: 0.15em 0.45em;
+    border-radius: 6px;
+  }
+</style>

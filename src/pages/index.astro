@@ -1,67 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Section from '../components/Section.astro';
-import Badge from '../components/Badge.astro';
-import Github from '../icons/Github.astro'
-import LinkedIn from '../icons/LinkedIn.astro'
-import Twitter from '../icons/Twitter.astro'
-import Bluesky from '../icons/Bluesky.astro'
-import SocialPill from '../components/SocialPill.astro';
-import Experience from '../components/Experience.astro';
-import Briefcase from '../icons/Briefcase.astro';
-import Code from '../icons/Code.astro';
-import Projects from '../components/Projects.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/sections/Hero.astro';
+import Marquee from '../components/sections/Marquee.astro';
+import About from '../components/sections/About.astro';
+import Experience from '../components/sections/Experience.astro';
+import Projects from '../components/sections/Projects.astro';
+import Skills from '../components/sections/Skills.astro';
+import Contact from '../components/sections/Contact.astro';
+import { getUI } from '../i18n/ui';
+import { SITE, IDENTITY } from '../lib/site';
+
+const t = getUI('en');
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: IDENTITY.handle,
+  url: SITE,
+  inLanguage: 'en',
+};
 ---
 
-<Layout title="Apoi2's Portfolio - Programmer, Developer and Systems Engineer" description="Contact apoi2 for help with a software solutions for your business, build web applications, or if you need an IT consultant for your project." locale="en">
-	<main class="px-4">
-		<Section class="py-44  pb-32">
-			<img 
-				class="rounded-full size-20 mb-4 border-blue-300 border-4"
-				src="photo.jpg"
-				alt="apoi2 photo" 
-			/>
-			<h1 class="text-white text-3xl md:text-4xl lg:text-5xl font-bold flex flex-row gap-x-4 pb-6 lg:pb-10">
-				Hey, I'm apoi2 <a href="https://www.linkedin.com/in/ruijuliadev" target="_blank" rel="noopener" class="flex justify-center items-center">
-					<Badge>Open to Work</Badge>
-				</a>
-			</h1>
-			<h2 class="text-2xl text-wrap max-w-175">
-				<span class="text-blue-300/90">Systems engineer</span><span class="opacity-75">, +2 years of experience in development, from </span><span class="text-yellow-200/90">Col</span><span class="text-blue-200/90">omb</span><span class="text-red-200/90">ia</span><span class="opacity-75">. Also I build tools for videogames as hobbie, especialized on </span> <span class="text-yellow-200/90">Java </span> <span class="opacity-75">and </span><span class="text-green-200/90">Spring Boot</span> + <span class="text-blue-200/90">React</span><span class="opacity-75"> Fullstack web.</span>
-			</h2>
-			<nav class="flex gap-4 mt-8 flex-wrap">
-				<SocialPill href="https://www.linkedin.com/in/ruijuliadev">
-					<LinkedIn class="size-4" />
-						LinkedIn
-				</SocialPill>
-				<SocialPill href="https://github.com/apoi1">
-					<Github class="size-4" />
-						Github
-				</SocialPill>
-				<SocialPill href="https://bsky.app/profile/apoi2.bsky.social">
-					<Bluesky class="size-4" />
-						Bluesky
-				</SocialPill>
-				<SocialPill href="">
-					<Twitter class="size-4" />
-					X (Before twitter)
-				</SocialPill>
-			</nav>
-		</Section>
-
-		<Section id="experience">
-			<h2 class="text-3xl font-semibold mb-6 flex gap-x-3 items-center">
-				<Briefcase class="size-7 "/>
-				Working Experience </h2>
-			<Experience />
-		</Section>
-
-		<Section id="projects" class="pb-44">
-			<h2 class="text-3xl font-semibold mb-6 flex gap-x-3 items-center">
-				<Code class="size-7" />
-				Projects
-			</h2>
-			<Projects />
-		</Section>
-	</main>
+<Layout title={t.meta.homeTitle} description={t.meta.homeDesc} locale="en">
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(websiteJsonLd)}
+  />
+  <Nav locale="en" />
+  <main id="main">
+    <Hero locale="en" />
+    <Marquee />
+    <About locale="en" />
+    <Experience locale="en" />
+    <Projects locale="en" />
+    <Skills locale="en" />
+    <Contact locale="en" />
+  </main>
+  <Footer locale="en" />
 </Layout>

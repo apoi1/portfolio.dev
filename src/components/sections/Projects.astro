@@ -1,0 +1,60 @@
+---
+/**
+ * Projects — bento grid of case-study cards, driven entirely by the
+ * content collection (src/content/projects/<slug>/). The featured
+ * project gets the wide slot.
+ */
+import SectionHeading from '../ui/SectionHeading.astro';
+import ProjectCard from '../ProjectCard.astro';
+import Icon from '../ui/Icon.astro';
+import { getProjects } from '../../lib/projects';
+import { getUI } from '../../i18n/ui';
+import type { Locale } from '../../lib/site';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getUI(locale);
+const projects = await getProjects(locale);
+---
+
+<section id="projects" class="relative scroll-mt-20">
+  <div class="mx-auto max-w-6xl px-4 py-24 md:px-6 md:py-36">
+    <SectionHeading kicker={t.projects.kicker} index="03">
+      {t.projects.titleLead}
+      <span class="text-grad">{t.projects.titleGrad}</span>
+    </SectionHeading>
+    <p
+      class="mt-6 max-w-xl text-sm leading-relaxed text-soft md:text-base"
+      data-reveal
+    >
+      {t.projects.subtitle}
+    </p>
+
+    <div class="mt-14 grid gap-6 md:grid-cols-2">
+      {
+        projects.map((p) => (
+          <ProjectCard
+            project={p}
+            locale={locale}
+            featured={p.data.featured}
+          />
+        ))
+      }
+    </div>
+
+    <p class="mono-label mt-10 flex flex-wrap items-center gap-2" data-reveal>
+      <Icon name="github" class="size-3.5 text-faint" />
+      {t.projects.viewAll}
+      <a
+        href="https://github.com/apoi1"
+        target="_blank"
+        rel="noopener"
+        class="text-lilac transition-colors hover:text-ink"
+      >
+        github.com/apoi1
+      </a>
+    </p>
+  </div>
+</section>

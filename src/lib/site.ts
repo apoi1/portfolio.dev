@@ -15,10 +15,16 @@ export const IDENTITY = {
 
 export type Locale = 'en' | 'es';
 
-/** EN/ES counterpart for a path: '/'↔'/es/', '/projects/x'↔'/es/projects/x' */
+/** EN/ES counterpart for a path: '/'↔'/es/', '/projects/x/'↔'/es/projects/x/'. Always returns a trailing-slash path so canonical/hreflang URLs are consistent. */
 export function altPath(pathname: string, to: Locale): string {
   const clean = pathname.split(/[?#]/)[0];
-  const isEs = clean === '/es' || clean.startsWith('/es/');
-  if (to === 'es') return isEs ? clean : `/es${clean === '/' ? '' : clean}`;
-  return isEs ? clean.replace(/^\/es/, '') || '/' : clean;
+  const isEs = clean === '/es' || clean === '/es/' || clean.startsWith('/es/');
+  let result: string;
+  if (to === 'es') {
+    result = isEs ? clean : `/es${clean === '/' ? '' : clean}`;
+  } else {
+    result = isEs ? clean.replace(/^\/es/, '') || '/' : clean;
+  }
+  if (result === '') result = '/';
+  return result.endsWith('/') ? result : `${result}/`;
 }

@@ -3,13 +3,16 @@ import type { Locale } from './site';
 
 export type ProjectEntry = CollectionEntry<'projects'>;
 
-/** "csisensor/index.en" → "csisensor" */
+/** "csisensor/indexen" → "csisensor" */
 export const projectSlug = (entry: ProjectEntry): string =>
   entry.id.split('/')[0] ?? entry.id;
 
-/** "csisensor/index.es" → "es" */
+/**
+ * "csisensor/indexes" → es, "csisensor/indexen" → en.
+ * The glob loader slugifies dots: index.es.md → "indexes", index.en.md → "indexen".
+ */
 export const projectLocale = (entry: ProjectEntry): Locale =>
-  entry.id.split('/')[1]?.startsWith('index.es') ? 'es' : 'en';
+  entry.id.split('/')[1] === 'indexes' ? 'es' : 'en';
 
 export async function getProjects(locale: Locale): Promise<ProjectEntry[]> {
   const all = await getCollection('projects');
@@ -23,7 +26,9 @@ export async function getProject(
   slug: string,
 ): Promise<ProjectEntry | undefined> {
   const all = await getCollection('projects');
-  return all.find((e) => e.id === `${slug}/index.${locale}`);
+  // ids are slugified: index.en → "indexen", index.es → "indexes"
+  const tail = locale === 'es' ? 'indexes' : 'indexen';
+  return all.find((e) => e.id === `${slug}/${tail}`);
 }
 
 /** Case-study path for a slug in a locale. */

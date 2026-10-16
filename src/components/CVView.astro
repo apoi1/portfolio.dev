@@ -1,0 +1,213 @@
+---
+/**
+ * CV — print-ready résumé. Reuses the verified ui.ts data (experience,
+ * education, languages, skills) plus the projects collection, so the
+ * CV can never drift from the site. Ctrl/Cmd+P → Save as PDF.
+ */
+import Icon from './ui/Icon.astro';
+import Chip from './ui/Chip.astro';
+import { getProjects } from '../lib/projects';
+import { IDENTITY, type Locale } from '../lib/site';
+import { getUI } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = getUI(locale);
+const projects = await getProjects(locale);
+const topProjects = projects.filter((p) => p.data.order <= 4);
+const today = new Intl.DateTimeFormat(locale === 'es' ? 'es-CO' : 'en-US', {
+  year: 'numeric',
+  month: 'long',
+}).format(new Date());
+---
+
+<div class="cv-sheet mx-auto max-w-3xl px-4 pt-32 pb-16 md:px-6">
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <p class="mono-label">{t.cv.kicker}</p>
+      <h1 class="mt-3 text-4xl font-extrabold tracking-tight text-ink md:text-5xl">
+        {t.cv.title}
+      </h1>
+      <p class="mt-2 font-mono text-sm text-lilac">
+        {IDENTITY.handle} · {IDENTITY.location.city}, {IDENTITY.location.country}
+      </p>
+    </div>
+    <button
+      type="button"
+      class="no-print glow-violet inline-flex items-center gap-2 rounded-full bg-violet px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-lilac"
+      data-cursor="hover"
+      id="cv-print">
+      <Icon name="download" class="size-4" />
+      {t.cv.print}
+    </button>
+  </div>
+
+  <p class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-soft">
+    <span class="inline-flex items-center gap-1.5">
+      <Icon name="mail" class="size-3.5 text-lilac" />
+      {IDENTITY.email}
+    </span>
+    <span class="inline-flex items-center gap-1.5">
+      <Icon name="github" class="size-3.5 text-lilac" />
+      github.com/apoi1
+    </span>
+    <span class="inline-flex items-center gap-1.5">
+      <Icon name="linkedin" class="size-3.5 text-lilac" />
+      linkedin.com/in/ruijuliadev
+    </span>
+    <span class="inline-flex items-center gap-1.5">
+      <Icon name="globe" class="size-3.5 text-lilac" />
+      apoi2.is-a.dev
+    </span>
+  </p>
+
+  <div class="cv-section">
+    <h2>{t.experience.kicker}</h2>
+    {
+      t.experience.items.map((e) => (
+        <div class="cv-entry">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <p class="cv-role">
+              {e.role} — <span class="text-lilac">{e.org}</span>
+            </p>
+            <p class="font-mono text-xs text-faint">{e.period}</p>
+          </div>
+          <p class="mt-0.5 font-mono text-[11px] tracking-wider uppercase text-faint">
+            {e.badge}
+          </p>
+          <ul class="cv-bullets">
+            {e.bullets.map((b) => (
+              <li>{b}</li>
+            ))}
+          </ul>
+          <p class="mt-2 flex flex-wrap gap-1.5">
+            {e.chips.map((c) => (
+              <Chip label={c} />
+            ))}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="cv-section">
+    <h2>{t.projects.kicker}</h2>
+    {
+      topProjects.map((p) => (
+        <div class="cv-entry">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <p class="cv-role">
+              {p.data.title}
+              {p.data.links.repo && (
+                <a
+                  class="cv-link"
+                  href={p.data.links.repo}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  ↗
+                </a>
+              )}
+              {p.data.links.live && (
+                <a
+                  class="cv-link"
+                  href={p.data.links.live}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  ●
+                </a>
+              )}
+            </p>
+            <p class="font-mono text-xs text-faint">{p.data.year}</p>
+          </div>
+          <p class="mt-1 text-sm text-soft">{p.data.tagline}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="cv-section">
+    <h2>{t.skills.kicker}</h2>
+    <p class="flex flex-wrap gap-2">
+      {
+        t.skills.groups.flatMap((g) => g.items.slice(0, 5)).map((item) => (
+          <Chip label={item} />
+        ))
+      }
+    </p>
+  </div>
+
+  <div class="cv-section grid gap-8 md:grid-cols-2">
+    <div>
+      <h2>{t.experience.educationKicker}</h2>
+      <p class="cv-role">{t.experience.degree}</p>
+      <p class="text-sm text-soft">{t.experience.school}</p>
+      <p class="mt-1 font-mono text-xs text-lilac">{t.experience.eduPeriod}</p>
+    </div>
+    <div>
+      <h2>{t.experience.languagesKicker}</h2>
+      <ul class="cv-bullets">
+        {t.experience.languages.map((l) => <li>{l}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <p class="mt-14 border-t border-line pt-4 font-mono text-[11px] text-faint print:mt-6">
+    {t.cv.updated}: {today} — apoi2.is-a.dev/{locale === 'es' ? 'es/cv' : 'cv'}
+  </p>
+</div>
+
+<script>
+  const init = () => {
+    document
+      .getElementById('cv-print')
+      ?.addEventListener('click', () => window.print());
+  };
+  document.addEventListener('astro:page-load', init);
+</script>
+
+<style>
+  .cv-sheet h2 {
+    margin-top: 2.4rem;
+    margin-bottom: 1rem;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-lilac);
+  }
+  .cv-role {
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+  .cv-entry {
+    margin-bottom: 1.4rem;
+  }
+  .cv-bullets {
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    list-style: disc;
+    color: var(--color-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .cv-bullets li::marker {
+    color: var(--color-lilac);
+  }
+  .cv-link {
+    margin-left: 0.5rem;
+    color: var(--color-lilac);
+    text-decoration: none;
+  }
+  @media print {
+    .cv-sheet {
+      padding-top: 0;
+      max-width: 100%;
+    }
+  }
+</style>

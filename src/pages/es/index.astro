@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Hero from '../../components/sections/Hero.astro';
+import Marquee from '../../components/sections/Marquee.astro';
+import About from '../../components/sections/About.astro';
+import Experience from '../../components/sections/Experience.astro';
+import Projects from '../../components/sections/Projects.astro';
+import Skills from '../../components/sections/Skills.astro';
+import Contact from '../../components/sections/Contact.astro';
+import { getUI } from '../../i18n/ui';
+import { SITE, IDENTITY } from '../../lib/site';
+
+const t = getUI('es');
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: IDENTITY.handle,
+  url: new URL('/es/', SITE).href,
+  inLanguage: 'es',
+};
+---
+
+<Layout title={t.meta.homeTitle} description={t.meta.homeDesc} locale="es">
+  <script
+    type="application/ld+json"
+    slot="head"
+    set:html={JSON.stringify(websiteJsonLd)}
+  />
+  <Nav locale="es" />
+  <main id="main">
+    <Hero locale="es" />
+    <Marquee />
+    <About locale="es" />
+    <Experience locale="es" />
+    <Projects locale="es" />
+    <Skills locale="es" />
+    <Contact locale="es" />
+  </main>
+  <Footer locale="es" />
+</Layout>
