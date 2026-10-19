@@ -46,7 +46,7 @@ for (let i = 0; i < term.length; i += 2) {
             pairs.map((p) => (
               <>
                 <p class="text-ink">
-                  <span class="mr-2 text-violet">$</span>
+                  <span class="mr-2 text-violet">apoi2@bogota:~$</span>
                   {p.cmd}
                 </p>
                 {p.out && <p class="pl-4 text-soft">{p.out}</p>}
@@ -57,10 +57,10 @@ for (let i = 0; i < term.length; i += 2) {
         <div
           class="flex items-center gap-2 border-t border-line px-5 py-3 font-mono text-xs md:text-[13px]"
         >
-          <span class="shrink-0 text-violet">$</span>
+          <span class="shrink-0 text-violet">apoi2@bogota:~$</span>
           <input
             id="term-input"
-            class="min-w-0 flex-1 bg-transparent text-ink outline-none placeholder:text-faint"
+            class="min-w-0 flex-1 bg-transparent text-ink caret-violet outline-none placeholder:text-faint"
             placeholder={t.skills.terminal.hint}
             autocomplete="off"
             spellcheck="false"
@@ -102,15 +102,15 @@ for (let i = 0; i < term.length; i += 2) {
     const locale = document.documentElement.lang === 'es' ? ('es' as const) : ('en' as const);
     const out = getUI(locale).skills.terminal.out;
 
-    const print = (cmd: string, text: string) => {
+    const print = (cmd: string, text: string, ok = false) => {
       const c = document.createElement('p');
       c.className = 'text-ink';
       const d = document.createElement('span');
       d.className = 'mr-2 text-violet';
-      d.textContent = '$';
+      d.textContent = 'apoi2@bogota:~$';
       c.append(d, document.createTextNode(cmd));
       const o = document.createElement('p');
-      o.className = 'pl-4 text-soft';
+      o.className = `pl-4 ${ok ? 'text-mint' : 'text-soft'}`;
       o.textContent = text;
       body.append(c, o);
       body.scrollTop = body.scrollHeight;
@@ -123,6 +123,24 @@ for (let i = 0; i < term.length; i += 2) {
       input.value = '';
       if (!raw) return;
       const cmd = raw.toLowerCase().split(/\s+/)[0];
+
+      if (cmd === 'cd') {
+        const target = raw.replace(/^\S+\s*/, '').trim().toLowerCase();
+        if (target === '' || target === 'home' || target === '~' || target === '..') {
+          print(raw, '→ /', true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (['about', 'experience', 'projects', 'skills', 'contact'].includes(target)) {
+          print(raw, `→ #${target}`, true);
+          document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          print(raw, out.cdNotFound);
+        }
+        return;
+      }
+      if (cmd === 'ls') {
+        print(raw, out.ls);
+        return;
+      }
 
       if (cmd === 'clear') {
         body.replaceChildren();
