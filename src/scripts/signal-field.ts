@@ -79,8 +79,8 @@ function createField(canvas: HTMLCanvasElement): Field {
   const colorB = new THREE.Color();
   const tmp = new THREE.Color();
   const applyTheme = () => {
-    colorA.set(cssVar('--sig-a', '#7c5cff'));
-    colorB.set(cssVar('--sig-b', '#22d3ee'));
+    colorA.set(cssVar('--sig-a', '#ffb000'));
+    colorB.set(cssVar('--sig-b', '#34c77e'));
     mat.opacity = Math.min(1, parseFloat(cssVar('--sig-glow', '0.6')));
   };
   applyTheme();

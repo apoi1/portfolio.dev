@@ -4,22 +4,22 @@
       <path d="M44 0H0V44" fill="none" stroke="#ffffff" stroke-opacity="0.05"/>
     </pattern>
     <linearGradient id="film" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#7c5cff"/>
-      <stop offset="1" stop-color="#22d3ee"/>
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="1" stop-color="#34C77E"/>
     </linearGradient>
   </defs>
 
-  <rect width="880" height="550" fill="#0a0a13"/>
+  <rect width="880" height="550" fill="#151310"/>
   <rect width="880" height="550" fill="url(#grid)"/>
 
   <!-- film strip -->
   <g transform="translate(56 84)">
-    <rect width="768" height="150" rx="14" fill="#0e0e1b" stroke="url(#film)" stroke-opacity="0.55"/>
+    <rect width="768" height="150" rx="14" fill="#1C1915" stroke="url(#film)" stroke-opacity="0.55"/>
     <g fill="#ffffff" fill-opacity="0.07">
       <rect x="10" y="0" width="34" height="150"/>
       <rect x="724" y="0" width="34" height="150"/>
     </g>
-    <g fill="#a78bfa" fill-opacity="0.5">
+    <g fill="#E8BC5A" fill-opacity="0.5">
       <rect x="20" y="16" width="14" height="26" rx="3"/>
       <rect x="20" y="58" width="14" height="26" rx="3"/>
       <rect x="20" y="100" width="14" height="26" rx="3"/>
@@ -27,48 +27,48 @@
       <rect x="734" y="58" width="14" height="26" rx="3"/>
       <rect x="734" y="100" width="14" height="26" rx="3"/>
     </g>
-    <g fill="#22d3ee" fill-opacity="0.14">
+    <g fill="#34C77E" fill-opacity="0.14">
       <rect x="70" y="22" width="120" height="106" rx="8"/>
       <rect x="210" y="22" width="120" height="106" rx="8"/>
       <rect x="350" y="22" width="120" height="106" rx="8"/>
       <rect x="490" y="22" width="120" height="106" rx="8"/>
       <rect x="630" y="22" width="76" height="106" rx="8"/>
     </g>
-    <text x="130" y="80" fill="#a7a7bb" font-size="13" text-anchor="middle">NOW</text>
-    <text x="270" y="80" fill="#a7a7bb" font-size="13" text-anchor="middle">PLAYING</text>
-    <text x="410" y="80" fill="#a7a7bb" font-size="13" text-anchor="middle">★ 8.4</text>
-    <text x="550" y="80" fill="#a7a7bb" font-size="13" text-anchor="middle">REVIEWS</text>
-    <text x="668" y="80" fill="#a7a7bb" font-size="13" text-anchor="middle">API</text>
+    <text x="130" y="80" fill="#ABA595" font-size="13" text-anchor="middle">NOW</text>
+    <text x="270" y="80" fill="#ABA595" font-size="13" text-anchor="middle">PLAYING</text>
+    <text x="410" y="80" fill="#ABA595" font-size="13" text-anchor="middle">★ 8.4</text>
+    <text x="550" y="80" fill="#ABA595" font-size="13" text-anchor="middle">REVIEWS</text>
+    <text x="668" y="80" fill="#ABA595" font-size="13" text-anchor="middle">API</text>
   </g>
 
   <!-- layered architecture -->
   <g transform="translate(56 296)" font-size="16" letter-spacing="3">
-    <rect width="238" height="58" rx="10" fill="#0e0e1b" stroke="#a78bfa" stroke-opacity="0.6"/>
-    <text x="119" y="34" fill="#a78bfa" text-anchor="middle">CONTROLLER</text>
-    <path d="M119 58v34" stroke="#7c5cff" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" fill="none"/>
-    <rect y="92" width="238" height="58" rx="10" fill="#0e0e1b" stroke="#a78bfa" stroke-opacity="0.45"/>
-    <text x="119" y="126" fill="#a78bfa" text-anchor="middle">SERVICE</text>
-    <path d="M119 150v34" stroke="#7c5cff" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" fill="none"/>
-    <rect y="184" width="238" height="58" rx="10" fill="#0e0e1b" stroke="#22d3ee" stroke-opacity="0.5"/>
-    <text x="119" y="218" fill="#22d3ee" text-anchor="middle">REPOSITORY</text>
+    <rect width="238" height="58" rx="10" fill="#1C1915" stroke="#E8BC5A" stroke-opacity="0.6"/>
+    <text x="119" y="34" fill="#E8BC5A" text-anchor="middle">CONTROLLER</text>
+    <path d="M119 58v34" stroke="#FFB000" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" fill="none"/>
+    <rect y="92" width="238" height="58" rx="10" fill="#1C1915" stroke="#E8BC5A" stroke-opacity="0.45"/>
+    <text x="119" y="126" fill="#E8BC5A" text-anchor="middle">SERVICE</text>
+    <path d="M119 150v34" stroke="#FFB000" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" fill="none"/>
+    <rect y="184" width="238" height="58" rx="10" fill="#1C1915" stroke="#34C77E" stroke-opacity="0.5"/>
+    <text x="119" y="218" fill="#34C77E" text-anchor="middle">REPOSITORY</text>
   </g>
 
   <!-- endpoints -->
   <g transform="translate(360 300)" font-size="15">
-    <text y="8" fill="#3ddc97">GET</text><text x="64" y="8" fill="#a7a7bb">/api/v1/movies</text>
-    <text y="40" fill="#3ddc97">GET</text><text x="64" y="40" fill="#a7a7bb">/api/v1/movies/{id}</text>
-    <text y="72" fill="#fbbf24">POST</text><text x="64" y="72" fill="#a7a7bb">/api/v1/movies/{id}/reviews</text>
-    <text y="104" fill="#fb7185">DELETE</text><text x="80" y="104" fill="#a7a7bb">/api/v1/reviews/{id}</text>
+    <text y="8" fill="#34C77E">GET</text><text x="64" y="8" fill="#ABA595">/api/v1/movies</text>
+    <text y="40" fill="#34C77E">GET</text><text x="64" y="40" fill="#ABA595">/api/v1/movies/{id}</text>
+    <text y="72" fill="#FFC95C">POST</text><text x="64" y="72" fill="#ABA595">/api/v1/movies/{id}/reviews</text>
+    <text y="104" fill="#fb7185">DELETE</text><text x="80" y="104" fill="#ABA595">/api/v1/reviews/{id}</text>
   </g>
 
   <!-- spring badge + docker whale hint -->
   <g transform="translate(716 306)">
-    <rect width="108" height="40" rx="20" fill="#0e0e1b" stroke="#3ddc97" stroke-opacity="0.6"/>
-    <text x="54" y="26" fill="#3ddc97" font-size="14" text-anchor="middle">SPRING</text>
-    <rect y="56" width="108" height="40" rx="20" fill="#0e0e1b" stroke="#22d3ee" stroke-opacity="0.5"/>
-    <text x="54" y="82" fill="#22d3ee" font-size="14" text-anchor="middle">DOCKER</text>
+    <rect width="108" height="40" rx="20" fill="#1C1915" stroke="#34C77E" stroke-opacity="0.6"/>
+    <text x="54" y="26" fill="#34C77E" font-size="14" text-anchor="middle">SPRING</text>
+    <rect y="56" width="108" height="40" rx="20" fill="#1C1915" stroke="#34C77E" stroke-opacity="0.5"/>
+    <text x="54" y="82" fill="#34C77E" font-size="14" text-anchor="middle">DOCKER</text>
   </g>
 
   <text x="56" y="522" fill="#64647e" font-size="14">SPRING BOOT · MAVEN · JPA · REST</text>
-  <text x="836" y="522" fill="#f2f2fa" font-size="15" font-weight="bold" text-anchor="end" opacity="0.85">ON RENDER</text>
+  <text x="836" y="522" fill="#F4F1E8" font-size="15" font-weight="bold" text-anchor="end" opacity="0.85">ON RENDER</text>
 </svg>

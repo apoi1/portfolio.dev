@@ -3,32 +3,32 @@
 /* ─────────────────────────────────────────────────────────────
    apoi2 · portfolio v2 — design system
    dark-first (default) · light theme via token overrides
-   electric violet lineage (#6366ee) · signal aesthetic
+   phosphor trace — instrument aesthetic (amber P3 · channel green)
    ───────────────────────────────────────────────────────────── */
 
 @theme {
   /* surfaces */
-  --color-base: #06060b;
-  --color-raised: #0a0a13;
-  --color-overlay: #0e0e1b;
+  --color-base: #0d0c0a;
+  --color-raised: #151310;
+  --color-overlay: #1c1915;
 
   /* text */
-  --color-ink: #f2f2fa;
-  --color-soft: #a7a7bb;
-  --color-faint: #64647e;
+  --color-ink: #f4f1e8;
+  --color-soft: #aba595;
+  --color-faint: #6f6a5d;
 
   /* hairlines */
-  --color-line: rgb(255 255 255 / 0.08);
-  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-line: rgb(244 241 232 / 0.08);
+  --color-line-strong: rgb(244 241 232 / 0.16);
 
-  /* brand — violet keeps the v1 identity (#63e), electrified */
-  --color-violet: #7c5cff;
-  --color-vio: #6366ee;
-  --color-lilac: #a78bfa;
-  --color-cyan: #22d3ee;
-  --color-mint: #3ddc97;
-  --color-amber: #fbbf24;
-  --color-rose: #fb7185;
+  /* brand — phosphor trace: amber P3 primary, channel green secondary */
+  --color-violet: #ffb000;
+  --color-vio: #9a6c00;
+  --color-lilac: #e8bc5a;
+  --color-cyan: #5f8fbf;
+  --color-mint: #34c77e;
+  --color-amber: #ffc95c;
+  --color-rose: #e85d75;
 
   /* type */
   --font-sans: "Onest Variable", ui-sans-serif, system-ui, -apple-system,
@@ -53,8 +53,8 @@
     to { transform: translateX(-50%); }
   }
   @keyframes pulse-dot {
-    0%, 100% { box-shadow: 0 0 0 0 rgb(61 220 151 / 0.5); opacity: 1; }
-    50% { box-shadow: 0 0 0 7px rgb(61 220 151 / 0); opacity: 0.7; }
+    0%, 100% { box-shadow: 0 0 0 0 rgb(52 199 126 / 0.5); opacity: 1; }
+    50% { box-shadow: 0 0 0 7px rgb(52 199 126 / 0); opacity: 0.7; }
   }
   @keyframes blink {
     0%, 49% { opacity: 1; }
@@ -75,59 +75,59 @@
   color-scheme: dark;
 
   /* gradient + glass + canvas parameters (dark) */
-  --grad-a: #a78bfa;
-  --grad-b: #7c5cff;
-  --grad-c: #22d3ee;
-  --glass-bg: rgb(14 14 27 / 0.55);
-  --frame-a: rgb(255 255 255 / 0.13);
-  --frame-b: rgb(255 255 255 / 0.03);
-  --frame-c: rgb(124 92 255 / 0.26);
-  --grid-line: rgb(255 255 255 / 0.035);
+  --grad-a: #ffc95c;
+  --grad-b: #ffb000;
+  --grad-c: #34c77e;
+  --glass-bg: rgb(28 25 21 / 0.55);
+  --frame-a: rgb(244 241 232 / 0.13);
+  --frame-b: rgb(244 241 232 / 0.03);
+  --frame-c: rgb(255 176 0 / 0.26);
+  --grid-line: rgb(244 241 232 / 0.035);
   --noise-opacity: 0.04;
   --scroll-thumb: var(--color-vio);
 
   /* hero signal-field canvas palette (read by three.js) */
-  --sig-a: #7c5cff;
-  --sig-b: #22d3ee;
+  --sig-a: #ffb000;
+  --sig-b: #34c77e;
   --sig-glow: 0.62;
-  --sig-bg-top: #0a0a16;
+  --sig-bg-top: #141210;
 }
 
 [data-theme="light"] {
   color-scheme: light;
 
-  --color-base: #f4f4f9;
-  --color-raised: #ffffff;
-  --color-overlay: #ffffff;
-  --color-ink: #12121e;
-  --color-soft: #52526e;
-  --color-faint: #8b8ba6;
-  --color-line: rgb(18 18 30 / 0.1);
-  --color-line-strong: rgb(18 18 30 / 0.2);
+  --color-base: #f4f0e6;
+  --color-raised: #fcfaf4;
+  --color-overlay: #fffefa;
+  --color-ink: #181510;
+  --color-soft: #595344;
+  --color-faint: #8b857a;
+  --color-line: rgb(24 21 16 / 0.1);
+  --color-line-strong: rgb(24 21 16 / 0.2);
 
-  --color-violet: #6d4dff;
-  --color-vio: #6366ee;
-  --color-lilac: #6a48e8;
-  --color-cyan: #0891b2;
-  --color-mint: #059669;
-  --color-amber: #b45309;
-  --color-rose: #e11d48;
+  --color-violet: #8a5800;
+  --color-vio: #6e4a00;
+  --color-lilac: #7a5200;
+  --color-cyan: #3e6285;
+  --color-mint: #0e7a45;
+  --color-amber: #946a00;
+  --color-rose: #c2304e;
 
-  --grad-a: #7c3aed;
-  --grad-b: #6d28d9;
-  --grad-c: #0e7490;
-  --glass-bg: rgb(255 255 255 / 0.62);
-  --frame-a: rgb(18 18 30 / 0.12);
-  --frame-b: rgb(18 18 30 / 0.02);
-  --frame-c: rgb(109 77 255 / 0.32);
-  --grid-line: rgb(18 18 30 / 0.05);
+  --grad-a: #a66b00;
+  --grad-b: #8a5800;
+  --grad-c: #0e7a45;
+  --glass-bg: rgb(252 250 244 / 0.62);
+  --frame-a: rgb(24 21 16 / 0.12);
+  --frame-b: rgb(24 21 16 / 0.02);
+  --frame-c: rgb(184 122 0 / 0.32);
+  --grid-line: rgb(24 21 16 / 0.05);
   --noise-opacity: 0.03;
-  --scroll-thumb: #6366ee;
+  --scroll-thumb: #6e4a00;
 
-  --sig-a: #6d4dff;
-  --sig-b: #0891b2;
+  --sig-a: #8a5800;
+  --sig-b: #0e7a45;
   --sig-glow: 0.42;
-  --sig-bg-top: #eceafd;
+  --sig-bg-top: #efe9da;
 }
 
 @layer base {
@@ -149,11 +149,11 @@
 
   ::selection {
     background: color-mix(in oklab, var(--color-violet) 60%, transparent);
-    color: #fff;
+    color: var(--color-base);
   }
 
   [data-theme="light"] ::selection {
-    color: #fff;
+    color: var(--color-base);
   }
 
   :focus-visible {
@@ -202,9 +202,9 @@
         border-box;
   }
 
-  /* violet halo */
+  /* amber halo */
   .glow-violet {
-    box-shadow: 0 0 44px -8px rgb(124 92 255 / 0.45);
+    box-shadow: 0 0 44px -8px rgb(255 176 0 / 0.4);
   }
 
   /* small mono annotation (kbd hints, readouts) — quiet, not shouting */
@@ -320,11 +320,11 @@ html.js [data-stagger] > * {
     --color-faint: #66666e;
     --color-line: rgb(16 16 20 / 0.14);
     --color-line-strong: rgb(16 16 20 / 0.3);
-    --color-lilac: #5527c9;
-    --color-violet: #6d4dff;
+    --color-lilac: #8a5a00;
+    --color-violet: #b87a00;
     --frame-a: rgb(16 16 20 / 0.12);
     --frame-b: rgb(16 16 20 / 0.02);
-    --frame-c: rgb(85 39 201 / 0.3);
+    --frame-c: rgb(184 122 0 / 0.3);
     --glass-bg: #ffffff;
   }
   body {

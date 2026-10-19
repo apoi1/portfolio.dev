@@ -19,8 +19,8 @@ const locale = (): Locale =>
 
 /** Devtools greeting — the classic portfolio wink for recruiters who open the console. */
 function consoleGreeting() {
-  const style = 'background:#7c5cff;color:#fff;padding:4px 10px;border-radius:6px 0 0 6px;font-weight:bold';
-  const style2 = 'background:#22d3ee;color:#06131a;padding:4px 10px;border-radius:0 6px 6px 0;font-weight:bold';
+  const style = 'background:#ffb000;color:#0d0c0a;padding:4px 10px;border-radius:6px 0 0 6px;font-weight:bold';
+  const style2 = 'background:#34c77e;color:#0d0c0a;padding:4px 10px;border-radius:0 6px 6px 0;font-weight:bold';
   console.log(
     `%c apoi2 %c signal received `,
     style,
@@ -28,7 +28,7 @@ function consoleGreeting() {
   );
   console.log(
     "%cYou opened devtools — I already like you.\n%cLooking for a systems engineer who tests what he ships?\n→ apoi2@proton.me · github.com/apoi1 · 527 automated tests say hi",
-    'font-size:14px;color:#a78bfa;font-family:monospace',
+    'font-size:14px;color:#e8bc5a;font-family:monospace',
     'font-size:12px;color:#8b8ba6;font-family:monospace',
   );
 }
@@ -39,7 +39,7 @@ function sparkles() {
   const onPointerDown = (e: PointerEvent) => {
     const target = e.target as HTMLElement | null;
     if (target?.closest('#cmdk, #preloader')) return;
-    const colors = ['#a78bfa', '#7c5cff', '#22d3ee', '#3ddc97'];
+    const colors = ['#e8bc5a', '#ffb000', '#34c77e', '#5f8fbf'];
     for (let i = 0; i < 6; i++) {
       const p = document.createElement('span');
       const size = 3 + Math.random() * 4;
@@ -88,7 +88,7 @@ function confettiBurst() {
     return;
   }
   ctx.scale(dpr, dpr);
-  const colors = ['#a78bfa', '#7c5cff', '#22d3ee', '#3ddc97', '#fbbf24'];
+  const colors = ['#e8bc5a', '#ffb000', '#34c77e', '#5f8fbf', '#ffc95c'];
   const parts = Array.from({ length: 110 }, () => ({
     x: window.innerWidth / 2 + (Math.random() - 0.5) * 90,
     y: window.innerHeight / 2 + (Math.random() - 0.5) * 40,

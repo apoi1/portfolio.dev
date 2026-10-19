@@ -71,7 +71,7 @@ const personJsonLd = {
     <meta name="description" content={description} />
     <meta name="author" content={IDENTITY.handle} />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#06060b" />
+    <meta name="theme-color" content="#0d0c0a" />
     {noindex && <meta name="robots" content="noindex" />}
 
     <link rel="canonical" href={canonical} />
@@ -113,7 +113,7 @@ const personJsonLd = {
         }
         document.documentElement.dataset.theme = t;
         var m = document.querySelector('meta[name="theme-color"]');
-        if (m) m.setAttribute('content', t === 'light' ? '#f4f4f9' : '#06060b');
+        if (m) m.setAttribute('content', t === 'light' ? '#f4f0e6' : '#0d0c0a');
         if (!window.__bootGuard) {
           window.__bootGuard = 1;
           // Stale SPA session guard: after a deploy, old in-memory pages
@@ -166,7 +166,7 @@ const personJsonLd = {
   <body>
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-full focus:bg-violet focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-full focus:bg-violet focus:px-4 focus:py-2 focus:text-sm focus:text-[color:var(--color-base)]"
     >
       {locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}
     </a>

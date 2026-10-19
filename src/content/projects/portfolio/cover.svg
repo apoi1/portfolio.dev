@@ -4,52 +4,52 @@
       <path d="M44 0H0V44" fill="none" stroke="#ffffff" stroke-opacity="0.05"/>
     </pattern>
     <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#7c5cff" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#7c5cff"/>
-      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+      <stop offset="0" stop-color="#FFB000" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#FFB000"/>
+      <stop offset="1" stop-color="#34C77E" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="bar" x1="0" y1="1" x2="0" y2="0">
-      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#22d3ee" stop-opacity="0.9"/>
+      <stop offset="0" stop-color="#FFB000" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#34C77E" stop-opacity="0.9"/>
     </linearGradient>
   </defs>
 
-  <rect width="880" height="550" fill="#0a0a13"/>
+  <rect width="880" height="550" fill="#151310"/>
   <rect width="880" height="550" fill="url(#grid)"/>
 
   <!-- browser window -->
   <g transform="translate(96 92)">
-    <rect width="688" height="366" rx="16" fill="#0e0e1b" stroke="#ffffff" stroke-opacity="0.12"/>
+    <rect width="688" height="366" rx="16" fill="#1C1915" stroke="#ffffff" stroke-opacity="0.12"/>
     <path d="M0 48h688" stroke="#ffffff" stroke-opacity="0.08"/>
     <g fill="#64647e">
       <circle cx="26" cy="24" r="6" fill="#fb7185"/>
-      <circle cx="46" cy="24" r="6" fill="#fbbf24"/>
-      <circle cx="66" cy="24" r="6" fill="#3ddc97"/>
+      <circle cx="46" cy="24" r="6" fill="#FFC95C"/>
+      <circle cx="66" cy="24" r="6" fill="#34C77E"/>
     </g>
     <rect x="92" y="12" width="300" height="24" rx="12" fill="#ffffff" fill-opacity="0.05"/>
-    <text x="108" y="29" fill="#a7a7bb" font-size="14">apoi2.is-a.dev</text>
+    <text x="108" y="29" fill="#ABA595" font-size="14">apoi2.is-a.dev</text>
     <!-- theme toggle -->
     <g transform="translate(612 14)">
-      <circle cx="12" cy="12" r="12" fill="#0a0a13" stroke="#a78bfa" stroke-opacity="0.6"/>
-      <path d="M12 5v3M12 16v3M5 12h3M16 12h3M7 7l2 2M15 15l2 2M17 7l-2 2M9 15l-2 2" stroke="#fbbf24" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="12" cy="12" r="12" fill="#151310" stroke="#E8BC5A" stroke-opacity="0.6"/>
+      <path d="M12 5v3M12 16v3M5 12h3M16 12h3M7 7l2 2M15 15l2 2M17 7l-2 2M9 15l-2 2" stroke="#FFC95C" stroke-width="1.6" stroke-linecap="round"/>
     </g>
     <!-- lang pills -->
     <g transform="translate(532 10)" font-size="13">
       <rect width="64" height="22" rx="11" fill="none" stroke="#ffffff" stroke-opacity="0.14"/>
-      <text x="32" y="16" fill="#a7a7bb" text-anchor="middle">EN|ES</text>
+      <text x="32" y="16" fill="#ABA595" text-anchor="middle">EN|ES</text>
     </g>
 
     <!-- hero name inside -->
-    <text x="40" y="150" fill="#f2f2fa" font-size="52" font-weight="800" letter-spacing="-1">Julián Ruiz</text>
-    <text x="40" y="186" fill="#a78bfa" font-size="22" font-weight="700">apoi2</text>
+    <text x="40" y="150" fill="#F4F1E8" font-size="52" font-weight="800" letter-spacing="-1">Julián Ruiz</text>
+    <text x="40" y="186" fill="#E8BC5A" font-size="22" font-weight="700">apoi2</text>
 
     <!-- signal wave inside window -->
     <path d="M40 300c40-18 80-18 120 0s80 18 120 0 80-18 120 0 80 18 120 0 70-12 100-8" fill="none" stroke="url(#wave)" stroke-width="3" stroke-linecap="round"/>
 
     <!-- cmdk hint -->
     <g transform="translate(488 262)">
-      <rect width="136" height="44" rx="12" fill="#0a0a13" stroke="#a78bfa" stroke-opacity="0.5"/>
-      <text x="20" y="27" fill="#a7a7bb" font-size="14">⌘K</text>
+      <rect width="136" height="44" rx="12" fill="#151310" stroke="#E8BC5A" stroke-opacity="0.5"/>
+      <text x="20" y="27" fill="#ABA595" font-size="14">⌘K</text>
       <text x="52" y="27" fill="#64647e" font-size="13">palette</text>
     </g>
 
@@ -64,7 +64,7 @@
 
   <g fill="#64647e" font-size="14">
     <text x="96" y="500">ASTRO 7 · TAILWIND 4 · GSAP · THREE.JS</text>
-    <text x="784" y="500" fill="#f2f2fa" font-weight="bold" text-anchor="end" opacity="0.85">100% STATIC · NETLIFY</text>
+    <text x="784" y="500" fill="#F4F1E8" font-weight="bold" text-anchor="end" opacity="0.85">100% STATIC · NETLIFY</text>
   </g>
   <path d="M56 516h768" stroke="#ffffff" stroke-opacity="0.08"/>
 </svg>

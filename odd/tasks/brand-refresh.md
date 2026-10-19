@@ -29,9 +29,9 @@ D10 — CTA contrast handling: the 5 `bg-violet text-white glow-violet` instance
 
 | ID | Spec | Task | Commit |
 |----|------|------|--------|
-| T1 | S2,S3,S5 | Token map audit: grep every hardcoded brand hex + utility-class usage across src/; finalize the compact token plan (color hex set, dark+light) reviewed against the skills' calibration lists | (pending) |
-| T2 | S3,S5 | New `public/favicon.svg` mark (bezel + phosphor trace, no gradient, 16px-legible) | (pending) |
-| T3 | S3,S5 | `global.css` token values (dark + light + sig vars) + `theme-color` in Layout + hardcoded hexes found in T1 | (pending) |
+| T1 | S2,S3,S5 | Token map audit: grep every hardcoded brand hex + utility-class usage across src/; finalize the compact token plan (color hex set, dark+light) reviewed against the skills' calibration lists | f4c4647 |
+| T2 | S3,S5 | New `public/favicon.svg` mark (bezel + phosphor trace, no gradient, 16px-legible) | 799be14 |
+| T3 | S3,S5 | `global.css` token values (dark + light + sig vars) + `theme-color` in Layout + hardcoded hexes found in T1 | (see L7 — extended to the 4 project `cover.svg` palettes) |
 | T4 | S3,S5 | `generate-og.mjs` identity update + regenerate og.png/og-es.png/apple-touch-icon.png/favicon.png; commit outputs | (pending) |
 | T5 | S3 | Verification: programmatic WCAG contrast audit of new pairs, `npm run build` + `check` + `verify`, dist smoke (favicon suite, theme-color, OG), docs touch if token/palette docs drift | (pending) |
 | T6 | S1–S5 | Close: doc log + Engram mirror + report; native assess per RDD entry rule | (pending) |
@@ -44,3 +44,4 @@ L3 — User follow-up (verbatim): S3 + project context (local path /home/APOI2/D
 L4 — User follow-up (verbatim): S4 (continue after accidental interruption).
 L5 — Scope decision: user selected "Refresh de marca completo" (S5). Feature branch `feature/brand-refresh` created; this document is the spec source for all tasks.
 L6 — Design plan per frontend-design's two-pass process (compact token system, reviewed against both skills' anti-AI calibration lists before building): see D4–D8.
+L7 — T3 execution (2026-10-19): audit gap found and closed — T1's grep excluded `.svg`, so the 4 project `cover.svg` files (chambas, cineclick, csisensor, portfolio) still carried the old violet→cyan palette; their composition is content (untouched), their palette is brand → mechanically remapped to the new system (violet→amber, lilac→gold, cyan/mint→channel green, old surfaces→warm charcoal). Also caught beyond T1's map: Cursor.astro hardcoded cursor rgb, pulse-dot keyframe rgb, the 404 CTA and the Layout skip-link (5+1 text-on-amber swaps, not 4).
