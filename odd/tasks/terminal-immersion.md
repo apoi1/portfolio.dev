@@ -31,7 +31,7 @@ D6 — Hero fixes (S4+S5): the aka/apoi2 gap is fixed with an explicit `mr-1.5` 
 | T3 | S1 | Terminal: pwd/history/cat/uname/exit + multi-line help + Tab completion | this commit |
 | T4 | S1,D4 | i18n EN+ES for all new strings | this commit |
 | T5 | S1–S3 | Verify: build + check + verify + HMR review | this commit (see L4) |
-| T6 | S1–S3 | Close: report; push still user-gated | (pending) |
+| T6 | S1–S3 | Close: report; push still user-gated | closed 2026-10-19 — user authorized, pushed, deploy verified (see L5) |
 | T7 | S4–S6 | Hero aka gap + rotator prefix contrast + palette-as-terminal execution layer | this commit |
 
 ## Log
@@ -40,3 +40,4 @@ L1 — User request (verbatim, 2026-10-19): S1–S3 above.
 L2 — Root cause of S2: the user typed `cd Projects` in the Ctrl+K palette (now terminal-styled but filter-only) — no execution, no feedback. The fix is behavioral (D1), not just visual: both surfaces speak the same command language.
 L3 — Scope growth (2026-10-19, same review round): user confirmed the palette panel renders correctly and the mockup is liked (S3); reported the ES hero aka gap (S4) and the rotator prefix readability (S5); and after finding the Skills terminal clarified that the palette is the one they want behaving as a terminal (S6) → D5 supersedes D1 in breadth (full command set + in-palette output), D6 covers the hero fixes. All strings shared via ui.ts skills.terminal.out; ES mirrors EN keys exactly.
 L4 — Verification (2026-10-19): first run caught 1 error (ts2307 — palette script import one level too deep: '../../i18n/ui' from components/, fixed to '../i18n/ui'); re-run fully green: build 15 pages · astro check 0 errors 0 warnings · verify 258 links + 64 script srcs (up from 49 — the new terminal scripts) + legacy hexes 0 · rotator-prefix contrast verified numerically: amber on base 10.67:1 (dark) / 5.31:1 (light). HMR live on localhost:4321 for user review.
+L5 — DELIVERY (2026-10-19): user authorized push ("ya con eso, autorizo push"). zod v4 migration committed (astro/zod import + z.url() — 17 hints → 0) + footer build marker bumped to v2.3.0 (cache-telling marker, repo's own convention). ff-merge feature/brand-refresh → main + push origin main: 1cdbbed..02a25d8 (10 commits). Netlify auto-deploy CONFIRMED live: https://apoi2.is-a.dev serves marker v2.3.0, the phosphor-trace favicon.svg (step response with ringing, #FFB000 on #17140F), theme-color #0d0c0a, and / + /es/ + favicon.png all HTTP 200. Delivery closed.
