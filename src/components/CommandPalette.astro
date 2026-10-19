@@ -64,21 +64,27 @@ const items: Item[] = [
   >
   </div>
   <div
-    class="frame bg-raised mx-auto mt-[10vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-2xl border border-line-strong shadow-2xl"
+    class="frame bg-raised relative z-10 mx-auto mt-[10vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-2xl border border-line-strong shadow-2xl"
   >
+    <div class="flex items-center gap-2 border-b border-line px-4 py-2.5">
+      <span class="size-2.5 rounded-full bg-rose"></span>
+      <span class="size-2.5 rounded-full bg-amber"></span>
+      <span class="size-2.5 rounded-full bg-mint"></span>
+      <span class="mono-label ml-2 !text-faint">apoi2@bogota:~</span>
+      <kbd
+        class="mono-label ml-auto shrink-0 rounded border border-line px-1.5 py-0.5"
+      >esc</kbd>
+    </div>
     <div class="flex items-center gap-3 border-b border-line px-4">
-      <Icon name="terminal" class="size-4 shrink-0 text-lilac" />
+      <span class="shrink-0 font-mono text-xs text-violet">apoi2@bogota:~$</span>
       <input
         id="cmdk-input"
         type="text"
-        class="h-12 min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-faint"
+        class="h-12 min-w-0 flex-1 bg-transparent font-mono text-sm text-ink outline-none placeholder:text-faint"
         placeholder={t.palette.placeholder}
         autocomplete="off"
         spellcheck="false"
       />
-      <kbd
-        class="mono-label shrink-0 rounded border border-line px-1.5 py-0.5"
-      >esc</kbd>
     </div>
 
     <div id="cmdk-list" class="max-h-[min(24rem,60vh)] overflow-y-auto p-2">
