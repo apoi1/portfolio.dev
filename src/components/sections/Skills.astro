@@ -110,18 +110,45 @@ for (let i = 0; i < term.length; i += 2) {
       d.textContent = 'apoi2@bogota:~$';
       c.append(d, document.createTextNode(cmd));
       const o = document.createElement('p');
-      o.className = `pl-4 ${ok ? 'text-mint' : 'text-soft'}`;
+      o.className = `pl-4 ${ok ? 'text-mint' : 'text-soft'} whitespace-pre-line`;
       o.textContent = text;
       body.append(c, o);
       body.scrollTop = body.scrollHeight;
     };
 
+    const historyArr: string[] = [];
     input.addEventListener('keydown', async (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const val = input.value;
+        const hasSpace = /\s/.test(val);
+        const head = hasSpace ? val.slice(0, val.indexOf(' ')) : '';
+        const frag = (hasSpace ? val.slice(val.indexOf(' ') + 1) : val).toLowerCase();
+        const pool =
+          hasSpace && head.toLowerCase() === 'cd'
+            ? ['about', 'experience', 'projects', 'skills', 'contact', '~', '..']
+            : hasSpace && head.toLowerCase() === 'cat'
+              ? ['status.txt', 'contact.txt', 'cv.txt']
+              : ['cd', 'ls', 'cat', 'help', 'whoami', 'pwd', 'history', 'uname', 'projects', 'contact', 'email', 'theme', 'lang', 'konami', 'sudo', 'clear', 'exit'];
+        const matches = pool.filter((c) => c.startsWith(frag));
+        if (matches.length === 0) return;
+        let chosen = matches[0];
+        if (matches.length > 1) {
+          for (const m of matches) {
+            while (!m.startsWith(chosen)) chosen = chosen.slice(0, -1);
+          }
+        }
+        input.value = (hasSpace ? head + ' ' : '') + chosen;
+        if (matches.length === 1) input.value += ' ';
+        return;
+      }
       if (e.key !== 'Enter') return;
       e.preventDefault();
       const raw = input.value.trim();
       input.value = '';
       if (!raw) return;
+      if (historyArr.length >= 50) historyArr.shift();
+      historyArr.push(raw);
       const cmd = raw.toLowerCase().split(/\s+/)[0];
 
       if (cmd === 'cd') {
@@ -139,6 +166,36 @@ for (let i = 0; i < term.length; i += 2) {
       }
       if (cmd === 'ls') {
         print(raw, out.ls);
+        return;
+      }
+      if (cmd === 'pwd') {
+        print(raw, out.pwd);
+        return;
+      }
+      if (cmd === 'history') {
+        print(
+          raw,
+          historyArr.length
+            ? historyArr.map((h, i) => `${String(i + 1).padStart(3)}  ${h}`).join('\n')
+            : out.historyEmpty,
+        );
+        return;
+      }
+      if (cmd === 'cat') {
+        const file = raw.replace(/^\S+\s*/, '').trim().toLowerCase();
+        if (!file) print(raw, out.catUsage);
+        else if (file === 'status.txt') print(raw, out.fileStatus);
+        else if (file === 'contact.txt') print(raw, out.fileContact);
+        else if (file === 'cv.txt') print(raw, out.fileCv);
+        else print(raw, out.catMissing.replace('{f}', file));
+        return;
+      }
+      if (cmd === 'uname') {
+        print(raw, out.uname);
+        return;
+      }
+      if (cmd === 'exit' || cmd === 'logout') {
+        print(raw, out.exitLine);
         return;
       }
 

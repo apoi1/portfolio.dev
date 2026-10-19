@@ -87,6 +87,12 @@ const items: Item[] = [
       />
     </div>
 
+    <div
+      id="cmdk-out"
+      class="hidden max-h-[min(24rem,60vh)] overflow-y-auto border-b border-line px-4 py-4 font-mono text-xs leading-relaxed whitespace-pre-line text-soft"
+    >
+    </div>
+
     <div id="cmdk-list" class="max-h-[min(24rem,60vh)] overflow-y-auto p-2">
       {
         items.map((item) => (
@@ -130,6 +136,8 @@ const items: Item[] = [
 </div>
 
 <script>
+  import { getUI } from '../i18n/ui';
+
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const init = () => {
@@ -140,8 +148,24 @@ const items: Item[] = [
     if (!root || !input || !list) return;
 
     const items = [...list.querySelectorAll<HTMLElement>('[data-cmdk-item]')];
+    const outEl = document.getElementById('cmdk-out');
+    const locale = document.documentElement.lang === 'es' ? ('es' as const) : ('en' as const);
+    const out = getUI(locale).skills.terminal.out;
+    const historyArr: string[] = [];
     let open = false;
     let active = -1;
+
+    const showOutput = (text: string) => {
+      if (!outEl) return;
+      outEl.textContent = text;
+      outEl.classList.remove('hidden');
+      list.style.display = 'none';
+    };
+    const hideOutput = () => {
+      if (!outEl) return;
+      outEl.classList.add('hidden');
+      list.style.display = '';
+    };
 
     const visible = () =>
       items.filter((el) => el.style.display !== 'none');
@@ -186,6 +210,7 @@ const items: Item[] = [
       document.documentElement.style.overflow = 'hidden';
       (window as any).__lenisStop?.(true);
       input.value = '';
+      hideOutput();
       filter();
       input.focus();
       setActive(0);
@@ -241,13 +266,154 @@ const items: Item[] = [
       window.location.href = href;
     };
 
+    const SECTIONS = ['about', 'experience', 'projects', 'skills', 'contact'];
+    const runCommand = (rawVal: string): boolean => {
+      const lower = rawVal.toLowerCase().trim();
+      if (!/^[a-z]/.test(lower)) return false;
+      const parts = lower.split(/\s+/);
+      const head = parts[0];
+      const arg = parts.slice(1).join(' ').replace(/\/+$/, '').trim();
+      if (historyArr.length >= 50) historyArr.shift();
+      historyArr.push(rawVal);
+
+      if (head === 'cd') {
+        if (arg === '' || arg === '~' || arg === '..' || arg === 'home') {
+          close();
+          window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
+          return true;
+        }
+        if (SECTIONS.includes(arg)) {
+          const el = document.getElementById(arg);
+          if (el) {
+            close();
+            el.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+            return true;
+          }
+        }
+        const proj = items.find((el) => (el.dataset.href ?? '').includes(`/projects/${arg}/`));
+        if (proj) {
+          run(proj);
+          return true;
+        }
+        showOutput(out.cdNotFound);
+        return true;
+      }
+      if (head === 'ls') {
+        showOutput(out.ls);
+        return true;
+      }
+      if (head === 'help') {
+        showOutput(out.help);
+        return true;
+      }
+      if (head === 'whoami') {
+        showOutput(out.whoami);
+        return true;
+      }
+      if (head === 'pwd') {
+        showOutput(out.pwd);
+        return true;
+      }
+      if (head === 'uname') {
+        showOutput(out.uname);
+        return true;
+      }
+      if (head === 'projects') {
+        showOutput(out.projects);
+        return true;
+      }
+      if (head === 'contact') {
+        showOutput(out.contact);
+        return true;
+      }
+      if (head === 'konami') {
+        showOutput(out.konami);
+        return true;
+      }
+      if (head === 'history') {
+        showOutput(
+          historyArr.length
+            ? historyArr.map((h, i) => `${String(i + 1).padStart(3)}  ${h}`).join('\n')
+            : out.historyEmpty,
+        );
+        return true;
+      }
+      if (head === 'cat') {
+        if (!arg) showOutput(out.catUsage);
+        else if (arg === 'status.txt') showOutput(out.fileStatus);
+        else if (arg === 'contact.txt') showOutput(out.fileContact);
+        else if (arg === 'cv.txt') showOutput(out.fileCv);
+        else showOutput(out.catMissing.replace('{f}', arg));
+        return true;
+      }
+      if (head === 'open') {
+        if (!arg) {
+          showOutput(out.openUsage);
+          return true;
+        }
+        const flat = arg.replace(/\s+/g, '');
+        const target = items.find((el) => {
+          const label = (el.dataset.label ?? '').toLowerCase().replace(/\s+/g, '');
+          const href = (el.dataset.href ?? '').toLowerCase();
+          return label === flat || (arg === 'cv' && href.endsWith('/cv'));
+        });
+        if (target) {
+          run(target);
+          return true;
+        }
+        showOutput(out.openMissing.replace('{f}', arg));
+        return true;
+      }
+      if (head === 'email') {
+        const copyItem = items.find((el) => el.dataset.action === 'copy-email');
+        if (copyItem) run(copyItem);
+        return true;
+      }
+      if (head === 'sudo') {
+        const sudoItem = items.find((el) => el.dataset.action === 'sudo-hire');
+        if (sudoItem) run(sudoItem);
+        return true;
+      }
+      if (head === 'theme') {
+        const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem('apoi2-theme', next);
+        } catch {}
+        document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+        showOutput(out.theme);
+        return true;
+      }
+      if (head === 'lang') {
+        showOutput(out.lang);
+        window.setTimeout(() => {
+          window.location.href = locale === 'es' ? '/' : '/es/';
+        }, 500);
+        return true;
+      }
+      if (head === 'clear') {
+        hideOutput();
+        input.value = '';
+        filter();
+        return true;
+      }
+      if (head === 'exit' || head === 'logout' || head === 'close') {
+        close();
+        return true;
+      }
+      return false;
+    };
+
     // bind once per page
     document.getElementById('cmdk-btn')?.addEventListener('click', show);
     root.querySelectorAll('[data-cmdk-close]').forEach((el) =>
       el.addEventListener('click', close),
     );
     items.forEach((el) => el.addEventListener('click', () => run(el)));
-    input.addEventListener('input', filter);
+    input.addEventListener('input', () => {
+      hideOutput();
+      filter();
+    });
     root.addEventListener('keydown', (e) => {
       if (!open) return;
       if (e.key === 'Escape') {
@@ -261,6 +427,8 @@ const items: Item[] = [
         setActive(active - 1);
       } else if (e.key === 'Enter') {
         e.preventDefault();
+        const rawCmd = input.value.trim();
+        if (rawCmd && runCommand(rawCmd)) return;
         const vis = visible();
         if (vis[active]) run(vis[active]);
       }
