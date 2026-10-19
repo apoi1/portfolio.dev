@@ -141,6 +141,25 @@ for (const file of allHtml) {
 }
 notes.push(`script srcs checked: ${scriptSrcs}`);
 
+// 5c — legacy brand palette must never ship (brand-refresh regression guard)
+const LEGACY = /#(7c5cff|22d3ee|a78bfa|6366ee|6d4dff|06060b|f4f4f9|3ddc97|fbbf24)\b/i;
+let legacyFiles = 0;
+for (const f of allHtml) {
+  if (LEGACY.test(readFileSync(f, 'utf8'))) {
+    errors.push(`${f.replace(DIST, '')}: legacy brand hex found`);
+    legacyFiles++;
+  }
+}
+if (existsSync(join(DIST, '_astro'))) {
+  for (const f of readdirSync(join(DIST, '_astro')).filter((x) => /\.(css|js)$/.test(x))) {
+    if (LEGACY.test(readFileSync(join(DIST, '_astro', f), 'utf8'))) {
+      errors.push(`_astro/${f}: legacy brand hex found`);
+      legacyFiles++;
+    }
+  }
+}
+notes.push(`legacy hexes: ${legacyFiles}`);
+
 // 6 — infra files
 for (const f of ['robots.txt', 'sitemap-index.xml', 'og.png', 'og-es.png', 'favicon.svg', 'apple-touch-icon.png']) {
   if (!existsSync(page(f))) errors.push(`missing public asset: ${f}`);

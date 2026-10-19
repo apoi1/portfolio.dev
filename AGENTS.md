@@ -9,8 +9,9 @@ Everything deeper lives in `docs/`.
 npm run dev        # dev server
 npm run build      # static build → dist/ (15 pages)
 npm run check      # astro check — types (must be 0 errors)
-npm run verify     # post-build content/SEO/link smoke test
+npm run verify     # post-build content/SEO/link smoke test (incl. legacy-palette guard)
 npm run gen:og     # regenerate OG cards + favicon PNGs (outputs are committed)
+npm run audit:contrast  # WCAG contrast audit of the brand palette
 ```
 
 ## Where things are
