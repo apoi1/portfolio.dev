@@ -46,6 +46,9 @@ function createField(canvas: HTMLCanvasElement): Field {
     u_time: { value: 0 },
     u_resolution: { value: new THREE.Vector2(1, 1) },
     u_mouse: { value: new THREE.Vector2(0.5, 0.55) },
+    u_click: { value: new THREE.Vector2(0.5, 0.55) },
+    u_clickT: { value: -10.0 },
+    u_flare: { value: 0 },
     u_colA: { value: new THREE.Color('#ffb000') },
     u_colB: { value: new THREE.Color('#34c77e') },
     u_glow: { value: 0.6 },
@@ -56,6 +59,7 @@ function createField(canvas: HTMLCanvasElement): Field {
     fragmentShader: `
 precision highp float;
 uniform float u_time; uniform vec2 u_resolution; uniform vec2 u_mouse;
+uniform vec2 u_click; uniform float u_clickT; uniform float u_flare;
 uniform vec3 u_colA; uniform vec3 u_colB; uniform float u_glow;
 float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float noise(vec2 p){
@@ -83,11 +87,16 @@ void main(){
   vec2 m = u_mouse * 2.0 - 1.0;
   m.x *= u_resolution.x / u_resolution.y;
   float bloom = exp(-dot(p - m, p - m) * 3.2) * 0.6;
+  // click ripple — touching the phosphor excites an expanding ring
+  vec2 cp = u_click * 2.0 - 1.0;
+  cp.x *= u_resolution.x / u_resolution.y;
+  float dt = u_time - u_clickT;
+  float ring = exp(-abs(length(p - cp) - dt * 0.9) * 14.0) * exp(-dt * 1.1);
   float vig = 1.0 - smoothstep(0.3, 1.35, length(p));
-  float glowAmt = (n * 0.30 + bloom + sweep * 0.45) * u_glow * vig;
+  float glowAmt = (n * 0.30 + bloom + sweep * 0.45 + ring * 0.55) * u_glow * vig * (1.0 + u_flare * 1.6);
   vec3 col = u_colA * glowAmt
            + u_colB * glowAmt * glowAmt * 1.6
-           + (u_colA + u_colB) * 0.5 * grid * 0.06 * vig;
+           + (u_colA + u_colB) * 0.5 * grid * (0.06 + u_flare * 0.14) * vig;
   gl_FragColor = vec4(col, 1.0);
 }`,
   });
@@ -169,8 +178,17 @@ void main(){
     );
   };
   const onPointerLeave = () => pointer.set(999, 999);
+  const onClick = (e: PointerEvent) => {
+    const rect = canvas.getBoundingClientRect();
+    bgUniforms.u_click.value.set(
+      (e.clientX - rect.left) / Math.max(1, rect.width),
+      1 - (e.clientY - rect.top) / Math.max(1, rect.height),
+    );
+    bgUniforms.u_clickT.value = t;
+  };
   listenRoot.addEventListener('pointermove', onPointer, { passive: true });
   listenRoot.addEventListener('pointerleave', onPointerLeave);
+  listenRoot.addEventListener('pointerdown', onClick, { passive: true });
 
   const resize = () => {
     const w = canvas.clientWidth || 1;
@@ -256,6 +274,7 @@ void main(){
         boost = Math.max(0, boost - 0.016 / 8);
         bgUniforms.u_time.value = t;
         bgUniforms.u_mouse.value.lerp(ndcMouse, 0.06);
+        bgUniforms.u_flare.value = boost;
         renderer.clear();
         renderer.render(bgScene, bgCam);
         update(t);
@@ -275,6 +294,7 @@ void main(){
       document.removeEventListener('visibilitychange', onVis);
       listenRoot.removeEventListener('pointermove', onPointer);
       listenRoot.removeEventListener('pointerleave', onPointerLeave);
+      listenRoot.removeEventListener('pointerdown', onClick);
       geo.dispose();
       mat.dispose();
       bgQuad.geometry.dispose();
