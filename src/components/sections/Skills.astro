@@ -117,19 +117,26 @@ for (let i = 0; i < term.length; i += 2) {
     };
 
     const historyArr: string[] = [];
+    const projSlugs = [...document.querySelectorAll<HTMLElement>('[data-cmdk-item]')]
+      .map((el) => ((el.dataset.href ?? '').match(/projects\/([^/]+)\//) ?? [])[1])
+      .filter((s): s is string => !!s);
+    let lastTab = { val: '', at: 0 };
+
     input.addEventListener('keydown', async (e) => {
       if (e.key === 'Tab') {
         e.preventDefault();
         const val = input.value;
-        const hasSpace = /\s/.test(val);
+        const hasSpace = /\s/.test(val.trim());
         const head = hasSpace ? val.slice(0, val.indexOf(' ')) : '';
         const frag = (hasSpace ? val.slice(val.indexOf(' ') + 1) : val).toLowerCase();
         const pool =
           hasSpace && head.toLowerCase() === 'cd'
-            ? ['about', 'experience', 'projects', 'skills', 'contact', '~', '..']
+            ? ['about', 'experience', 'projects', 'skills', 'contact', ...projSlugs, '~', '..', 'home']
             : hasSpace && head.toLowerCase() === 'cat'
               ? ['status.txt', 'contact.txt', 'cv.txt']
-              : ['cd', 'ls', 'cat', 'help', 'whoami', 'pwd', 'history', 'uname', 'projects', 'contact', 'email', 'theme', 'lang', 'konami', 'sudo', 'clear', 'exit'];
+              : hasSpace && head.toLowerCase() === 'open'
+                ? ['github', 'linkedin', 'bluesky', 'cv']
+                : ['cd', 'ls', 'cat', 'help', 'whoami', 'pwd', 'history', 'uname', 'open', 'projects', 'contact', 'email', 'theme', 'lang', 'konami', 'sudo', 'clear', 'exit'];
         const matches = pool.filter((c) => c.startsWith(frag));
         if (matches.length === 0) return;
         let chosen = matches[0];
@@ -140,6 +147,14 @@ for (let i = 0; i < term.length; i += 2) {
         }
         input.value = (hasSpace ? head + ' ' : '') + chosen;
         if (matches.length === 1) input.value += ' ';
+        else {
+          // real double-Tab: no further progress → list the options
+          const now = performance.now();
+          if (lastTab.val === input.value && now - lastTab.at < 1500) {
+            print('tab', matches.join('   '));
+          }
+          lastTab = { val: input.value, at: now };
+        }
         return;
       }
       if (e.key !== 'Enter') return;
@@ -159,6 +174,12 @@ for (let i = 0; i < term.length; i += 2) {
         } else if (['about', 'experience', 'projects', 'skills', 'contact'].includes(target)) {
           print(raw, `→ #${target}`, true);
           document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (projSlugs.includes(target)) {
+          const base = locale === 'es' ? '/es/projects/' : '/projects/';
+          print(raw, `→ ${base}${target}/`, true);
+          window.setTimeout(() => {
+            window.location.href = `${base}${target}/`;
+          }, 400);
         } else {
           print(raw, out.cdNotFound);
         }
@@ -188,6 +209,36 @@ for (let i = 0; i < term.length; i += 2) {
         else if (file === 'contact.txt') print(raw, out.fileContact);
         else if (file === 'cv.txt') print(raw, out.fileCv);
         else print(raw, out.catMissing.replace('{f}', file));
+        return;
+      }
+      if (cmd === 'open') {
+        const target = raw.replace(/^\S+\s*/, '').trim().toLowerCase().replace(/\s+/g, '');
+        if (!target) {
+          print(raw, out.openUsage);
+          return;
+        }
+        if (target === 'cv') {
+          const cvHref = locale === 'es' ? '/es/cv' : '/cv';
+          print(raw, `→ ${cvHref}`, true);
+          window.setTimeout(() => {
+            window.location.href = cvHref;
+          }, 400);
+          return;
+        }
+        const found = [...document.querySelectorAll<HTMLElement>('[data-cmdk-item]')].find(
+          (el) =>
+            (el.dataset.label ?? '').toLowerCase().replace(/\s+/g, '') === target,
+        );
+        if (found?.dataset.href) {
+          const href = found.dataset.href;
+          print(raw, `→ ${href}`, true);
+          window.setTimeout(() => {
+            if (found.dataset.external === 'true') window.open(href, '_blank', 'noopener');
+            else window.location.href = href;
+          }, 400);
+          return;
+        }
+        print(raw, out.openMissing.replace('{f}', target));
         return;
       }
       if (cmd === 'uname') {

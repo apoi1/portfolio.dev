@@ -406,6 +406,11 @@ const items: Item[] = [
 
     // bind once per page
     document.getElementById('cmdk-btn')?.addEventListener('click', show);
+    items.forEach((el) => el.addEventListener('click', () => run(el)));
+    input.addEventListener('input', () => {
+      hideOutput();
+      filter();
+    });
     root.querySelectorAll('[data-cmdk-close]').forEach((el) =>
       el.addEventListener('click', close),
     );
@@ -414,6 +419,25 @@ const items: Item[] = [
       hideOutput();
       filter();
     });
+
+    // bash-style Tab completion — same command language as the Skills terminal
+    const BARE_CMDS = [
+      'cd','ls','help','whoami','pwd','uname','projects','contact','history',
+      'cat','open','email','theme','lang','konami','sudo','clear','exit',
+    ];
+    const projSlugs = items
+      .map((el) => ((el.dataset.href ?? '').match(/projects\/([^/]+)\//) ?? [])[1])
+      .filter((s): s is string => !!s);
+    const tabPools = (head: string): string[] => {
+      const h = head.toLowerCase();
+      if (h === 'cd')
+        return ['about','experience','projects','skills','contact', ...projSlugs, '~','..','home'];
+      if (h === 'cat') return ['status.txt','contact.txt','cv.txt'];
+      if (h === 'open') return ['github','linkedin','bluesky','cv'];
+      return [];
+    };
+    let lastTab = { val: '', at: 0 };
+
     root.addEventListener('keydown', (e) => {
       if (!open) return;
       if (e.key === 'Escape') {
@@ -425,6 +449,37 @@ const items: Item[] = [
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         setActive(active - 1);
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const val = input.value;
+        const hasSpace = /\s/.test(val.trim());
+        const head = hasSpace ? val.slice(0, val.indexOf(' ')) : '';
+        const frag = (hasSpace ? val.slice(val.indexOf(' ') + 1) : val).toLowerCase();
+        // empty + Tab → the palette's one bash deviation: command discovery
+        if (val === '') {
+          showOutput(out.help);
+          return;
+        }
+        const pool = hasSpace ? tabPools(head) : BARE_CMDS;
+        const matches = pool.filter((c) => c.startsWith(frag));
+        if (matches.length === 0) return;
+        let chosen = matches[0];
+        if (matches.length > 1) {
+          for (const m of matches) {
+            while (!m.startsWith(chosen)) chosen = chosen.slice(0, -1);
+          }
+        }
+        input.value = (hasSpace ? head + ' ' : '') + chosen;
+        if (matches.length === 1) {
+          input.value += ' ';
+        } else {
+          // real double-Tab: no further progress → list the options
+          const now = performance.now();
+          if (lastTab.val === input.value && now - lastTab.at < 1500) {
+            showOutput(matches.join('   '));
+          }
+          lastTab = { val: input.value, at: now };
+        }
       } else if (e.key === 'Enter') {
         e.preventDefault();
         const rawCmd = input.value.trim();
