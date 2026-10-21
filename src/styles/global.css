@@ -283,15 +283,27 @@ html.js [data-stagger] > * {
   opacity: 0;
 }
 
+/* ── motion preference gates ────────────────────────────────
+   Tri-state override of prefers-reduced-motion:
+   html.motion-force  → user forced full motion (ignore OS setting)
+   html.motion-off   → user forced calm mode
+   auto              → follow the OS media query (default) */
+html.motion-off .animate-marquee,
+html.motion-off .animate-marquee-slow,
+html.motion-off .animate-float,
+html.motion-off .animate-spin-slow {
+  animation: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html.js [data-reveal],
-  html.js [data-stagger] > * {
+  html:not(.motion-force) [data-reveal],
+  html:not(.motion-force) [data-stagger] > * {
     opacity: 1;
   }
-  .animate-marquee,
-  .animate-marquee-slow,
-  .animate-float,
-  .animate-spin-slow {
+  html:not(.motion-force) .animate-marquee,
+  html:not(.motion-force) .animate-marquee-slow,
+  html:not(.motion-force) .animate-float,
+  html:not(.motion-force) .animate-spin-slow {
     animation: none !important;
   }
 }

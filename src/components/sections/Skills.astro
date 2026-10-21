@@ -93,6 +93,7 @@ for (let i = 0; i < term.length; i += 2) {
 
 <script>
   import { getUI } from '../../i18n/ui';
+  import { cycleMotion } from '../../scripts/motion-pref';
 
   const init = () => {
     const input = document.getElementById('term-input') as HTMLInputElement | null;
@@ -250,6 +251,11 @@ for (let i = 0; i < term.length; i += 2) {
         return;
       }
 
+      if (cmd === 'motion') {
+        print(raw, out.motion);
+        window.setTimeout(() => cycleMotion(), 350);
+        return;
+      }
       if (cmd === 'clear') {
         body.replaceChildren();
         return;

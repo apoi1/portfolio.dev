@@ -11,6 +11,7 @@
  * the loop pauses when the tab is hidden or the hero is off-screen.
  */
 import * as THREE from 'three';
+import { motionReduced } from './motion-pref';
 
 interface Field {
   dispose: () => void;
@@ -27,7 +28,7 @@ const cssVar = (name: string, fallback: string) =>
   fallback;
 
 function createField(canvas: HTMLCanvasElement): Field {
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = motionReduced();
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
   const renderer = new THREE.WebGLRenderer({
@@ -81,22 +82,22 @@ void main(){
   vec2 g = abs(fract(uv * vec2(14.0, 8.0)) - 0.5);
   float line = smoothstep(0.035, 0.05, min(g.x, g.y));
   float grid = 1.0 - line;
-  float n = fbm(uv * 2.6 + vec2(u_time * 0.02, -u_time * 0.013));
+  float n = smoothstep(0.25, 0.85, fbm(uv * 2.6 + vec2(u_time * 0.02, -u_time * 0.013)));
   float sweepPos = fract(u_time * 0.06) * 1.3 - 0.15;
   float sweep = exp(-abs(uv.y - sweepPos) * 16.0);
   vec2 m = u_mouse * 2.0 - 1.0;
   m.x *= u_resolution.x / u_resolution.y;
-  float bloom = exp(-dot(p - m, p - m) * 3.2) * 0.6;
+  float bloom = exp(-dot(p - m, p - m) * 3.2) * 0.9;
   // click ripple — touching the phosphor excites an expanding ring
   vec2 cp = u_click * 2.0 - 1.0;
   cp.x *= u_resolution.x / u_resolution.y;
   float dt = u_time - u_clickT;
   float ring = exp(-abs(length(p - cp) - dt * 0.9) * 14.0) * exp(-dt * 1.1);
   float vig = 1.0 - smoothstep(0.3, 1.35, length(p));
-  float glowAmt = (n * 0.30 + bloom + sweep * 0.45 + ring * 0.55) * u_glow * vig * (1.0 + u_flare * 1.6);
+  float glowAmt = (n * 0.50 + bloom + sweep * 0.85 + ring * 0.75) * u_glow * vig * (1.0 + u_flare * 1.6);
   vec3 col = u_colA * glowAmt
            + u_colB * glowAmt * glowAmt * 1.6
-           + (u_colA + u_colB) * 0.5 * grid * (0.06 + u_flare * 0.14) * vig;
+           + (u_colA + u_colB) * 0.5 * grid * (0.11 + u_flare * 0.14) * vig;
   gl_FragColor = vec4(col, 1.0);
 }`,
   });

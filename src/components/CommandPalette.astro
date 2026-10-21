@@ -136,9 +136,10 @@ const items: Item[] = [
 </div>
 
 <script>
+import { motionReduced, cycleMotion } from '../scripts/motion-pref';
   import { getUI } from '../i18n/ui';
 
-  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = () => motionReduced();
 
   const init = () => {
     const root = document.getElementById('cmdk');
@@ -372,6 +373,10 @@ const items: Item[] = [
       if (head === 'sudo') {
         const sudoItem = items.find((el) => el.dataset.action === 'sudo-hire');
         if (sudoItem) run(sudoItem);
+        return true;
+      }
+      if (head === 'motion') {
+        cycleMotion();
         return true;
       }
       if (head === 'theme') {

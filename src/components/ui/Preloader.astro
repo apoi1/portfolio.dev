@@ -40,6 +40,7 @@
 </div>
 
 <script>
+import { motionReduced } from '../../scripts/motion-pref';
   const D = 1050;
 
   const finish = () => {
@@ -59,7 +60,7 @@
     };
 
     const seen = sessionStorage.getItem('apoi2-v2-seen') === '1';
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = motionReduced();
 
     if (seen || reduced) {
       el.remove();

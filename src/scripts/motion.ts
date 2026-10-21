@@ -18,10 +18,11 @@
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motionReduced } from './motion-pref';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduced = motionReduced();
 const finePointer = window.matchMedia('(pointer: fine)').matches;
 
 let lenis: Lenis | null = null;

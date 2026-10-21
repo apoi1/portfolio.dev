@@ -83,6 +83,15 @@ const socials = [
       />
       <ThemeToggle label={t.nav.theme} />
       <button
+        id="motion-btn"
+        class="grid size-9 place-items-center rounded-full border border-line bg-raised transition-colors hover:border-line-strong"
+        aria-label={t.nav.motion}
+        title={t.nav.motion}
+        data-cursor="hover"
+      >
+        <Icon name="zap" class="size-4 text-lilac" />
+      </button>
+      <button
         id="cmdk-btn"
         class="glass hidden h-9 items-center gap-1.5 rounded-full border border-line px-3 font-mono text-[11px] text-soft transition-colors hover:border-line-strong hover:text-ink md:flex"
         aria-label={t.nav.cmdk}
@@ -180,7 +189,10 @@ const socials = [
 </style>
 
 <script>
+  import { getMotionPref, cycleMotion, motionReduced } from '../scripts/motion-pref';
+
   let scrollBound = false;
+
   const onScroll = () => {
     const bar = document.getElementById('nav-bar');
     const prog = document.getElementById('scroll-progress');
@@ -198,6 +210,16 @@ const socials = [
       window.addEventListener('scroll', onScroll, { passive: true });
     }
     onScroll();
+
+    // motion toggle (tri-state: auto → on → off, reloads to apply)
+    const motionBtn = document.getElementById('motion-btn');
+    motionBtn?.addEventListener('click', () => cycleMotion());
+    motionBtn?.setAttribute('aria-pressed', String(getMotionPref() === 'on'));
+    motionBtn?.classList.toggle('opacity-45', getMotionPref() === 'off');
+    motionBtn?.classList.toggle(
+      'text-faint',
+      getMotionPref() === null && motionReduced(),
+    );
 
     // mobile menu
     const burger = document.getElementById('burger');

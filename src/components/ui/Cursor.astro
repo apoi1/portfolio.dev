@@ -29,8 +29,9 @@
 </div>
 
 <script>
+import { motionReduced } from '../../scripts/motion-pref';
   const fine = window.matchMedia('(pointer: fine)').matches;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = motionReduced();
 
   let el: HTMLElement | null = null;
   let dot: HTMLElement | null = null;

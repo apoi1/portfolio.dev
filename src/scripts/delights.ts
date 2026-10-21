@@ -10,8 +10,9 @@
  */
 import { getUI } from '../i18n/ui';
 import type { Locale } from '../lib/site';
+import { motionReduced } from './motion-pref';
 
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduced = motionReduced();
 const fine = window.matchMedia('(pointer: fine)').matches;
 
 const locale = (): Locale =>

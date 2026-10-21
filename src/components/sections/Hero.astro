@@ -138,6 +138,7 @@ const socials = [
   <script src="../../scripts/signal-field.ts"></script>
 
   <script>
+import { motionReduced } from '../../scripts/motion-pref';
     // typewriter role rotator
     const init = () => {
       const el = document.getElementById('rotator');
@@ -149,7 +150,7 @@ const socials = [
         items = [];
       }
       if (items.length === 0) return;
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reduced = motionReduced();
       if (reduced) {
         el.textContent = items[0];
         return;

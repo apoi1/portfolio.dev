@@ -114,6 +114,11 @@ const personJsonLd = {
         document.documentElement.dataset.theme = t;
         var m = document.querySelector('meta[name="theme-color"]');
         if (m) m.setAttribute('content', t === 'light' ? '#f4f0e6' : '#0d0c0a');
+        try {
+          var mp = localStorage.getItem('apoi2-motion');
+          if (mp === 'on') document.documentElement.classList.add('motion-force');
+          else if (mp === 'off') document.documentElement.classList.add('motion-off');
+        } catch (e) {}
         if (!window.__bootGuard) {
           window.__bootGuard = 1;
           // Stale SPA session guard: after a deploy, old in-memory pages
