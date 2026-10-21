@@ -176,6 +176,13 @@ const personJsonLd = {
       {locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}
     </a>
 
+    <canvas
+      id="page-bg"
+      class="pointer-events-none fixed inset-0 -z-10 size-full"
+      aria-hidden="true"
+    >
+    </canvas>
+
     <slot />
 
     <Preloader />
@@ -186,5 +193,6 @@ const personJsonLd = {
 
     <script src="../scripts/motion.ts"></script>
     <script src="../scripts/delights.ts"></script>
+    <script src="../scripts/page-bg.ts"></script>
   </body>
 </html>
