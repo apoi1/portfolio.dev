@@ -1,14 +1,15 @@
 /**
- * Signal field — interactive three.js point-wave canvas for the hero.
+ * Signal field — the hero's point-wave layer.
  *
  * A grid of additive-blended points undulates as layered radio waves;
  * the pointer injects a decaying ripple, like a WiFi CSI packet hitting
- * the receiver. Colors are read from the theme's CSS variables
- * (--sig-a / --sig-b / --sig-glow) and refresh on themechange.
+ * the receiver. The page-wide phosphor background (page-bg.ts) lives
+ * underneath and IS the site background — this layer adds the wave
+ * surface on top of it in the hero. Colors from --sig-* tokens.
  *
  * Graceful behavior: prefers-reduced-motion renders one static frame;
- * no WebGL → the canvas is removed and the CSS gradient remains;
- * the loop pauses when the tab is hidden or the hero is off-screen.
+ * no WebGL → the canvas is removed; the loop pauses when the tab is
+ * hidden or the hero is off-screen.
  */
 import * as THREE from 'three';
 import { motionReduced } from './motion-pref';
@@ -38,72 +39,6 @@ function createField(canvas: HTMLCanvasElement): Field {
     powerPreference: 'low-power',
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
-  renderer.autoClear = false; // two passes: phosphor backdrop + point wave
-
-  // ── phosphor backdrop (shader-glsl skill: fullscreen quad + ShaderMaterial) ──
-  const bgScene = new THREE.Scene();
-  const bgCam = new THREE.Camera();
-  const bgUniforms = {
-    u_time: { value: 0 },
-    u_resolution: { value: new THREE.Vector2(1, 1) },
-    u_mouse: { value: new THREE.Vector2(0.5, 0.55) },
-    u_click: { value: new THREE.Vector2(0.5, 0.55) },
-    u_clickT: { value: -10.0 },
-    u_flare: { value: 0 },
-    u_colA: { value: new THREE.Color('#ffb000') },
-    u_colB: { value: new THREE.Color('#34c77e') },
-    u_glow: { value: 0.6 },
-  };
-  const bgMat = new THREE.ShaderMaterial({
-    uniforms: bgUniforms,
-    vertexShader: `void main(){ gl_Position = vec4(position, 1.0); }`,
-    fragmentShader: `
-precision highp float;
-uniform float u_time; uniform vec2 u_resolution; uniform vec2 u_mouse;
-uniform vec2 u_click; uniform float u_clickT; uniform float u_flare;
-uniform vec3 u_colA; uniform vec3 u_colB; uniform float u_glow;
-float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float noise(vec2 p){
-  vec2 i = floor(p), f = fract(p);
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
-             mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
-}
-float fbm(vec2 p){
-  float v = 0.0, a = 0.5;
-  mat2 r = mat2(0.8, 0.6, -0.6, 0.8);
-  for (int i = 0; i < 4; i++){ v += a * noise(p); p = r * p * 2.0; a *= 0.5; }
-  return v;
-}
-void main(){
-  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-  vec2 p = uv * 2.0 - 1.0;
-  p.x *= u_resolution.x / u_resolution.y;
-  vec2 g = abs(fract(uv * vec2(14.0, 8.0)) - 0.5);
-  float line = smoothstep(0.035, 0.05, min(g.x, g.y));
-  float grid = 1.0 - line;
-  float n = smoothstep(0.25, 0.85, fbm(uv * 2.6 + vec2(u_time * 0.02, -u_time * 0.013)));
-  float sweepPos = fract(u_time * 0.06) * 1.3 - 0.15;
-  float sweep = exp(-abs(uv.y - sweepPos) * 16.0);
-  vec2 m = u_mouse * 2.0 - 1.0;
-  m.x *= u_resolution.x / u_resolution.y;
-  float bloom = exp(-dot(p - m, p - m) * 3.2) * 0.9;
-  // click ripple — touching the phosphor excites an expanding ring
-  vec2 cp = u_click * 2.0 - 1.0;
-  cp.x *= u_resolution.x / u_resolution.y;
-  float dt = u_time - u_clickT;
-  float ring = exp(-abs(length(p - cp) - dt * 0.9) * 14.0) * exp(-dt * 1.1);
-  float vig = 1.0 - smoothstep(0.3, 1.35, length(p));
-  float glowAmt = (n * 0.50 + bloom + sweep * 0.85 + ring * 0.75) * u_glow * vig * (1.0 + u_flare * 1.6);
-  vec3 col = u_colA * glowAmt
-           + u_colB * glowAmt * glowAmt * 1.6
-           + (u_colA + u_colB) * 0.5 * grid * (0.11 + u_flare * 0.14) * vig;
-  gl_FragColor = vec4(col, 1.0);
-}`,
-  });
-  const bgQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMat);
-  bgQuad.frustumCulled = false; // clip-space quad — never let culling eat it
-  bgScene.add(bgQuad);
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
@@ -148,17 +83,12 @@ void main(){
   const applyTheme = () => {
     colorA.set(cssVar('--sig-a', '#ffb000'));
     colorB.set(cssVar('--sig-b', '#34c77e'));
-    const glow = Math.min(1, parseFloat(cssVar('--sig-glow', '0.6')));
-    mat.opacity = glow;
-    (bgUniforms.u_colA.value as THREE.Color).copy(colorA);
-    (bgUniforms.u_colB.value as THREE.Color).copy(colorB);
-    bgUniforms.u_glow.value = glow;
+    mat.opacity = Math.min(1, parseFloat(cssVar('--sig-glow', '0.62')));
   };
   applyTheme();
 
   // pointer → world coordinates on the y=0 plane
   const pointer = new THREE.Vector2(999, 999);
-  const ndcMouse = new THREE.Vector2(0.5, 0.55);
   const raycaster = new THREE.Raycaster();
   const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const hit = new THREE.Vector3();
@@ -173,23 +103,10 @@ void main(){
     if (raycaster.ray.intersectPlane(groundPlane, hit)) {
       pointer.set(hit.x, hit.z);
     }
-    ndcMouse.set(
-      (e.clientX - rect.left) / Math.max(1, rect.width),
-      1 - (e.clientY - rect.top) / Math.max(1, rect.height),
-    );
   };
   const onPointerLeave = () => pointer.set(999, 999);
-  const onClick = (e: PointerEvent) => {
-    const rect = canvas.getBoundingClientRect();
-    bgUniforms.u_click.value.set(
-      (e.clientX - rect.left) / Math.max(1, rect.width),
-      1 - (e.clientY - rect.top) / Math.max(1, rect.height),
-    );
-    bgUniforms.u_clickT.value = t;
-  };
   listenRoot.addEventListener('pointermove', onPointer, { passive: true });
   listenRoot.addEventListener('pointerleave', onPointerLeave);
-  listenRoot.addEventListener('pointerdown', onClick, { passive: true });
 
   const resize = () => {
     const w = canvas.clientWidth || 1;
@@ -197,10 +114,6 @@ void main(){
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    bgUniforms.u_resolution.value.set(
-      w * renderer.getPixelRatio(),
-      h * renderer.getPixelRatio(),
-    );
   };
   resize();
   const ro = new ResizeObserver(resize);
@@ -247,9 +160,6 @@ void main(){
   let io: IntersectionObserver | null = null;
 
   if (reduced) {
-    bgUniforms.u_time.value = 2.4;
-    renderer.clear();
-    renderer.render(bgScene, bgCam);
     update(2.4);
     renderer.render(scene, camera);
   } else {
@@ -265,19 +175,10 @@ void main(){
       if (visible && inView) {
         // scroll velocity feeds the wave speed — the page feels alive
         // while you scroll it (motion.ts writes __scrollVel from Lenis)
-        const vel = Math.min(
-          Math.abs((window as any).__scrollVel || 0),
-          60,
-        );
-        (window as any).__scrollVel =
-          ((window as any).__scrollVel || 0) * 0.92;
+        const vel = Math.min(Math.abs((window as any).__scrollVel || 0), 60);
+        (window as any).__scrollVel = ((window as any).__scrollVel || 0) * 0.92;
         t += 0.016 * (1 + (vel / 60) * 1.2);
         boost = Math.max(0, boost - 0.016 / 8);
-        bgUniforms.u_time.value = t;
-        bgUniforms.u_mouse.value.lerp(ndcMouse, 0.06);
-        bgUniforms.u_flare.value = boost;
-        renderer.clear();
-        renderer.render(bgScene, bgCam);
         update(t);
         renderer.render(scene, camera);
       }
@@ -295,11 +196,8 @@ void main(){
       document.removeEventListener('visibilitychange', onVis);
       listenRoot.removeEventListener('pointermove', onPointer);
       listenRoot.removeEventListener('pointerleave', onPointerLeave);
-      listenRoot.removeEventListener('pointerdown', onClick);
       geo.dispose();
       mat.dispose();
-      bgQuad.geometry.dispose();
-      bgMat.dispose();
       renderer.dispose();
     },
   };
@@ -308,14 +206,12 @@ void main(){
 const init = () => {
   field?.dispose();
   field = null;
-  const canvas = document.getElementById(
-    'signal-field',
-  ) as HTMLCanvasElement | null;
+  const canvas = document.getElementById('signal-field') as HTMLCanvasElement | null;
   if (!canvas) return;
   try {
     field = createField(canvas);
   } catch {
-    // no WebGL / context lost → drop the canvas, CSS gradient remains
+    // no WebGL / context lost → drop the canvas, the page-bg remains
     canvas.remove();
   }
   if (!themeBound) {
