@@ -83,15 +83,16 @@ void main(){
   vec2 m = u_mouse * 2.0 - 1.0;
   m.x *= u_resolution.x / u_resolution.y;
   float bloom = exp(-dot(p - m, p - m) * 3.2) * 0.6;
-  float vig = smoothstep(1.35, 0.3, length(p));
+  float vig = 1.0 - smoothstep(0.3, 1.35, length(p));
   float glowAmt = (n * 0.30 + bloom + sweep * 0.45) * u_glow * vig;
   vec3 col = u_colA * glowAmt
            + u_colB * glowAmt * glowAmt * 1.6
-           + (u_colA + u_colB) * 0.5 * grid * 0.045 * vig;
+           + (u_colA + u_colB) * 0.5 * grid * 0.06 * vig;
   gl_FragColor = vec4(col, 1.0);
 }`,
   });
   const bgQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMat);
+  bgQuad.frustumCulled = false; // clip-space quad — never let culling eat it
   bgScene.add(bgQuad);
 
   const scene = new THREE.Scene();
